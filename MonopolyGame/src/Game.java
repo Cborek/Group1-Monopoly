@@ -52,13 +52,15 @@ class Game {
 		System.out.println (communityChest.get(0));
 		communityChest.add(communityChest.get(0));
 		communityChest.remove(0);
+		//modifiying player money with value on the card
 	}
 	public void selectChance()
 	{
-		//possible needed changes
+		//possible needed changes for get out of jail
 		System.out.println (chance.get(0));
 		chance.add(chance.get(0));
 		chance.remove(0);
+		//modifiying player money with value on the card
 	}
 	
 }
