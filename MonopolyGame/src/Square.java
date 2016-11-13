@@ -13,40 +13,25 @@ public class Square {
 	private int twoHouses;
 	private int threeHouses;
 	private int fourHouses;
-	private int hotel;
+	private int hotelRent;
 	private int numHouses;
-	
+	private int rentWithTwo;
+	private int rentWithThree;
+	private int rentWithFour;
 	private int player = 0;
 	
 	// square object for assigning values of a square. Can be assigned in this class or board class
-	public static Square square1 = new PropertySquare(2, "Vegas",  "Orange", 200, 1, 4, 4,4,4,4,4,4);
-		
-		/*
-		 * new board
-		 * loop(for the size of arrList i++)
-		 * takes property at i
-		 * build a new square with property
-		 */
-		//}
+	public static Square square1 = new PropertySquare(2, "Vegas",  "Orange", 200, 1, 2, 3,4,5,6,7,8, 1);
 	
 	public Square( int location, String name) {
 		this.location = location;
 		this.name = name;
 	}
 
-	// prints out info of given square
-	public void getInfo(){
+	// prints out info of property square
+	public void getSquareInfo() {
+		System.out.println("The location is: " +location);
 		System.out.println("The Name is: " + name);
-		System.out.println("This color is: " + color);
-		System.out.println("The cost is: " + cost);
-		System.out.println("The rent is : " + rent);
-		System.out.println("The cost of a building  is: " + houseCost);
-		System.out.println("Rent with one house: " + oneHouse);
-		System.out.println("Rent with two houses: " + twoHouses);
-		System.out.println("Rent with three houses: " + threeHouses);
-		System.out.println("Rent with four houses: " + fourHouses);
-		System.out.println("Rent with hotel: " + hotel);
-		System.out.println("Mortgage value: " + mortgage);
 	}
 	
 	//get location of board on squares
@@ -62,7 +47,7 @@ public class Square {
 //		this.name = name;
 //	}
 
-	// get cost of square
+	// get cost to buy the square
 	public int getCost() {
 		return cost;
 	}
@@ -87,26 +72,62 @@ public class Square {
 	}	
 	
 	//Returns the cost of rent when a player lands on this property.
-	public int getRent(){
-		if(numHouses == 1){
-			rent = oneHouse;
-		}
-		if(numHouses == 2){
-			rent = twoHouses;
-		}
-		if(numHouses == 3){
-			rent = threeHouses;
-		}
-		if(numHouses == 4){
-			rent = fourHouses;
-		}
-		if(numHouses == 5){
-			addHotel(hotel);
-		}
+	public int getRent(int numHouses){
+//		if(numHouses == 1){
+//			rent = oneHouse;
+//		}
+//		if(numHouses == 2){
+//			rent = twoHouses;
+//		}
+//		if(numHouses == 3){
+//			rent = threeHouses;
+//		}
+//		if(numHouses == 4){
+//			rent = fourHouses;
+//		}
+//		if(numHouses == 5){
+//			addHotel(hotel);
+//		}
 		return rent;
 	}
 	public void setRent(int rent) {
 		this.rent = rent;
+	}
+	
+	// Gets rent depending on the number of houses they have
+	public void setOneHouseRent(int oneHouse) {
+		this.oneHouse = oneHouse;
+	}
+	public int getOneHouseRent() {
+		return oneHouse;
+	}
+	
+	public void setTwoHousesRent(int twoHouses) {
+		this.twoHouses = twoHouses;
+	}
+	public int getTwoHousesRent() {
+		return twoHouses;
+	}
+	
+	public void setThreeHousesRent(int threeHouses) {
+		this.threeHouses = threeHouses;
+	}
+	public int getThreeHousesRent() {
+		return threeHouses;
+	}
+	
+	public void setFourHousesRent(int fourHouses) {
+		this.fourHouses = fourHouses;
+	}
+	public int getFourHousesRent() {
+		return fourHouses;
+	}
+	
+	public void setHotelRent(int hotel) {
+		this.hotelRent = hotel;
+	}
+	public int getHotelRent() {
+		return hotelRent;
 	}
 	
 	//Sets the number of houses that a property has on it and the properties modified cost depending on the number of houses. Number of houses is zero by default. 
@@ -119,6 +140,7 @@ public class Square {
 		numHouses = 0;
 		rent = hotelRent;
 	}
+	
 	//Return the number of houses that a property has on it. Five houses is a hotel.
 	public int getHouses(){
 		return numHouses;
@@ -135,6 +157,28 @@ public class Square {
 		this.houseCost = houseCost;
 	}
 	
+	// Gets rent for owning 2,3,or 4 squares
+	public void setRentWithTwo(int rentWithTwo) {
+		this.rentWithTwo = rentWithTwo;
+	}
+	public int getRentWithTwo() {
+		return rentWithTwo;
+	}
+	
+	public void setRentWithThree(int rentWithThree) {
+		this.rentWithThree = rentWithThree;
+	}
+	public int getRentWithThree() {
+		return rentWithThree;
+	}
+	
+	public void setRentWithFour(int rentWithFour) {
+		this.rentWithFour = rentWithFour;
+	}
+	public int getRentWithFour() {
+		return rentWithFour;
+	}
+	
 	//Gets the mortgage of a property
 	public int getMortgage(){
 		return mortgage;
@@ -143,42 +187,6 @@ public class Square {
 		this.mortgage = mortgage;
 	}
 	
-	
-}
-
-class GoSquare extends Square{
-
-	public GoSquare(int location, String name, int cost) {
-		super(location, name);
-		setCost(cost);
-	}
-	
-}
-
-class railRoadSquare extends Square {
-	
-	public railRoadSquare(int location, String name, int cost, int mortgage) {
-		super(location, name);
-		setCost(cost);
-		setMortgage(mortgage);
-	}
-}
-
-class PropertySquare extends Square {
-
-	public PropertySquare(int location, String name, String color, int cost, int rent, int houseCost,  int withOneHouse,
-			int withTwoHouses, int withThreeHouses, int withFourHouses, int withHotel, int mortgage) {
-		super(location, name);
-		setColor(color);
-		setCost(cost);
-		setRent(rent);
-		setHouseCost(houseCost);
-		setHouses(getHouses());
-		setMortgage(mortgage);
-		
-		getPlayer();
-		
-	}
 	
 }
 
