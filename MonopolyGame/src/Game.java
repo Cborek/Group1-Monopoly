@@ -6,7 +6,7 @@ class Game {
 	//hold the number of players in the game
 	private int PlayerNum;
 	//generates the game board
-	//private Board gameArea = new Board();
+	private Board gameArea = new Board();
 	//a list of the community chest cards
 	private ArrayList<Cards> communityChest = new ArrayList<Cards>();
 	//a list of the chance cards
@@ -44,6 +44,7 @@ class Game {
 	public void printGame()
 	{
 		//prints the board as well as the players and where they are on the board
+		gameArea.showBoard();
 	}
 	
 	public void selectCommunity()
