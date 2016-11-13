@@ -1,0 +1,297 @@
+import java.io.IOException;
+
+public class Board {
+	private Square[][] BOARD;
+	//public String[][] BOARD = new String[11][11];
+	//private int rows;
+//	private int columns;
+	public Board() {
+		BOARD = new Square[11][11];
+	
+
+		BOARD[10][10] = new Square (1, "GO");
+		BOARD[10][9] = new Square (2, "Mediterranean");
+		BOARD[10][8] = new Square(3, "Community Chest");
+		BOARD[10][7] = new Square(4, "Baltic");
+		BOARD[10][6] = new Square(5, "Income Tax");
+		BOARD[10][5] = new Square(6, "Reading Railroad");
+		BOARD[10][4] = new Square(7, "Oriental");
+		BOARD[10][3] = new Square(8, "Chance");
+		BOARD[10][2] = new Square(9, "Vermont");
+		BOARD[10][1] = new Square(10, "Connecticut");
+		BOARD[10][0] = new Square(11, "Just Visiting / Jail");
+		BOARD[9][0] = new Square(12, "St. Charles Place");
+		BOARD[8][0] = new Square(13, "Electric Company");
+		BOARD[7][0] = new Square(14, "States");
+		BOARD[6][0] = new Square(15, "Virginia");
+		BOARD[5][0] = new Square(16, "Pennsylvania Railroad");
+		BOARD[4][0] = new Square(17, "St. James Place");
+		BOARD[3][0] = new Square(18, "Community Chest");
+		BOARD[2][0] = new Square(19, "Tennessee");
+		BOARD[1][0] = new Square(20, "New York");
+		BOARD[0][0] = new Square(21, "Free Parking");
+		BOARD[0][1] = new Square(22, "Kentucky");
+		BOARD[0][2] = new Square(23, "Chance");
+		BOARD[0][3] = new Square(24, "Indiana");
+		BOARD[0][4] = new Square(25, "Illinois");
+		BOARD[0][5] = new Square(26, "B. & O. Railroad");
+		BOARD[0][6] = new Square(27, "Atlantic");
+		BOARD[0][7] = new Square(28, "Ventnor");
+		BOARD[0][8] = new Square(29, "Water Works");
+		BOARD[0][9] = new Square(30, "Marvin Gardens");
+		BOARD[0][10] = new Square(31, "Go To Jail");
+		BOARD[1][10] = new Square(32, "Pacific");
+		BOARD[2][10] = new Square(33, "North Carolina");
+		BOARD[3][10] = new Square(34, "Community Chest");
+		BOARD[4][10] = new Square(35, "Pennsylvania");
+		BOARD[5][10] = new Square(36, "Short Line Railroad");
+		BOARD[6][10] = new Square(37, "Chance");
+		BOARD[7][10] = new Square(38, " Park Place");
+		BOARD[8][10] = new Square(39, "Luxury Tax");
+		BOARD[9][10] = new Square(40, "Boardwalk");
+
+		// blank squares
+		BOARD[1][1] = new Square (41, "  ");
+		BOARD[1][2] = new Square (42, "  ");
+		BOARD[1][3] = new Square (43,"  ");
+		BOARD[1][4] = new Square (44,"  ");
+		BOARD[1][5] = new Square (45,"  ");
+		BOARD[1][6] = new Square (46,"  ");
+		BOARD[1][7] = new Square (47,"  ");
+		BOARD[1][8] = new Square (48,"  ");
+		BOARD[1][9] = new Square (49,"  ");
+		BOARD[2][1] = new Square (50,"  ");
+		BOARD[2][2] = new Square (51,"  ");
+		BOARD[2][3] = new Square (52,"  ");
+		BOARD[2][4] = new Square (53,"  ");
+		BOARD[2][5] = new Square (54,"  ");
+		BOARD[2][6] = new Square (55,"  ");
+		BOARD[2][7] = new Square (56,"  ");
+		BOARD[2][8] = new Square (57,"  ");
+		BOARD[2][9] = new Square (58,"  ");
+		BOARD[3][1] = new Square (59,"  ");
+		BOARD[3][2] = new Square (60,"  ");
+		BOARD[3][3] = new Square (61,"  ");
+		BOARD[3][4] = new Square (62,"  ");
+		BOARD[3][5] = new Square (63,"  ");
+		BOARD[3][6] = new Square (64,"  ");
+		BOARD[3][7] = new Square (65,"  ");
+		BOARD[3][8] = new Square (66,"  "); 
+		BOARD[3][9] = new Square (67,"  ");
+		BOARD[4][1] = new Square (68,"  ");
+		BOARD[4][2] = new Square (69,"  ");
+		BOARD[4][3] = new Square (70,"  ");
+		BOARD[4][4] = new Square (71,"  ");
+		BOARD[4][5] = new Square (72,"  ");
+		BOARD[4][6] = new Square (73,"  ");
+		BOARD[4][7] = new Square (74,"  ");
+		BOARD[4][8] = new Square (75,"  ");
+		BOARD[4][9] = new Square (76,"  ");
+		BOARD[5][1] = new Square (77,"  ");
+		BOARD[5][2] = new Square (78,"  ");
+		BOARD[5][3] = new Square (79,"  ");
+		BOARD[5][4] = new Square (80," MONOPOLY ");
+		BOARD[5][5] = new Square (81,"");
+		BOARD[5][6] = new Square (82,"");
+		BOARD[5][7] = new Square (83,"");
+		BOARD[5][8] = new Square (84,"");
+		BOARD[5][9] = new Square (85,"");
+		BOARD[6][1] = new Square (86,"  ");
+		BOARD[6][2] = new Square (87,"  ");
+		BOARD[6][3] = new Square (88,"  ");
+		BOARD[6][4] = new Square (89,"  ");
+		BOARD[6][5] = new Square (90,"  ");
+		BOARD[6][6] = new Square (91,"  ");
+		BOARD[6][7] = new Square (92,"  ");
+		BOARD[6][8] = new Square (93,"  ");
+		BOARD[6][9] = new Square (94,"  ");
+		BOARD[7][1] = new Square (95,"  ");
+		BOARD[7][2] = new Square (96,"  ");
+		BOARD[7][3] = new Square (97,"  ");
+		BOARD[7][4] = new Square (98,"  ");
+		BOARD[7][5] = new Square (99,"  ");
+		BOARD[7][6] = new Square (100,"  ");
+		BOARD[7][7] = new Square (101,"  ");
+		BOARD[7][8] = new Square (102,"  ");
+		BOARD[7][9] = new Square (103,"  ");
+		BOARD[8][1] = new Square (104,"  ");
+		BOARD[8][2] = new Square (105,"  ");
+		BOARD[8][3] = new Square (106,"  ");
+		BOARD[8][4] = new Square (107,"  ");
+		BOARD[8][5] = new Square (108,"  ");
+		BOARD[8][6] = new Square (109,"  ");
+		BOARD[8][7] = new Square (110,"  ");
+		BOARD[8][8] = new Square (111,"  ");
+		BOARD[8][9] = new Square (112,"  ");
+		BOARD[9][1] = new Square (113,"  ");
+		BOARD[9][2] = new Square (114,"  ");
+		BOARD[9][3] = new Square (115,"  ");
+		BOARD[9][4] = new Square (116,"  ");
+		BOARD[9][5] = new Square (117,"  ");
+		BOARD[9][6] = new Square (118,"  ");
+		BOARD[9][7] = new Square (119,"  ");
+		BOARD[9][8] = new Square (120,"  ");
+		BOARD[9][9] = new Square (121,"  ");
+		
+//		BOARD[10][10] = "GO";
+//		BOARD[10][9] = "01";
+//		BOARD[10][8] = "02";
+//		BOARD[10][7] = "03";
+//		BOARD[10][6] = "04";
+//		BOARD[10][5] = "05";
+//		BOARD[10][4] = "06";
+//		BOARD[10][3] = "07";
+//		BOARD[10][2] = "08";
+//		BOARD[10][1] = "09";
+//		BOARD[10][0] ="10";
+//		BOARD[9][0] = "11";
+//		BOARD[8][0] = "12";
+//		BOARD[7][0] = "13";
+//		BOARD[6][0] = "14";
+//		BOARD[5][0] = "15";
+//		BOARD[4][0] = "16";
+//		BOARD[3][0] = "17";
+//		BOARD[2][0] = "18";
+//		BOARD[1][0] = "19";
+//		BOARD[0][0] = "20";
+//		BOARD[0][1] = "21";
+//		BOARD[0][2] = "22";
+//		BOARD[0][3] = "23";
+//		BOARD[0][4] = "24";
+//		BOARD[0][5] = "25";
+//		BOARD[0][6] = "26";
+//		BOARD[0][7] = "27";
+//		BOARD[0][8] = "28";
+//		BOARD[0][9] = "29";
+//		BOARD[0][10] = "30";
+//		BOARD[1][10] = "31";
+//		BOARD[2][10] = "32";
+//		BOARD[3][10] = "33";
+//		BOARD[4][10] = "34";
+//		BOARD[5][10] = "35";
+//		BOARD[6][10] = "36";
+//		BOARD[7][10] = "37";
+//		BOARD[8][10] = "38";
+//		BOARD[9][10] = "39";
+//
+//		// blank squares
+//		BOARD[1][1] = "  ";
+//		BOARD[1][2] = "  ";
+//		BOARD[1][3] = "  ";
+//		BOARD[1][4] = "  ";
+//		BOARD[1][5] = "  ";
+//		BOARD[1][6] = "  ";
+//		BOARD[1][7] = "  ";
+//		BOARD[1][8] = "  ";
+//		BOARD[1][9] = "  ";
+//		BOARD[2][1] = "  ";
+//		BOARD[2][2] = "  ";
+//		BOARD[2][3] = "  ";
+//		BOARD[2][4] = "  ";
+//		BOARD[2][5] = "  ";
+//		BOARD[2][6] = "  ";
+//		BOARD[2][7] = "  ";
+//		BOARD[2][8] = "  ";
+//		BOARD[2][9] = "  ";
+//		BOARD[3][1] = "  ";
+//		BOARD[3][2] = "  ";
+//		BOARD[3][3] = "  ";
+//		BOARD[3][4] = "  ";
+//		BOARD[3][5] = "  ";
+//		BOARD[3][6] = "  ";
+//		BOARD[3][7] = "  ";
+//		BOARD[3][8] = "  ";
+//		BOARD[3][9] = "  ";
+//		BOARD[4][1] = "  ";
+//		BOARD[4][2] = "  ";
+//		BOARD[4][3] = "  ";
+//		BOARD[4][4] = "  ";
+//		BOARD[4][5] = "  ";
+//		BOARD[4][6] = "  ";
+//		BOARD[4][7] = "  ";
+//		BOARD[4][8] = "  ";
+//		BOARD[4][9] = "  ";
+//		BOARD[5][1] = "  ";
+//		BOARD[5][2] = "  ";
+//		BOARD[5][3] = "  ";
+//		BOARD[5][4] = " MONOPOLY ";
+//		BOARD[5][5] = "";
+//		BOARD[5][6] = "";
+//		BOARD[5][7] = "";
+//		BOARD[5][8] = "";
+//		BOARD[5][9] = " ";
+//		BOARD[6][1] = "  ";
+//		BOARD[6][2] = "  ";
+//		BOARD[6][3] = "  ";
+//		BOARD[6][4] = "  ";
+//		BOARD[6][5] = "  ";
+//		BOARD[6][6] = "  ";
+//		BOARD[6][7] = "  ";
+//		BOARD[6][8] = "  ";
+//		BOARD[6][9] = "  ";
+//		BOARD[7][1] = "  ";
+//		BOARD[7][2] = "  ";
+//		BOARD[7][3] = "  ";
+//		BOARD[7][4] = "  ";
+//		BOARD[7][5] = "  ";
+//		BOARD[7][6] = "  ";
+//		BOARD[7][7] = "  ";
+//		BOARD[7][8] = "  ";
+//		BOARD[7][9] = "  ";
+//		BOARD[8][1] = "  ";
+//		BOARD[8][2] = "  ";
+//		BOARD[8][3] = "  ";
+//		BOARD[8][4] = "  ";
+//		BOARD[8][5] = "  ";
+//		BOARD[8][6] = "  ";
+//		BOARD[8][7] = "  ";
+//		BOARD[8][8] = "  ";
+//		BOARD[8][9] = "  ";
+//		BOARD[9][1] = "  ";
+//		BOARD[9][2] = "  ";
+//		BOARD[9][3] = "  ";
+//		BOARD[9][4] = "  ";
+//		BOARD[9][5] = "  ";
+//		BOARD[9][6] = "  ";
+//		BOARD[9][7] = "  ";
+//		BOARD[9][8] = "  ";
+//		BOARD[9][9] = "  ";
+		
+		
+		
+	}
+
+	public void showBoard() throws IOException {
+		System.out.println();
+			System.out.println("     ----------------------------------------------");
+		for (int i = 0; i < BOARD.length; i++) {
+		
+			System.out.print("|----|                                            |----|");
+			System.out.println();
+			for (int j = 0; j < BOARD.length; j++) {
+				System.out.print("  " + BOARD[i][j].getLocation() + " ");
+			
+			}
+			System.out.println();
+		}
+			System.out.print("|----|                                            |----|");	
+			System.out.println();
+			System.out.println("     ---------------------------------------------");
+			System.out.println();
+		
+			
+			
+//		for(int i = 10; i < 11; i ++){
+//			System.out.print("|----|                                            |----|");
+//			System.out.println();
+//			for (int j = 0; j < BOARD.length; j++) {
+//				System.out.print("  " + BOARD[i][j].getLocation() + " ");
+//			
+//			}
+//			System.out.println();
+//		}
+	}
+	
+	
+	
+}
