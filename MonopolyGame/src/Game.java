@@ -11,6 +11,8 @@ class Game {
 	private ArrayList<Cards> communityChest = new ArrayList<Cards>();
 	//a list of the chance cards
 	private ArrayList<Cards> chance = new ArrayList<Cards>();
+	//Start Menu for when application first starts up
+	private String[] menu = {"Play a New Game", "Credits", "Exit"};
 	
 	public Game()throws IOException
 	{
@@ -45,6 +47,24 @@ class Game {
 	{
 		//prints the board as well as the players and where they are on the board
 		gameArea.showBoard();
+	}
+	
+	public void startMenu(){
+		int menuOption = ConsoleUI.promptForMenuSelection(menu, false);
+		if(menuOption == 1){
+			play();
+		}
+		else if(menuOption == 2){
+			System.out.println("Neumont University Fall 2016 Quarter 1");
+			System.out.println("Ryan Cox CSC 110: Section A");
+			System.out.println("Intro to CS Final Project Group 1 - Monopoly");
+			System.out.println("Game programmed by: ");
+			System.out.println("Cooper Astle\nColin Borek\nMelissa Buena\nJoshua Carpenter");
+		}
+		else{
+			System.out.println("Exiting 'Monopoly'...");
+			System.out.println("Goodbye!");
+		}
 	}
 	
 	public void selectCommunity()
