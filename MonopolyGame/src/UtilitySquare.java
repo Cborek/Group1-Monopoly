@@ -11,7 +11,7 @@ public class UtilitySquare extends Square {
 		setMortgage(mortgage);
 	}
 	
-	public void getUtilityInfo() {
+	public void getInfo() {
 		getSquareInfo();
 		System.out.println("This color is: " + getColor());
 		System.out.println("The cost is: " + getCost());

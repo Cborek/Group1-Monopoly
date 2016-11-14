@@ -7,7 +7,7 @@ public class PaymentSquare extends Square {
 		setRent(rent);
 	}
 	
-	public void getPaymentInfo() {
+	public void getInfo() {
 		getSquareInfo();
 		System.out.println("The rent is: " +getRent(1));
 	}

@@ -7,5 +7,10 @@ public class GoSquare extends Square{
 		setRent(rent);
 	}
 	
+	public void getInfo() {
+		getSquareInfo();
+		System.out.println("The rent is: " +getRent(0));
+	}
+	
 	//WRITE IN WHAT HAPPENS WHEN YOU LAND ON OR PASS THIS SQUARE
 }

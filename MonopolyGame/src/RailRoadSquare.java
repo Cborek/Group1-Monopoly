@@ -8,7 +8,7 @@ class RailRoadSquare extends UtilitySquare {
 		setRentWithFour(rentWithFour);
 	}
 	
-	public void getRailRoadInfo() {
+	public void getInfo() {
 		getSquareInfo();
 		System.out.println("This color is: " + getColor());
 		System.out.println("The cost is: " + getCost());

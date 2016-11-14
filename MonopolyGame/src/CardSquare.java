@@ -12,7 +12,7 @@ public class CardSquare extends Square {
 		}
 	}
 	
-	public void getCardSquareInfo() {
+	public void getInfo() {
 		getSquareInfo();
 	}
 	

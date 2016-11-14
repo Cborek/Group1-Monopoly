@@ -3,7 +3,7 @@ package edu.neumont.csc110.a.monopoly;
 class PropertySquare extends Square {
 
 	public PropertySquare(int location, String name, String color, int cost, int rent, int houseCost,  int withOneHouse,
-			int withTwoHouses, int withThreeHouses, int withFourHouses, int withHotel, int mortgage, int player) {
+			int withTwoHouses, int withThreeHouses, int withFourHouses, int withHotel, int mortgage) {
 		super(location, name);
 		setColor(color);
 		setCost(cost);
@@ -16,11 +16,11 @@ class PropertySquare extends Square {
 		setHouseCost(houseCost);
 		setHouses(getHouses());
 		setMortgage(mortgage);
-		setPlayer(player);
+		
 		
 	}
 	
-	public void getPropertyInfo(){
+	public void getInfo(){
 		getSquareInfo();
 		System.out.println("This color is: " + getColor());
 		System.out.println("The cost is: " + getCost());

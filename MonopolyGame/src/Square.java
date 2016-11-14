@@ -19,9 +19,16 @@ public class Square {
 	private int rentWithThree;
 	private int rentWithFour;
 	private int player = 0;
+	private String contents;
 	
 	// square object for assigning values of a square. Can be assigned in this class or board class
-	public static Square square1 = new PropertySquare(2, "Vegas",  "Orange", 200, 1, 2, 3,4,5,6,7,8, 1);
+	public static Square square1 = new PropertySquare(2, "Vegas",  "Orange", 200, 1, 2, 3,4,5,6,7,8);
+	public Square(String contents){
+		this.contents = contents;
+	}
+	public String getContents() {
+		return contents;
+	}
 	
 	public Square( int location, String name) {
 		this.location = location;
@@ -73,21 +80,6 @@ public class Square {
 	
 	//Returns the cost of rent when a player lands on this property.
 	public int getRent(int numHouses){
-//		if(numHouses == 1){
-//			rent = oneHouse;
-//		}
-//		if(numHouses == 2){
-//			rent = twoHouses;
-//		}
-//		if(numHouses == 3){
-//			rent = threeHouses;
-//		}
-//		if(numHouses == 4){
-//			rent = fourHouses;
-//		}
-//		if(numHouses == 5){
-//			addHotel(hotel);
-//		}
 		return rent;
 	}
 	public void setRent(int rent) {
