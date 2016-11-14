@@ -1,5 +1,7 @@
 "# Group1-Monopoly" 
+====
 TODO
+====
 
 MAKE SURE TO COMMENT ALL OF YOUR CODE
 
@@ -21,7 +23,9 @@ REMEMBER TO COMMENT YOUR CODE
 
 Enums need to be used somehow.
 
-CORE COMPETENCIES CHECKLIST
+===========================
+Core Competencies Checklist
+===========================
 
 Use appropriate types, method parameters, and return types.
 
