@@ -9,6 +9,6 @@ public class PaymentSquare extends Square {
 	
 	public void getInfo() {
 		getSquareInfo();
-		System.out.println("The rent is: " +getRent(1));
+		System.out.println("The rent is: " +getRent());
 	}
 }
