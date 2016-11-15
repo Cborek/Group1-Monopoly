@@ -12,7 +12,7 @@ class RailRoadSquare extends UtilitySquare {
 		getSquareInfo();
 		System.out.println("This color is: " + getColor());
 		System.out.println("The cost is: " + getCost());
-		System.out.println("The rent is : " + getRent(1));
+		System.out.println("The rent is : " + getRent());
 		System.out.println("Rent with two RR owned: " + getRentWithTwo());
 		System.out.println("Rent with three RR owned: " + getRentWithThree());
 		System.out.println("Rent with four RR owned: " + getRentWithFour());
