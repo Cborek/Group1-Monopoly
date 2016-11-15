@@ -22,7 +22,7 @@ public class ConsoleUI {
 	 */
 	public static int promptForMenuSelection(String[] options, boolean withQuit) throws IOException {
 
-		System.out.println("What menu action do you want to do?");
+		System.out.println("What menu option do you want to execute?");
 		int min = 1;
 
 		for (int i = 0; i < options.length; i++) {
@@ -282,12 +282,12 @@ public class ConsoleUI {
 			IllegalArgumentException myException = new IllegalArgumentException();
 			throw myException;
 		}
-		System.out.print(prompt);
+		System.out.println(prompt);
 		String input = in.readLine();
 		while (input.length() == 0 && allowEmpty == false) { // ! is equal to
 																// allowEmpty ==
 																// false
-			System.out.println("Sorry, you can't enter the empty string");
+			System.out.println("Sorry, you can't enter an empty string");
 			input = in.readLine();
 		}
 		return input;
@@ -322,7 +322,7 @@ public class ConsoleUI {
 			} else {
 				charInput = input.charAt(0);
 				if (charInput < min || charInput > max) {
-					System.out.println("Sorry, the character you entered is not in between " + min + " and " + max);
+					System.out.println("Sorry, the character you enter must be between " + min + " and " + max);
 					isGoodInput = false;
 				} else {
 
