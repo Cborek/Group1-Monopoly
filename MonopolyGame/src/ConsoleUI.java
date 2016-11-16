@@ -35,7 +35,10 @@ public class ConsoleUI {
 		boolean isGoodInput = true;
 		String input;
 		int inputInt = 0;
-
+		if (options == null || options.length==0 && !withQuit) {
+			IllegalArgumentException myException = new IllegalArgumentException();
+			throw myException;
+		}
 		do {
 			input = in.readLine();
 			isGoodInput = true;
@@ -80,6 +83,10 @@ public class ConsoleUI {
 		System.out.println(prompt);
 		boolean isBoolean = true;
 		boolean isGoodInput = true;
+		if (prompt == null || trueString == null || falseString == null) {
+			IllegalArgumentException myException = new IllegalArgumentException();
+			throw myException;
+		}
 		do {
 			String input = in.readLine();
 
@@ -124,7 +131,7 @@ public class ConsoleUI {
 	 * @return the byte value
 	 * @throws IOException
 	 */
-	static byte promptForByte(String prompt, byte min, byte max) throws IOException {
+	public static byte promptForByte(String prompt, byte min, byte max) throws IOException {
 		return (byte) promptForShort(prompt, min, max);
 	}
 
@@ -141,7 +148,7 @@ public class ConsoleUI {
 	 * @return the short value
 	 * @throws IOException
 	 */
-	static short promptForShort(String prompt, short min, short max) throws IOException {
+	public static short promptForShort(String prompt, short min, short max) throws IOException {
 		return (short) promptForInt(prompt, min, max);
 	}
 
@@ -177,12 +184,16 @@ public class ConsoleUI {
 	 * @return the long value
 	 * @throws IOException
 	 */
-	static long promptForLong(String prompt, long min, long max) throws IOException {
+	public static long promptForLong(String prompt, long min, long max) throws IOException {
 
 		System.out.println(prompt);
 		String rawInput = null;
 		long input = 0;
 		boolean isGoodInput = true;
+		if (prompt == null || min>max) {
+			IllegalArgumentException myException = new IllegalArgumentException();
+			throw myException;
+		}
 		do {
 			rawInput = in.readLine();
 			isGoodInput = true;
@@ -220,7 +231,7 @@ public class ConsoleUI {
 	 * @return the float value
 	 * @throws IOException
 	 */
-	static float promptForFloat(String prompt, float min, float max) throws IOException {
+	public static float promptForFloat(String prompt, float min, float max) throws IOException {
 		return (float) promptForDouble(prompt, min, max);
 	}
 
@@ -237,11 +248,15 @@ public class ConsoleUI {
 	 * @return the double value
 	 * @throws IOException
 	 */
-	static double promptForDouble(String prompt, double min, double max) throws IOException {
+	public static double promptForDouble(String prompt, double min, double max) throws IOException {
 		System.out.println(prompt);
 		String rawInput = null;
 		double input = 0;
 		boolean isGoodInput = true;
+		if (prompt == null || min>max) {
+			IllegalArgumentException myException = new IllegalArgumentException();
+			throw myException;
+		}
 		do {
 			rawInput = in.readLine();
 			isGoodInput = true;
@@ -313,6 +328,10 @@ public class ConsoleUI {
 		boolean isGoodInput = true;
 		String input;
 		char charInput = 0;
+		if (prompt == null || min>max) {
+			IllegalArgumentException myException = new IllegalArgumentException();
+			throw myException;
+		}
 		do {
 			input = in.readLine();
 			
