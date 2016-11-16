@@ -1,5 +1,3 @@
-package edu.neumont.csc110.a.monopoly.board;
-
 import java.io.IOException;
 
 public class Board {
@@ -137,7 +135,6 @@ public class Board {
 
 	public void showBoard() throws IOException {
 		System.out.println();
-		System.out.println(BOARD.length);	
 		System.out.println("     ----------------------------------------------");
 			
 		for (int i = 0; i < BOARD.length; i++) {
@@ -171,5 +168,35 @@ public class Board {
 			System.out.println("     ---------------------------------------------");
 			System.out.println();
 	}
+	public Square getPos(int num)
+	{
+		//returns the value of a position
+		for(int r=0;r<BOARD.length;r++)
+		{
+			for(int c=0; c< BOARD[r].length; c++)
+			{
+				if(BOARD[r][c].getLocation() == num)
+				{
+					return BOARD[r][c];
+				}
+			}
+		}
+		return BOARD[0][0];
+	}
 	
+	public String getPosName(int num)
+	{
+		//returns the value of a position
+		for(int r=0;r<BOARD.length;r++)
+		{
+			for(int c=0; c< BOARD[r].length; c++)
+			{
+				if(BOARD[r][c].getLocation() == num)
+				{
+					return BOARD[r][c].getName();
+				}
+			}
+		}
+		return BOARD[0][0].getName();
+	}
 }

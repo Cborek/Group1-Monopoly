@@ -1,4 +1,3 @@
-package edu.neumont.csc110.a.monopoly;
 
 public class Square {
 
@@ -20,12 +19,13 @@ public class Square {
 	private int rentWithFour;	//The rent for owning FOUR squares with same color
 	private int player = 0;		//PLAYER NUMBER  IS NOT USED YET IN THIS CLASS  and  MAY NOT BE USED
 	private String contents;	//Holds the string contents in the blank squares in the board
-	
+	private boolean isOwned;   //tells if the squared is owned and can be purchased
 	
 	//Square constructor for BLANK SQUARES
 	//I would rename this but we have already assigned all of our blank squares with the new Square() constructor   
 	public Square(String contents){
 		this.contents = contents;
+		isOwned = false;
 	}
 	public String getContents() {
 		return contents;
@@ -36,6 +36,7 @@ public class Square {
 	public Square( int location, String name) {
 		this.location = location;
 		this.name = name;
+		isOwned =false;
 	}
 	
 
@@ -216,7 +217,14 @@ public class Square {
 		this.mortgage = mortgage;
 	}
 	
+	//sets and get the isOwned boolean
+	public boolean getIsOwned()
+	{
+		return isOwned;
+	}
 	
+	public void setIsOwned()
+	{
+		isOwned =!isOwned;
+	}
 }
-
-
