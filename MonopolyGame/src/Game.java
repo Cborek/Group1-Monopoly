@@ -54,6 +54,7 @@ class Game {
 			}		
 		}while(gameMembers.size()>1 && good);
 		//win condition
+	
 		if(gameMembers.size()==1)
 		{
 			System.out.println(gameMembers.get(0).getName() + " You have WON");
@@ -84,6 +85,7 @@ class Game {
 			}
 			//the position value is equal to the square the player is currently on
 			Square position = gameArea.getPos(currentPlayer.getPlace());
+			
 			if(position.getIsOwned() && !currentPlayer.ownes(position)&& position.getRent()>0 )
 			{
 				System.out.println ("This space is owned you pay rent of $" + position.getRent() +" dollars");
@@ -101,23 +103,25 @@ class Game {
 			}
 			else if(option ==2)
 			{
-				//send current space to auction
-				auctionNotBought(position);
+				option2DoNotBuy(position,currentPlayer);
 			}
 			else if(option == 3)
 			{
-				Square[] playerProperty = new Square[currentPlayer.getHoldings().size()];
-				currentPlayer.showHoldings();
-				for(int i=0; i<playerProperty.length;i++)
-				{
-					playerProperty[i]=currentPlayer.getHoldings().get(i);
-				}
-				//checks is player has ability to build a house
+				option3Build(position,currentPlayer);
+			}
+			else if(option ==4)
+			{
+				option4SellProp(currentPlayer);
+			}
+			else if(option == 5)
+			{
+				option5makeOffer(currentPlayer);
 			}
 			else if(option == 6)
 			{
 				option6(currentPlayer);
 			}
+			
 			if(doubles && turn!=3 && option == 7)
 			{
 				System.out.println ("You rolled doubles go again");
@@ -132,15 +136,18 @@ class Game {
 				doubles = false;
 			}
 		}while(option <7);
+	
 		if(!gameArea.getPos(currentPlayer.getPlace()).getIsOwned() && option ==7)
 		{
 			auctionNotBought(gameArea.getPos(currentPlayer.getPlace()));
 		}
+		
 		else if(option == 8)
 		{
 			System.out.println ("You have quit the game");
 			//action all property off
 			currentPlayer.setMoney(-1*currentPlayer.getMoney());
+			
 			for(int i=0; i<currentPlayer.PropertyNum();i++)
 			{
 				System.out.println (currentPlayer.getName() + " you may not participate in this auction. You are quiting and have forfieted all your money");
@@ -151,6 +158,7 @@ class Game {
 			gameMembers.remove(currentPlayer);
 		}
 	}
+
 	//handle the squares you cant buy
 	private void uniqueSquares(Square position , Player currentPlayer)
 	{
@@ -162,6 +170,7 @@ class Game {
 			}
 			
 	}
+
 	private void option1(Square position , Player currentPlayer)
 	{
 		if(!position.getIsOwned() && currentPlayer.getMoney()>=position.getCost())
@@ -181,12 +190,42 @@ class Game {
 				//set a boolean within the square to say it is owned and by who
 				//check if player can afford it
 	}
+
+	private void option2DoNotBuy(Square position , Player currentPlayer)throws IOException
+	{
+		//send current space to auction
+		auctionNotBought(position);
+	}
+
+	private void option3Build(Square position , Player currentPlayer)
+	{
+		Square[] playerProperty = new Square[currentPlayer.getHoldings().size()];
+				currentPlayer.showHoldings();
+				for(int i=0; i<playerProperty.length;i++)
+				{
+					playerProperty[i]=currentPlayer.getHoldings().get(i);
+				}
+				//checks is player has ability to build a house
+	}
+	
+	private void option4SellProp(Player currentPlayer)
+	{
+		// has the user select if they wnat to sell a property or a card
+		//then handle the selling from there
+	}
+
+	private void option5makeOffer(Player currentPlayer)
+	{
+		// handles the player offering to buy from other players any property
+	}
+
 	private void option6(Player currentPlayer)
 	{
 		/*Handles the mortgaging of a chosen square
 		 *player has stuff to get a list of owned properties and certain values and such
 		 */
 	}
+	
 	private int rollDice()
 	{
 		//generate the roll of a six sided die
@@ -201,6 +240,7 @@ class Game {
 		//checks if doubles have been roled
 		return die1==die2;
 	}
+
 	public void printGame()throws IOException
 	{
 		//prints the board as well as the players and where they are on the board
@@ -234,6 +274,7 @@ class Game {
 		communityChest.remove(0);
 		//modifiying player money with value on the card
 	}
+
 	private void selectChance()
 	{
 		//possible needed changes for get out of jail
@@ -242,6 +283,7 @@ class Game {
 		chance.remove(0);
 		//modifiying player money with value on the card
 	}
+
 	private ArrayList<Cards> shuffleList(ArrayList<Cards> a){
 		Random rand = new Random();
 		for(int i = 0; i < a.size(); i++){
