@@ -1,12 +1,14 @@
+package borek.colin.monopoly;
 import java.util.ArrayList;
 
 class Player {
 	//has any cards that the player may have in their posetion
-	private ArrayList<Cards> heldCards = new ArrayList<Cards>();
+	//private ArrayList<Cards> heldCards = new ArrayList<Cards>();
 	//hold players current monetary holdings
 	private int money;
 	//holds the propertiues that the palyer has
 	private ArrayList<Square> ownedAssets = new ArrayList<Square>();
+	private ArrayList<Square>mortgagedProperties = new ArrayList<Square>();
 	// some type of thing to hold the piece the player is using most likly an enum
 	private String name;
 	private int place;
@@ -96,93 +98,33 @@ class Player {
 	{
 		return ownedAssets;
 	}
-	
+	// a statement to asses if the player can build upon the selected square
+	public boolean canBuild()
+	{
+		boolean build = false;
+		
+		return build;
+	}
 	// gets a single owned property so as to be used for auction or sale
 	public Square getProperty(int num)
 	{
 		return ownedAssets.get(num);
+	}
+	public void removeProperty(Square toRem){
+		ownedAssets.remove(toRem);
 	}
 	public int PropertyNum()
 	{
 		//returns the number of properties currently owned by the player
 		return ownedAssets.size();
 	}
-	
-	// a statement to asses if the player can build upon the selected square
-	public boolean canBuild(Square curProperty)
-	{
-		String color = curProperty.getColor();
-		boolean good = false;
-		if(color.equalsIgnoreCase("white")|| color.equalsIgnoreCase("black"))
-		{
-			return false;
-		}
-		if(color.equalsIgnoreCase("blue") || color.equalsIgnoreCase("brown"))
-		{
-			int owned =0;
-			for(Square prop: ownedAssets)
-			{
-				if(prop.getColor().equalsIgnoreCase(color))
-				{
-					owned++;
-				}
-			}
-			if(owned == 2)
-			{
-				good = true;
-			} 
-		}
-		else
-		{
-			int owned =0;
-			for(Square prop: ownedAssets)
-			{
-				if(prop.getColor().equalsIgnoreCase(color))
-				{
-					owned++;
-				}
-			}
-			if(owned == 3)
-			{
-				good = true;
-			}
-		}
-		return good;
+	//Adds a property to the mortgagesProperties
+	public void addMortgagedProperty(Square a){
+		mortgagedProperties.add(a);
 	}
-	
-	public boolean ownesColorGroup(String color)
-	{
-		boolean good = false;
-		if(color.equalsIgnoreCase("blue") || color.equalsIgnoreCase("brown") || color.equalsIgnoreCase("black"))
-		{
-			int owned =0;
-			for(Square prop: ownedAssets)
-			{
-				if(prop.getColor().equalsIgnoreCase(color))
-				{
-					owned++;
-				}
-			}
-			if(owned == 2)
-			{
-				good = true;
-			} 
+	public void getMortgagedProperties(){
+		for(int i = 0; i < mortgagedProperties.size(); i++){
+			System.out.println(mortgagedProperties.get(i));
 		}
-		else if(!color.equalsIgnoreCase("white"))
-		{
-			int owned =0;
-			for(Square prop: ownedAssets)
-			{
-				if(prop.getColor().equalsIgnoreCase(color))
-				{
-					owned++;
-				}
-			}
-			if(owned == 3)
-			{
-				good = true;
-			}
-		}
-		return good;
 	}
 }
