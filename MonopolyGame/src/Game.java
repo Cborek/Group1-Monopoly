@@ -12,7 +12,7 @@ class Game {
 	//Start Menu for when application first starts up
 	private final String[] menu = {"Play a New Game", "Credits", "Exit"};
 	//options of the players turn
-	private final String[] playerOptions = {"Buy Space","Do not buy space","Build","Sell property","Make offer","End turn","Quit game"};
+	private final String[] playerOptions = {"Buy Space","Do not buy space","Build","Sell property","Make offer","Mortgage","End turn","Quit game"};
 	//a list of the player
 	private ArrayList<Player> gameMembers = new ArrayList<Player>();
 	private CreateCardLists cardLists = new CreateCardLists();
@@ -60,7 +60,7 @@ class Game {
 		}
 		startMenu();
 	}
-	public void playerTurn(Player currentPlayer)throws IOException
+	private void playerTurn(Player currentPlayer)throws IOException
 	{
 		// runs throught the options and possibilities of the players turn
 		int turn =1;
@@ -94,31 +94,10 @@ class Game {
 			System.out.println ();
 			System.out.println (currentPlayer.getName() + " it is your turn");
 			option = ConsoleUI.promptForMenuSelection(playerOptions,false);
-			if(gameArea.getPosName(currentPlayer.getPlace()).trim().equalsIgnoreCase("got to jail"))
-			{
-				//player goes to jail
-				System.out.println ("you go to jail");
-				currentPlayer.goToPlace(11);
-			}
-			
+			uniqueSquares(position,currentPlayer);
 			if(option == 1)
 			{
-				if(!position.getIsOwned() && currentPlayer.getMoney()>=position.getCost())
-				{
-					currentPlayer.setMoney(-1*position.getCost());
-					//Player purchases the space
-					currentPlayer.propertyChange(position);
-					// player is passed the square they are on
-					position.setIsOwned();
-					//the square is now owned;
-					position.setPlayer(gameMembers.indexOf(currentPlayer)+1);
-				}
-				else
-				{
-					System.out.println ("You cannot buy that square");
-				}
-				//set a boolean within the square to say it is owned and by who
-				//check if player can afford it
+				option1(position, currentPlayer);
 			}
 			else if(option ==2)
 			{
@@ -135,7 +114,11 @@ class Game {
 				}
 				//checks is player has ability to build a house
 			}
-			if(doubles && turn!=3 && option == 6)
+			else if(option == 6)
+			{
+				option6(currentPlayer);
+			}
+			if(doubles && turn!=3 && option == 7)
 			{
 				System.out.println ("You rolled doubles go again");
 				turn++;
@@ -148,12 +131,12 @@ class Game {
 				//create the in jail or just visiting
 				doubles = false;
 			}
-		}while(option <6);
-		if(!gameArea.getPos(currentPlayer.getPlace()).getIsOwned() && option ==6)
+		}while(option <7);
+		if(!gameArea.getPos(currentPlayer.getPlace()).getIsOwned() && option ==7)
 		{
 			auctionNotBought(gameArea.getPos(currentPlayer.getPlace()));
 		}
-		else if(option == 7)
+		else if(option == 8)
 		{
 			System.out.println ("You have quit the game");
 			//action all property off
@@ -168,7 +151,43 @@ class Game {
 			gameMembers.remove(currentPlayer);
 		}
 	}
-	public int rollDice()
+	//handle the squares you cant buy
+	private void uniqueSquares(Square position , Player currentPlayer)
+	{
+			if(gameArea.getPosName(currentPlayer.getPlace()).trim().equalsIgnoreCase("got to jail"))
+			{
+				//player goes to jail
+				System.out.println ("you go to jail");
+				currentPlayer.goToPlace(11);
+			}
+			
+	}
+	private void option1(Square position , Player currentPlayer)
+	{
+		if(!position.getIsOwned() && currentPlayer.getMoney()>=position.getCost())
+				{
+					currentPlayer.setMoney(-1*position.getCost());
+					//Player purchases the space
+					currentPlayer.propertyChange(position);
+					// player is passed the square they are on
+					position.setIsOwned();
+					//the square is now owned;
+					position.setPlayer(gameMembers.indexOf(currentPlayer)+1);
+				}
+				else
+				{
+					System.out.println ("You cannot buy that square");
+				}
+				//set a boolean within the square to say it is owned and by who
+				//check if player can afford it
+	}
+	private void option6(Player currentPlayer)
+	{
+		/*Handles the mortgaging of a chosen square
+		 *player has stuff to get a list of owned properties and certain values and such
+		 */
+	}
+	private int rollDice()
 	{
 		//generate the roll of a six sided die
 		int roll =0;
@@ -215,7 +234,7 @@ class Game {
 		communityChest.remove(0);
 		//modifiying player money with value on the card
 	}
-	public void selectChance()
+	private void selectChance()
 	{
 		//possible needed changes for get out of jail
 		System.out.println (chance.get(0));
@@ -223,7 +242,7 @@ class Game {
 		chance.remove(0);
 		//modifiying player money with value on the card
 	}
-	public ArrayList<Cards> shuffleList(ArrayList<Cards> a){
+	private ArrayList<Cards> shuffleList(ArrayList<Cards> a){
 		Random rand = new Random();
 		for(int i = 0; i < a.size(); i++){
 			int pullVal = rand.nextInt(a.size());
@@ -235,7 +254,7 @@ class Game {
 	}
 	
 	//handles the auctions if a player does not buy the square they landed on
-	public void auctionNotBought(Square property)throws IOException
+	private void auctionNotBought(Square property)throws IOException
 	{
 		boolean isBought = false;
 		//use a player that holds the current highest bid
