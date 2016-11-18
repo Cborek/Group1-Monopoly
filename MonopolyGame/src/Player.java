@@ -44,7 +44,7 @@ class Player {
 		//show the current properties held by the player
 		for(Square prop: ownedAssets)
 		{
-			//System.out.println(prop.getSquareInfo());
+			prop.getSquareInfo();
 		}
 		//may need changes for cleanliness in the console
 	}
@@ -91,5 +91,26 @@ class Player {
 			return true;
 		}
 		return false;
+	}
+	public ArrayList<Square> getHoldings()
+	{
+		return ownedAssets;
+	}
+	// a statement to asses if the player can build upon the selected square
+	public boolean canBuild()
+	{
+		boolean build = false;
+		
+		return build;
+	}
+	// gets a single owned property so as to be used for auction or sale
+	public Square getProperty(int num)
+	{
+		return ownedAssets.get(num);
+	}
+	public int PropertyNum()
+	{
+		//returns the number of properties currently owned by the player
+		return ownedAssets.size();
 	}
 }

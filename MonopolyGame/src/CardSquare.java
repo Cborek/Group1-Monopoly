@@ -1,5 +1,3 @@
-package edu.neumont.csc110.a.monopoly;
-
 public class CardSquare extends Square {
 	boolean chance;
 	public CardSquare(int location, String name) {
@@ -10,6 +8,7 @@ public class CardSquare extends Square {
 		} else if(name.equalsIgnoreCase("Community Chest")){
 			//CODE TO CHOOSE COMMUNITY CHEST
 		}
+		super.setIsOwned();
 	}
 	
 	public void getInfo() {

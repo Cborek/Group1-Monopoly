@@ -4,6 +4,10 @@ class CreateCardLists {
 	
 	public ArrayList<Cards> CommunityChest = new ArrayList<Cards>();
 	
+	public CreateCardLists()
+	{
+		addCommChestCards();
+	}
 	
 	public void addCommChestCards(){
 		
@@ -26,5 +30,10 @@ class CreateCardLists {
 		CommunityChest.add(new Cards("Pay Hospital: ", "$100", -100)); //16
 		
 		
+	}
+	
+	public ArrayList<Cards> getComChest()
+	{
+		return CommunityChest;
 	}
 	}

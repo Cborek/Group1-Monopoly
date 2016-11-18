@@ -1,10 +1,9 @@
-package edu.neumont.csc110.a.monopoly;
-
 public class PaymentSquare extends Square {
 	
 	public PaymentSquare(int location, String name, int rent) {
 		super(location, name);
 		setRent(rent);
+		super.setIsOwned();
 	}
 	
 	public void getInfo() {

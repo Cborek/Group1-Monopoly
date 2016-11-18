@@ -25,7 +25,7 @@ public class Square {
 	//I would rename this but we have already assigned all of our blank squares with the new Square() constructor   
 	public Square(String contents){
 		this.contents = contents;
-		isOwned = false;
+		isOwned = true;
 	}
 	public String getContents() {
 		return contents;

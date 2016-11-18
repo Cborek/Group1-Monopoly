@@ -3,8 +3,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 class Game {
-	//hold the number of players in the game
-	private int PlayerNum;
 	//generates the game board
 	private Board gameArea = new Board();
 	//a list of the community chest cards
@@ -17,10 +15,11 @@ class Game {
 	private final String[] playerOptions = {"Buy Space","Do not buy space","Build","Sell property","Make offer","End turn","Quit game"};
 	//a list of the player
 	private ArrayList<Player> gameMembers = new ArrayList<Player>();
-	
+	private CreateCardLists cardLists = new CreateCardLists();
 	public Game()throws IOException
 	{
 		//creates the card piles
+		communityChest = cardLists.getComChest();
 		communityChest = shuffleList(communityChest);
 		chance = shuffleList(chance);
 	}
@@ -28,7 +27,7 @@ class Game {
 	private void play()throws IOException
 	{
 		boolean good = true;
-		PlayerNum = ConsoleUI.promptForInt("Please enter the number of players. 2-8", 2,8);
+		int PlayerNum = ConsoleUI.promptForInt("Please enter the number of players. 2-8", 2,8);
 		//creates players based on the number of players
 		for(int i=0; i< PlayerNum; i++)
 		{
@@ -50,9 +49,11 @@ class Game {
 			}
 			if(gameMembers.size()>1)
 			{
+				//gives players the option of ending the entire game without a winner
 				good = ConsoleUI.promptForBool("Is the game still being played? Y/N","y","n");
 			}		
 		}while(gameMembers.size()>1 && good);
+		//win condition
 		if(gameMembers.size()==1)
 		{
 			System.out.println(gameMembers.get(0).getName() + " You have WON");
@@ -83,7 +84,7 @@ class Game {
 			}
 			//the position value is equal to the square the player is currently on
 			Square position = gameArea.getPos(currentPlayer.getPlace());
-			if(position.getIsOwned() && !currentPlayer.ownes(position))
+			if(position.getIsOwned() && !currentPlayer.ownes(position)&& position.getRent()>0 )
 			{
 				System.out.println ("This space is owned you pay rent of $" + position.getRent() +" dollars");
 				currentPlayer.setMoney(-1*position.getRent());
@@ -124,6 +125,16 @@ class Game {
 				//send current space to auction
 				auctionNotBought(position);
 			}
+			else if(option == 3)
+			{
+				Square[] playerProperty = new Square[currentPlayer.getHoldings().size()];
+				currentPlayer.showHoldings();
+				for(int i=0; i<playerProperty.length;i++)
+				{
+					playerProperty[i]=currentPlayer.getHoldings().get(i);
+				}
+				//checks is player has ability to build a house
+			}
 			if(doubles && turn!=3 && option == 6)
 			{
 				System.out.println ("You rolled doubles go again");
@@ -146,6 +157,13 @@ class Game {
 		{
 			System.out.println ("You have quit the game");
 			//action all property off
+			currentPlayer.setMoney(-1*currentPlayer.getMoney());
+			for(int i=0; i<currentPlayer.PropertyNum();i++)
+			{
+				System.out.println (currentPlayer.getName() + " you may not participate in this auction. You are quiting and have forfieted all your money");
+				auctionNotBought(currentPlayer.getProperty(0));
+				currentPlayer.propertyChange(currentPlayer.getProperty(0));
+			}
 			//remove player from list
 			gameMembers.remove(currentPlayer);
 		}
