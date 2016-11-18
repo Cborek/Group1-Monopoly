@@ -96,13 +96,7 @@ class Player {
 	{
 		return ownedAssets;
 	}
-	// a statement to asses if the player can build upon the selected square
-	public boolean canBuild()
-	{
-		boolean build = false;
-		
-		return build;
-	}
+	
 	// gets a single owned property so as to be used for auction or sale
 	public Square getProperty(int num)
 	{
@@ -112,5 +106,83 @@ class Player {
 	{
 		//returns the number of properties currently owned by the player
 		return ownedAssets.size();
+	}
+	
+	// a statement to asses if the player can build upon the selected square
+	public boolean canBuild(Square curProperty)
+	{
+		String color = curProperty.getColor();
+		boolean good = false;
+		if(color.equalsIgnoreCase("white")|| color.equalsIgnoreCase("black"))
+		{
+			return false;
+		}
+		if(color.equalsIgnoreCase("blue") || color.equalsIgnoreCase("brown"))
+		{
+			int owned =0;
+			for(Square prop: ownedAssets)
+			{
+				if(prop.getColor().equalsIgnoreCase(color))
+				{
+					owned++;
+				}
+			}
+			if(owned == 2)
+			{
+				good = true;
+			} 
+		}
+		else
+		{
+			int owned =0;
+			for(Square prop: ownedAssets)
+			{
+				if(prop.getColor().equalsIgnoreCase(color))
+				{
+					owned++;
+				}
+			}
+			if(owned == 3)
+			{
+				good = true;
+			}
+		}
+		return good;
+	}
+	
+	public boolean ownesColorGroup(String color)
+	{
+		boolean good = false;
+		if(color.equalsIgnoreCase("blue") || color.equalsIgnoreCase("brown") || color.equalsIgnoreCase("black"))
+		{
+			int owned =0;
+			for(Square prop: ownedAssets)
+			{
+				if(prop.getColor().equalsIgnoreCase(color))
+				{
+					owned++;
+				}
+			}
+			if(owned == 2)
+			{
+				good = true;
+			} 
+		}
+		else if(!color.equalsIgnoreCase("white"))
+		{
+			int owned =0;
+			for(Square prop: ownedAssets)
+			{
+				if(prop.getColor().equalsIgnoreCase(color))
+				{
+					owned++;
+				}
+			}
+			if(owned == 3)
+			{
+				good = true;
+			}
+		}
+		return good;
 	}
 }
