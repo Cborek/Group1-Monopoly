@@ -1,5 +1,3 @@
-package edu.neumont.csc110.a.monopoly;
-
 class RailRoadSquare extends UtilitySquare {
 	
 	public RailRoadSquare(int location, String name, String color, int cost, int rent, int rentWithTwo, int rentWithThree, int rentWithFour, int mortgage) {
@@ -8,11 +6,11 @@ class RailRoadSquare extends UtilitySquare {
 		setRentWithFour(rentWithFour);
 	}
 	
-	public void getRailRoadInfo() {
+	public void getInfo() {
 		getSquareInfo();
 		System.out.println("This color is: " + getColor());
 		System.out.println("The cost is: " + getCost());
-		System.out.println("The rent is : " + getRent(1));
+		System.out.println("The rent is : " + getRent());
 		System.out.println("Rent with two RR owned: " + getRentWithTwo());
 		System.out.println("Rent with three RR owned: " + getRentWithThree());
 		System.out.println("Rent with four RR owned: " + getRentWithFour());

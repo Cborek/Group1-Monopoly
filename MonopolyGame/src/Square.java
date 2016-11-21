@@ -1,58 +1,61 @@
-package edu.neumont.csc110.a.monopoly;
 
 public class Square {
 
-	private int location;
-	private String name;
-	private String color;
-	private int cost;
-	private int mortgage;
-	private int rent;
-	private int houseCost;
-	private int oneHouse;
-	private int twoHouses;
-	private int threeHouses;
-	private int fourHouses;
-	private int hotelRent;
-	private int numHouses;
-	private int rentWithTwo;
-	private int rentWithThree;
-	private int rentWithFour;
-	private int player = 0;
-	private String contents;
+	private int location; 		//Location of Square on board
+	private String name; 		//Name of the Square
+	private String color; 		//Color value of the square
+	private int cost; 			//The cost to buy the square
+	private int mortgage;		//The mortgage cost of the square
+	private int rent;			//The rent for landing on a square
+	private int houseCost;		//The cost to buy a house
+	private int oneHouse;		//The rent if property has ONE house
+	private int twoHouses;		//The rent if property has TWO houses
+	private int threeHouses;	//The rent if property has THREE house
+	private int fourHouses;		//The rent if property has FOUR houses
+	private int hotelRent;		//The rent if property has a hotel
+	private int numHouses = 0;	//The number of houses on each square
+	private int rentWithTwo;	//The rent for owning TWO squares with same color    ie. Utilities and RailRoad
+	private int rentWithThree;	//The rent for owning THREE squares with same color
+	private int rentWithFour;	//The rent for owning FOUR squares with same color
+	private int player = 0;		//PLAYER NUMBER  IS NOT USED YET IN THIS CLASS  and  MAY NOT BE USED
+	private String contents;	//Holds the string contents in the blank squares in the board
+	private boolean isOwned;   //tells if the squared is owned and can be purchased
 	
-	// square object for assigning values of a square. Can be assigned in this class or board class
-	public static Square square1 = new PropertySquare(2, "Vegas",  "Orange", 200, 1, 2, 3,4,5,6,7,8);
+	//Square constructor for BLANK SQUARES
+	//I would rename this but we have already assigned all of our blank squares with the new Square() constructor   
 	public Square(String contents){
 		this.contents = contents;
+		isOwned = true;
 	}
 	public String getContents() {
 		return contents;
 	}
 	
+	
+	//Square Constructor for BOARD SQUARES   All squares on the board will have AT LEAST these two values
 	public Square( int location, String name) {
 		this.location = location;
 		this.name = name;
+		isOwned =false;
 	}
+	
 
-	// prints out info of property square
+	// Prints out basic info of square that is shared between all squares
 	public void getSquareInfo() {
 		System.out.println("The location is: " +location);
 		System.out.println("The Name is: " + name);
 	}
 	
-	//get location of board on squares
+	
+	// Gets location of board on squares
 	public int getLocation() {
 		return location;
 	}
-	
+	// Gets name of board on squares
 	public String getName() {
 		return name;
 	}
 
-//	public void setName(String name) {
-//		this.name = name;
-//	}
 
 	// get cost to buy the square
 	public int getCost() {
@@ -62,7 +65,10 @@ public class Square {
 		this.cost = cost;
 	}
 	
-	// Player methods will get player number from player class
+	
+	
+	// Player methods will get player number from player class 
+	//IS NOT USED YET  and  MAY NOT BE USED
 	public int getPlayer() {
 		return player;
 	}
@@ -70,7 +76,9 @@ public class Square {
 		this.player = player;
 	}
 	
-	// gets color of square
+	
+	
+	// Gets color of square
 	public String getColor() {
 		return color;
 	}
@@ -78,30 +86,38 @@ public class Square {
 		this.color = color;
 	}	
 	
-	//Returns the cost of rent when a player lands on this property.
-	public int getRent(int numHouses){
-//		if(numHouses == 1){
-//			rent = oneHouse;
-//		}
-//		if(numHouses == 2){
-//			rent = twoHouses;
-//		}
-//		if(numHouses == 3){
-//			rent = threeHouses;
-//		}
-//		if(numHouses == 4){
-//			rent = fourHouses;
-//		}
-//		if(numHouses == 5){
-//			addHotel(hotel);
-//		}
+	
+	// Returns the cost of rent when a player lands on an a property square depending on the number of houses they own.
+	// getRent is also used to get basic rent of squares that do not have houses  ie.  Utilities, RailRoad, GoSquare rent will add money instead of subtract   
+	public int getRent(){	
+		getHouses();
+		if(numHouses == 0){
+			return rent;
+		}
+		if(numHouses == 1){
+			rent = getOneHouseRent();
+		}
+		if(numHouses == 2){
+			rent = getTwoHousesRent();
+		}
+		if(numHouses == 3){
+			rent = getThreeHousesRent();
+		}
+		if(numHouses == 4){
+			rent = getFourHousesRent();
+		}
+		if(numHouses == 5){
+			rent = getHotelRent();
+		}
 		return rent;
 	}
 	public void setRent(int rent) {
 		this.rent = rent;
 	}
 	
+	
 	// Gets rent depending on the number of houses they have
+	// The returned values will then used in the getRent method to set values equal to rent
 	public void setOneHouseRent(int oneHouse) {
 		this.oneHouse = oneHouse;
 	}
@@ -137,24 +153,29 @@ public class Square {
 		return hotelRent;
 	}
 	
-	//Sets the number of houses that a property has on it and the properties modified cost depending on the number of houses. Number of houses is zero by default. 
-	public void addHouses(int theNumHouses, int theRent){
-		numHouses = theNumHouses;
-		rent = theRent;
-	}
 	
-	public void addHotel(int hotelRent){
+	// Method to add number of houses to a square
+	public void addHouse(){
+		if (numHouses<4){
+		numHouses++;
+		}
+	}
+	//Method to subtract number of houses from a square
+	public void subtractHouse(){
+		if (numHouses>0) {
+			numHouses--;
+		}
+	}
+	// adds a hotel to the square and sets number of houses to 0
+	public void addHotel(){
 		numHouses = 0;
 		rent = hotelRent;
 	}
-	
-	//Return the number of houses that a property has on it. Five houses is a hotel.
+	//Return the number of houses that a property has on it.
 	public int getHouses(){
 		return numHouses;
 	}
-	public void setHouses(int numHouses) {
-		this.numHouses = numHouses;
-	}
+	
 	
 	//Return the cost of adding a house to the property.
 	public int getHouseCost(){
@@ -164,7 +185,8 @@ public class Square {
 		this.houseCost = houseCost;
 	}
 	
-	// Gets rent for owning 2,3,or 4 squares
+	
+	// Gets rent for owning 2,3,or 4 squares    Two for the utilities squares    Four for the RailRoads
 	public void setRentWithTwo(int rentWithTwo) {
 		this.rentWithTwo = rentWithTwo;
 	}
@@ -186,6 +208,7 @@ public class Square {
 		return rentWithFour;
 	}
 	
+	
 	//Gets the mortgage of a property
 	public int getMortgage(){
 		return mortgage;
@@ -194,7 +217,14 @@ public class Square {
 		this.mortgage = mortgage;
 	}
 	
+	//sets and get the isOwned boolean
+	public boolean getIsOwned()
+	{
+		return isOwned;
+	}
 	
+	public void setIsOwned()
+	{
+		isOwned =!isOwned;
+	}
 }
-
-

@@ -1,4 +1,3 @@
-package edu.neumont.csc110.a.utilities;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -282,7 +281,7 @@ public class ConsoleUI {
 			IllegalArgumentException myException = new IllegalArgumentException();
 			throw myException;
 		}
-		System.out.print(prompt);
+		System.out.println(prompt);
 		String input = in.readLine();
 		while (input.length() == 0 && allowEmpty == false) { // ! is equal to
 																// allowEmpty ==

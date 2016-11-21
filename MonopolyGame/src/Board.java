@@ -1,5 +1,3 @@
-package edu.neumont.csc110.a.monopoly;
-
 import java.io.IOException;
 
 public class Board {
@@ -10,7 +8,8 @@ public class Board {
 		BOARD = new Square[11][11];
 	
 
-		BOARD[10][10] = new GoSquare(1, "GO", 200);
+		BOARD[10][10] = new GoSquare(1, "GO");
+		BOARD[10][10].setIsOwned();
 		BOARD[10][9] = new PropertySquare(2, "Mediterranean Avenue", "Brown", 60, 2, 50, 10, 30, 90, 160, 250, 30);
 		BOARD[10][8] = new CardSquare(3, "Community Chest");
 		BOARD[10][7] = new PropertySquare(4, "Baltic Avenue", "Brown", 60, 4, 50, 20, 60, 180, 320, 450, 30);
@@ -21,6 +20,7 @@ public class Board {
 		BOARD[10][2] = new PropertySquare(9, "Vermont Avenue", "Light Blue", 100, 6, 50, 30, 90, 270, 400, 550, 50);
 		BOARD[10][1] = new PropertySquare(10, "Connecticut Avenue", "Light Blue", 120, 8, 50, 40, 100, 300, 450, 600, 60);
 		BOARD[10][0] = new Square(11, "Jail");
+		BOARD[10][0].setIsOwned();
 		BOARD[9][0] = new PropertySquare(12, "St. Charles Place", "Pink", 140, 10, 100, 50, 150, 450, 625, 750, 70);
 		BOARD[8][0] = new UtilitySquare(13, "Electric Company", "Black", 140, 1, 2, 70); // NEED TO ADD RENT COST
 		BOARD[7][0] = new PropertySquare(14, "States Avenue", "Pink", 140, 10, 100, 50, 150, 450, 625, 750, 70);
@@ -31,6 +31,7 @@ public class Board {
 		BOARD[2][0] = new PropertySquare(19, "Tennessee Avenue", "Orange", 180, 14, 100, 70, 200, 550, 750, 950, 90);
 		BOARD[1][0] = new PropertySquare(20, "New York Avenue", "Orange", 200, 16, 100, 80, 220, 600, 800, 1000, 100);
 		BOARD[0][0] = new Square(21, "Free Parking");
+		BOARD[0][0].setIsOwned();
 		BOARD[0][1] = new PropertySquare(22, "Kentucky Avenue", "Red", 220, 18, 150, 90, 250, 700, 875, 1050, 110);
 		BOARD[0][2] = new CardSquare(23, "Chance");
 		BOARD[0][3] = new PropertySquare(24, "Indiana Avenue", "Red", 220, 18, 150, 90, 250, 700, 875, 1050, 110);
@@ -41,6 +42,7 @@ public class Board {
 		BOARD[0][8] = new UtilitySquare(29, "Water Works", "Black", 140, 1, 2, 70); // NEED TO ADD RENT COST
 		BOARD[0][9] = new PropertySquare(30, "Marvin Gardens", "Yellow", 280, 24, 150, 120, 360, 850, 1025, 1200, 140);
 		BOARD[0][10] = new Square(31, "Go to Jail");
+		BOARD[0][10].setIsOwned();
 		BOARD[1][10] = new PropertySquare(32, "Pacific Avenue", "Green", 300, 26, 200, 130, 390, 900, 1100, 1275, 150);
 		BOARD[2][10] = new PropertySquare(33, "North Carolina Avenue", "Green", 300, 26, 200, 130, 390, 900, 1100, 1275, 150);
 		BOARD[3][10] = new CardSquare(34, "Community Chest");
@@ -95,8 +97,8 @@ public class Board {
 		BOARD[5][5] = new Square ("");
 		BOARD[5][6] = new Square ("");
 		BOARD[5][7] = new Square ("");
-		BOARD[5][8] = new Square ("");
-		BOARD[5][9] = new Square ("");
+		BOARD[5][8] = new Square (" ");
+		BOARD[5][9] = new Square (" ");
 		BOARD[6][1] = new Square ("  ");
 		BOARD[6][2] = new Square ("  ");
 		BOARD[6][3] = new Square ("  ");
@@ -137,15 +139,29 @@ public class Board {
 
 	public void showBoard() throws IOException {
 		System.out.println();
-			System.out.println("     ----------------------------------------------");
+		System.out.println("     ----------------------------------------------");
+			
 		for (int i = 0; i < BOARD.length; i++) {
 		
 			System.out.print("|----|                                            |----|");
 			System.out.println();
 			for (int j = 0; j < BOARD.length; j++) {
-				if (j==10 || j==0 || i==0 || i ==10) {
-					System.out.print(BOARD[i][j].getLocation());
-				} else {
+		
+				if(i == 10 && j==10){
+					System.out.print("  0" + BOARD[i][j].getLocation() + " ");
+				}
+				else if (j==0 ||i==0|| j==10) {
+					
+					System.out.print("  " + BOARD[i][j].getLocation() + " ");
+					
+				} 
+				else if(i==10 && j > 1 ){
+					System.out.print("  0" + BOARD[i][j].getLocation() + " ");
+				}
+				else if(i == 10 && j==1){
+					System.out.print("  " + BOARD[i][j].getLocation() + " ");
+				}
+				else {
 					System.out.print("  " + BOARD[i][j].getContents() + " ");
 				}
 			}
@@ -156,5 +172,35 @@ public class Board {
 			System.out.println("     ---------------------------------------------");
 			System.out.println();
 	}
+	public Square getPos(int num)
+	{
+		//returns the value of a position
+		for(int r=0;r<BOARD.length;r++)
+		{
+			for(int c=0; c< BOARD[r].length; c++)
+			{
+				if(BOARD[r][c].getLocation() == num)
+				{
+					return BOARD[r][c];
+				}
+			}
+		}
+		return BOARD[0][0];
+	}
 	
+	public String getPosName(int num)
+	{
+		//returns the value of a position
+		for(int r=0;r<BOARD.length;r++)
+		{
+			for(int c=0; c< BOARD[r].length; c++)
+			{
+				if(BOARD[r][c].getLocation() == num)
+				{
+					return BOARD[r][c].getName();
+				}
+			}
+		}
+		return BOARD[0][0].getName();
+	}
 }

@@ -1,4 +1,3 @@
-
 class Cards {
 	
 	private String description;
