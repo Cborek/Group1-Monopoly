@@ -10,9 +10,9 @@ class Game {
 	//a list of the chance cards
 	private ArrayList<Cards> chance = new ArrayList<Cards>();
 	//Start Menu for when application first starts up
-	private final String[] menu = {"Play a New Game", "Credits", "Exit"};
+	private final String[] menu = {"Play a New Game", "Credits", "Game Rules", "Exit"};
 	//options of the players turn
-	private final String[] playerOptions = {"Buy Space","Do not buy space","Build","Sell property","Make offer","Mortgage","End turn","Quit game", "Show my propreties"};
+	private final String[] playerOptions = {"Buy Space","Do not buy space","Build","Sell Property","Make Offer","Mortgage","End Turn","Quit Game", "Show my properties"};
 	//a list of the player
 	private ArrayList<Player> gameMembers = new ArrayList<Player>();
 	private CreateCardLists cardLists = new CreateCardLists();
@@ -41,7 +41,7 @@ class Game {
 			for(int whoseTurn =0; whoseTurn < gameMembers.size(); whoseTurn++)
 			{
 				printGame();
-				System.out.println (gameMembers.get(whoseTurn).getName() + " it is your turn");
+				System.out.println (gameMembers.get(whoseTurn).getName() + " it is your turn.");
 				playerTurn(gameMembers.get(whoseTurn));
 			}
 			for(Player member: gameMembers)
@@ -58,7 +58,7 @@ class Game {
 	
 		if(gameMembers.size()==1)
 		{
-			System.out.println(gameMembers.get(0).getName() + " You have WON");
+			System.out.println(gameMembers.get(0).getName() + " has WON the game!");
 		}
 		startMenu();
 	}
@@ -77,12 +77,12 @@ class Game {
 				int die2 = rollDice();
 				total = die1+die2;
 				doubles = isDoubles(die1,die2);
-				System.out.println ("You are on "+gameArea.getPosName(currentPlayer.getPlace())+ " at space "+ currentPlayer.getPlace());
-				System.out.println ("You rolled "+ die1 +" and " +die2+ " You move "+ total + " spaces");
+				System.out.println ("You are on " + "'"+gameArea.getPosName(currentPlayer.getPlace())+"'" +" at space # "+ currentPlayer.getPlace());
+				System.out.println ("You rolled a "+ die1 +" and a " +die2+ " and moved "+ total + " spaces.");
 				//get not set dumby fix it later 
 				//above is covered
 				currentPlayer.setPlace(total);
-				System.out.println ("You are on "+gameArea.getPosName(currentPlayer.getPlace())+ " at space " +currentPlayer.getPlace());
+				System.out.println ("You landed on " + "'"+gameArea.getPosName(currentPlayer.getPlace())+ "'" +" at space # " +currentPlayer.getPlace();
 			}
 			//the position value is equal to the square the player is currently on
 			Square position = gameArea.getPos(currentPlayer.getPlace());
@@ -101,7 +101,7 @@ class Game {
 					position = selectCommunity(currentPlayer,position);
 			}
 			System.out.println ();
-			System.out.println (currentPlayer.getName() + " it is your turn");
+			//System.out.println (currentPlayer.getName() + " it is your turn");
 			option = ConsoleUI.promptForMenuSelection(playerOptions,false);
 			uniqueSquares(position,currentPlayer);
 			if(option == 1)
@@ -143,13 +143,13 @@ class Game {
 			}
 			if(doubles && turn!=3 && option == 7)
 			{
-				System.out.println ("You rolled doubles go again");
+				System.out.println ("You rolled doubles, roll again!");
 				turn++;
 				option =0;
 			}
 			else if(turn ==3 && doubles)
 			{
-				System.out.println ("You go to jail. You rolled to many doubles");
+				System.out.println ("You rolled too many doubles. Go to jail!");
 				currentPlayer.goToPlace(11);
 				//create the in jail or just visiting
 				doubles = false;
@@ -170,18 +170,18 @@ class Game {
 	private void payRent(Square position, Player currentPlayer)
 	{
 		// need to add what is done for owneing multiple things of the same color as well as railroads and utilities
-		System.out.println ("This space is owned you pay rent of $" + position.getRent() +" dollars");
+		System.out.println ("This space is owned. Pay rent of $" + position.getRent() +" dollars.");
 		currentPlayer.setMoney(-1*position.getRent());
 		gameMembers.get(position.getPlayer()-1).setMoney(position.getRent());
-		System.out.println (gameMembers.get(position.getPlayer()-1).getName() + " you have been paid rent");
+		System.out.println (gameMembers.get(position.getPlayer()-1).getName() + ", you have been paid rent");
 	}
 	//handle the squares you cant buy
 	private void uniqueSquares(Square position , Player currentPlayer)
 	{
-			if(gameArea.getPosName(currentPlayer.getPlace()).trim().equalsIgnoreCase("got to jail"))
+			if(gameArea.getPosName(currentPlayer.getPlace()).trim().equalsIgnoreCase("go to jail"))
 			{
 				//player goes to jail
-				System.out.println ("you go to jail");
+				System.out.println ("You go to jail");
 				currentPlayer.goToPlace(11);
 			}
 			
@@ -202,7 +202,7 @@ class Game {
 				}
 				else
 				{
-					System.out.println ("You cannot buy that square");
+					System.out.println ("You cannot buy that square.");
 				}
 				//set a boolean within the square to say it is owned and by who
 				//check if player can afford it
@@ -278,7 +278,7 @@ class Game {
 			mortgaging = ConsoleUI.promptForBool("Would you like to mortgage another property? (Y/N)", "Y", "N"); 
 			
 		}while(mortgaging);
-		System.out.println("Properties which you have mortgaged.");
+		System.out.println("Properties which you have mortgaged:");
 		currentPlayer.getMortgagedProperties();
 	}
 	
@@ -324,14 +324,26 @@ class Game {
 	public void startMenu()throws IOException{
 		int menuOption = ConsoleUI.promptForMenuSelection(menu, false);
 		if(menuOption == 1){
+			System.out.println("It's time to ruin friendships! LET'S PLAY MONOPOLY!");
 			play();
 		}
 		else if(menuOption == 2){
+			System.out.println("~*~*~*~*~");
 			System.out.println("Neumont University Fall 2016 Quarter 1");
 			System.out.println("Ryan Cox CSC 110: Section A");
 			System.out.println("Intro to CS Final Project Group 1 - Monopoly");
 			System.out.println("Game programmed by: ");
 			System.out.println("Cooper Astle\nColin Borek\nMelissa Buena\nJoshua Carpenter");
+			System.out.println("~*~*~*~*~");
+			System.out.println();
+			startMenu();
+		}
+		else if(menuOption == 3){
+			System.out.println("This version of Monopoly plays by the classic\nrules of buying, renting, and selling properties.");
+			System.out.println();
+			System.out.println("For the full list of rules, go to the link down below.");
+			System.out.println("http://www.hasbro.com/common/instruct/00009.pdf");
+			System.out.println();
 			startMenu();
 		}
 		else{
@@ -376,7 +388,7 @@ class Game {
 	{
 		boolean isBought = false;
 		//use a player that holds the current highest bid
-		Player highBid = new Player("No one");
+		Player highBid = new Player("no one.");
 		int bid =0;
 		System.out.println (property.getName() + " is up for Auction");
 		//loops through players until bidding ceases
@@ -426,7 +438,7 @@ class Game {
 				isBought=true;
 			}
 		}while(!isBought || highBid.getName().equalsIgnoreCase("no one"));
-		System.out.println (highBid.getName() + " You have purchased " + property.getName() +" for $" + bid);
+		System.out.println (highBid.getName() + " has purchased " + property.getName() +" for $" + bid);
 		//give the winning player the space and retrive the money spent on the bid
 		property.setIsOwned();
 		property.setPlayer(gameMembers.indexOf(highBid)+1);
