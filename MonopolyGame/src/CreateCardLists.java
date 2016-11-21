@@ -1,5 +1,3 @@
-package edu.neumont.csc110.a.monopoly;
-
 
 import java.util.ArrayList;
 
