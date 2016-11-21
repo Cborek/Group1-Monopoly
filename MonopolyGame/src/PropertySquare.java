@@ -1,4 +1,3 @@
-package edu.neumont.csc110.a.monopoly;
 
 class PropertySquare extends Square {
 
