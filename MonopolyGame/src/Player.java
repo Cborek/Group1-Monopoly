@@ -108,7 +108,7 @@ class Player {
 		}
 		else
 		{
-			good = ownesColorGroup();
+			good = ownesColorGroup(color);
 		}
 		// at this point if the player owns the entire group of the curProperty's color good will be true
 		// the even building must be checked
