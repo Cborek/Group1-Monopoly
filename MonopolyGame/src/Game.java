@@ -149,7 +149,7 @@ class Game {
 			}
 			else if(turn ==3 && doubles)
 			{
-				System.out.println ("You rolled too many doubles. Go to jail!";
+				System.out.println ("You rolled too many doubles. Go to jail!");
 				currentPlayer.goToPlace(11);
 				//create the in jail or just visiting
 				doubles = false;
