@@ -1,4 +1,4 @@
-package borek.colin.monopoly;
+
 import java.util.ArrayList;
 
 class Player {
