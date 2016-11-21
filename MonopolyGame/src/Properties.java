@@ -1,4 +1,3 @@
-
 public class Properties {
 	private String name;
 	private String color;

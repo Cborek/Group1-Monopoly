@@ -12,7 +12,7 @@ class Game {
 	//Start Menu for when application first starts up
 	private final String[] menu = {"Play a New Game", "Credits", "Exit"};
 	//options of the players turn
-	private final String[] playerOptions = {"Buy Space","Do not buy space","Build","Sell property","Make offer","Mortgage","End turn","Quit game"};
+	private final String[] playerOptions = {"Buy Space","Do not buy space","Build","Sell property","Make offer","Mortgage","End turn","Quit game", "Show my propreties"};
 	//a list of the player
 	private ArrayList<Player> gameMembers = new ArrayList<Player>();
 	private CreateCardLists cardLists = new CreateCardLists();
@@ -21,10 +21,11 @@ class Game {
 		//creates the card piles
 		communityChest = cardLists.getComChest();
 		communityChest = shuffleList(communityChest);
+		chance =cardLists.getChance();
 		chance = shuffleList(chance);
 	}
 	
-	void play()throws IOException
+	private void play()throws IOException
 	{
 		boolean good = true;
 		int PlayerNum = ConsoleUI.promptForInt("Please enter the number of players. 2-8", 2,8);
@@ -54,6 +55,7 @@ class Game {
 			}		
 		}while(gameMembers.size()>1 && good);
 		//win condition
+	
 		if(gameMembers.size()==1)
 		{
 			System.out.println(gameMembers.get(0).getName() + " You have WON");
@@ -84,12 +86,19 @@ class Game {
 			}
 			//the position value is equal to the square the player is currently on
 			Square position = gameArea.getPos(currentPlayer.getPlace());
+			
 			if(position.getIsOwned() && !currentPlayer.ownes(position)&& position.getRent()>0 )
 			{
-				System.out.println ("This space is owned you pay rent of $" + position.getRent() +" dollars");
-				currentPlayer.setMoney(-1*position.getRent());
-				gameMembers.get(position.getPlayer()-1).setMoney(position.getRent());
-				System.out.println (gameMembers.get(position.getPlayer()-1).getName() + " you have been paid rent");
+				payRent(position, currentPlayer);
+			}
+			else if(position.getName().equalsIgnoreCase("chance") || position.getName().equalsIgnoreCase("community Chest"))
+			{
+				if(position.getName().equalsIgnoreCase("chance"))
+				{
+					position = selectChance(currentPlayer,position);
+				}
+				else
+					position = selectCommunity(currentPlayer,position);
 			}
 			System.out.println ();
 			System.out.println (currentPlayer.getName() + " it is your turn");
@@ -97,26 +106,40 @@ class Game {
 			uniqueSquares(position,currentPlayer);
 			if(option == 1)
 			{
-				option1BuySquare(position, currentPlayer);
+				option1(position, currentPlayer);
 			}
-			else if(option ==2)
+			else if(option ==2 )
 			{
-				//send current space to auction
-				auctionNotBought(position);
+				if(!position.getIsOwned())
+				{
+					option2DoNotBuy(position,currentPlayer);
+				}
+				else
+				{
+					System.out.println ("That is not an option on this square");
+				}
 			}
 			else if(option == 3)
 			{
-				Square[] playerProperty = new Square[currentPlayer.getHoldings().size()];
-				currentPlayer.showHoldings();
-				for(int i=0; i<playerProperty.length;i++)
-				{
-					playerProperty[i]=currentPlayer.getHoldings().get(i);
-				}
-				//checks is player has ability to build a house
+				option3Build(position,currentPlayer);
+			}
+			else if(option ==4)
+			{
+				option4SellProp(currentPlayer);
+			}
+			else if(option == 5)
+			{
+				option5makeOffer(currentPlayer);
 			}
 			else if(option == 6)
 			{
 				option6Mortgage(currentPlayer);
+
+			}
+			else if(option ==9)
+			{
+				currentPlayer.showHoldings();
+				option = -1;
 			}
 			if(doubles && turn!=3 && option == 7)
 			{
@@ -132,24 +155,25 @@ class Game {
 				doubles = false;
 			}
 		}while(option <7);
+	
 		if(!gameArea.getPos(currentPlayer.getPlace()).getIsOwned() && option ==7)
 		{
 			auctionNotBought(gameArea.getPos(currentPlayer.getPlace()));
 		}
+		
 		else if(option == 8)
 		{
-			System.out.println ("You have quit the game");
-			//action all property off
-			currentPlayer.setMoney(-1*currentPlayer.getMoney());
-			for(int i=0; i<currentPlayer.PropertyNum();i++)
-			{
-				System.out.println (currentPlayer.getName() + " you may not participate in this auction. You are quiting and have forfieted all your money");
-				auctionNotBought(currentPlayer.getProperty(0));
-				currentPlayer.propertyChange(currentPlayer.getProperty(0));
-			}
-			//remove player from list
-			gameMembers.remove(currentPlayer);
+			Option8quitGame(currentPlayer);
 		}
+	}
+	
+	private void payRent(Square position, Player currentPlayer)
+	{
+		// need to add what is done for owneing multiple things of the same color as well as railroads and utilities
+		System.out.println ("This space is owned you pay rent of $" + position.getRent() +" dollars");
+		currentPlayer.setMoney(-1*position.getRent());
+		gameMembers.get(position.getPlayer()-1).setMoney(position.getRent());
+		System.out.println (gameMembers.get(position.getPlayer()-1).getName() + " you have been paid rent");
 	}
 	//handle the squares you cant buy
 	private void uniqueSquares(Square position , Player currentPlayer)
@@ -162,7 +186,8 @@ class Game {
 			}
 			
 	}
-	private void option1BuySquare(Square position , Player currentPlayer)
+
+	private void option1(Square position , Player currentPlayer)
 	{
 		if(!position.getIsOwned() && currentPlayer.getMoney()>=position.getCost())
 				{
@@ -173,6 +198,7 @@ class Game {
 					position.setIsOwned();
 					//the square is now owned;
 					position.setPlayer(gameMembers.indexOf(currentPlayer)+1);
+					System.out.println ("You have bought " + position.getName());
 				}
 				else
 				{
@@ -181,6 +207,47 @@ class Game {
 				//set a boolean within the square to say it is owned and by who
 				//check if player can afford it
 	}
+
+	private void option2DoNotBuy(Square position , Player currentPlayer)throws IOException
+	{
+		//send current space to auction
+		auctionNotBought(position);
+	}
+
+	private void option3Build(Square position , Player currentPlayer)throws IOException
+	{
+		String[] playerProperty = new String[currentPlayer.getHoldings().size()];
+		String[] BuildOp= {"Build house","Build Hotel"};
+				currentPlayer.showHoldings();
+				for(int i=0; i<playerProperty.length;i++)
+				{
+					playerProperty[i]=currentPlayer.getHoldings().get(i).getName();
+				}
+				//checks is player has ability to build a house
+				int propToSell = ConsoleUI.promptForMenuSelection(playerProperty,false);
+				if(currentPlayer.canBuild(currentPlayer.getProperty(propToSell)))
+				{
+					int choice = ConsoleUI.promptForMenuSelection(BuildOp,false);
+					//handle the even building of houses and if they can or can not build a hotel
+				}
+	}
+	
+	private void option4SellProp(Player currentPlayer)
+	{
+		// has the user select if they want to sell a property or a card
+		//and if they want to sell to a specific player or not 
+		//then handle the selling from there
+		//if it is a property and they do not want to sell specifically put it in auction
+		//else send to trade method
+	}
+
+	private void option5makeOffer(Player currentPlayer)
+	{
+		// handles the player offering to buy from other players any property
+		//utilize the trade method after asking a player who they would like to trade with
+		//
+	}
+
 	private void option6Mortgage(Player currentPlayer) throws IOException
 	{
 		/*Handles the mortgaging of a chosen square
@@ -215,6 +282,24 @@ class Game {
 		currentPlayer.getMortgagedProperties();
 	}
 	
+	//option 7 does not need a method so this skips to option 8
+	private void Option8quitGame(Player currentPlayer)throws IOException
+	{
+		System.out.println ("You have quit the game");
+			//action all property off
+			currentPlayer.setMoney(-1*currentPlayer.getMoney());
+			
+			for(int i=0; i<=currentPlayer.PropertyNum();i++)
+			{
+				System.out.println ();
+				System.out.println (currentPlayer.getName() + " you may not participate in this auction. You are quiting and have forfieted all your money");
+				auctionNotBought(currentPlayer.getProperty(0));
+				currentPlayer.propertyChange(currentPlayer.getProperty(0));
+			}
+			//remove player from list
+			gameMembers.remove(currentPlayer);
+	}
+	
 	private int rollDice()
 	{
 		//generate the roll of a six sided die
@@ -229,6 +314,7 @@ class Game {
 		//checks if doubles have been roled
 		return die1==die2;
 	}
+
 	public void printGame()throws IOException
 	{
 		//prints the board as well as the players and where they are on the board
@@ -254,22 +340,26 @@ class Game {
 		}
 	}
 	
-	public void selectCommunity()
+	public Square selectCommunity(Player  currentPlayer, Square position)
 	{
 		//may need change to acomidate the get out of jail card leaving the deck
 		System.out.println (communityChest.get(0));
 		communityChest.add(communityChest.get(0));
 		communityChest.remove(0);
 		//modifiying player money with value on the card
+		//return the square the player is on eeven if they did not move
 	}
-	/*private void selectChance()
+
+	private Square selectChance(Player currentPlayer, Square position)
 	{
 		//possible needed changes for get out of jail
 		System.out.println (chance.get(0));
 		chance.add(chance.get(0));
 		chance.remove(0);
 		//modifiying player money with value on the card
-	}*/
+		//return the square the player is on even if they did not move
+	}
+
 	private ArrayList<Cards> shuffleList(ArrayList<Cards> a){
 		Random rand = new Random();
 		for(int i = 0; i < a.size(); i++){
@@ -288,6 +378,7 @@ class Game {
 		//use a player that holds the current highest bid
 		Player highBid = new Player("No one");
 		int bid =0;
+		System.out.println (property.getName() + " is up for Auction");
 		//loops through players until bidding ceases
 		do
 		{
@@ -297,8 +388,16 @@ class Game {
 			for(int i=0; i<gameMembers.size();i++)
 			{
 				int attemptBid =0;
-				System.out.println (gameMembers.get(i).getName() + " The current bid is $" + bid +" and is held by "+ highBid.getName());
-				boolean isBidding = ConsoleUI.promptForBool("Would you like to place a bid? Y/N", "y","n");
+				boolean isBidding = false;
+				if(highBid != gameMembers.get(i))
+				{
+					System.out.println (gameMembers.get(i).getName() + " The current bid is $" + bid +" and is held by "+ highBid.getName());
+					isBidding = ConsoleUI.promptForBool("Would you like to place a bid? Y/N", "y","n");
+				}
+				else
+				{
+					bidding--;
+				}
 				if(isBidding && gameMembers.get(i).getMoney() > bid)
 				{
 					attemptBid = ConsoleUI.promptForInt("How much will you bid",bid+1,gameMembers.get(i).getMoney());
@@ -333,5 +432,12 @@ class Game {
 		property.setPlayer(gameMembers.indexOf(highBid)+1);
 		highBid.propertyChange(property);
 		highBid.setMoney(-1*bid);
+	}
+	
+	private void trade(Player Init, Player Pass)
+	{
+		//tradeing between to player until a agreement is struck or they chose to end the trade
+		//handle what each player wants to offer both money and other ownable items (such as property or cards)
+		//ask the players if the trade is agreable
 	}
 }

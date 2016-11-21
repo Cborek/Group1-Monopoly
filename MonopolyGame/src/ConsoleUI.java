@@ -1,4 +1,3 @@
-package edu.neumont.csc110.a.utilities;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,7 +21,7 @@ public class ConsoleUI {
 	 */
 	public static int promptForMenuSelection(String[] options, boolean withQuit) throws IOException {
 
-		System.out.println("What menu option do you want to execute?");
+		System.out.println("What menu action do you want to do?");
 		int min = 1;
 
 		for (int i = 0; i < options.length; i++) {
@@ -35,10 +34,7 @@ public class ConsoleUI {
 		boolean isGoodInput = true;
 		String input;
 		int inputInt = 0;
-		if (options == null || options.length==0 && !withQuit) {
-			IllegalArgumentException myException = new IllegalArgumentException();
-			throw myException;
-		}
+
 		do {
 			input = in.readLine();
 			isGoodInput = true;
@@ -83,10 +79,6 @@ public class ConsoleUI {
 		System.out.println(prompt);
 		boolean isBoolean = true;
 		boolean isGoodInput = true;
-		if (prompt == null || trueString == null || falseString == null) {
-			IllegalArgumentException myException = new IllegalArgumentException();
-			throw myException;
-		}
 		do {
 			String input = in.readLine();
 
@@ -131,7 +123,7 @@ public class ConsoleUI {
 	 * @return the byte value
 	 * @throws IOException
 	 */
-	public static byte promptForByte(String prompt, byte min, byte max) throws IOException {
+	static byte promptForByte(String prompt, byte min, byte max) throws IOException {
 		return (byte) promptForShort(prompt, min, max);
 	}
 
@@ -148,7 +140,7 @@ public class ConsoleUI {
 	 * @return the short value
 	 * @throws IOException
 	 */
-	public static short promptForShort(String prompt, short min, short max) throws IOException {
+	static short promptForShort(String prompt, short min, short max) throws IOException {
 		return (short) promptForInt(prompt, min, max);
 	}
 
@@ -184,16 +176,12 @@ public class ConsoleUI {
 	 * @return the long value
 	 * @throws IOException
 	 */
-	public static long promptForLong(String prompt, long min, long max) throws IOException {
+	static long promptForLong(String prompt, long min, long max) throws IOException {
 
 		System.out.println(prompt);
 		String rawInput = null;
 		long input = 0;
 		boolean isGoodInput = true;
-		if (prompt == null || min>max) {
-			IllegalArgumentException myException = new IllegalArgumentException();
-			throw myException;
-		}
 		do {
 			rawInput = in.readLine();
 			isGoodInput = true;
@@ -231,7 +219,7 @@ public class ConsoleUI {
 	 * @return the float value
 	 * @throws IOException
 	 */
-	public static float promptForFloat(String prompt, float min, float max) throws IOException {
+	static float promptForFloat(String prompt, float min, float max) throws IOException {
 		return (float) promptForDouble(prompt, min, max);
 	}
 
@@ -248,15 +236,11 @@ public class ConsoleUI {
 	 * @return the double value
 	 * @throws IOException
 	 */
-	public static double promptForDouble(String prompt, double min, double max) throws IOException {
+	static double promptForDouble(String prompt, double min, double max) throws IOException {
 		System.out.println(prompt);
 		String rawInput = null;
 		double input = 0;
 		boolean isGoodInput = true;
-		if (prompt == null || min>max) {
-			IllegalArgumentException myException = new IllegalArgumentException();
-			throw myException;
-		}
 		do {
 			rawInput = in.readLine();
 			isGoodInput = true;
@@ -302,7 +286,7 @@ public class ConsoleUI {
 		while (input.length() == 0 && allowEmpty == false) { // ! is equal to
 																// allowEmpty ==
 																// false
-			System.out.println("Sorry, you can't enter an empty string");
+			System.out.println("Sorry, you can't enter the empty string");
 			input = in.readLine();
 		}
 		return input;
@@ -328,10 +312,6 @@ public class ConsoleUI {
 		boolean isGoodInput = true;
 		String input;
 		char charInput = 0;
-		if (prompt == null || min>max) {
-			IllegalArgumentException myException = new IllegalArgumentException();
-			throw myException;
-		}
 		do {
 			input = in.readLine();
 			
@@ -341,7 +321,7 @@ public class ConsoleUI {
 			} else {
 				charInput = input.charAt(0);
 				if (charInput < min || charInput > max) {
-					System.out.println("Sorry, the character you enter must be between " + min + " and " + max);
+					System.out.println("Sorry, the character you entered is not in between " + min + " and " + max);
 					isGoodInput = false;
 				} else {
 

@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 
 class Player {
@@ -99,11 +98,57 @@ class Player {
 		return ownedAssets;
 	}
 	// a statement to asses if the player can build upon the selected square
-	public boolean canBuild()
+	public boolean canBuild(Square curProperty)
 	{
-		boolean build = false;
-		
-		return build;
+		String color = curProperty.getColor();
+		boolean good = false;
+		if(color.equalsIgnoreCase("white")|| color.equalsIgnoreCase("black"))
+		{
+			return false;
+		}
+		else
+		{
+			good = ownesColorGroup();
+		}
+		// at this point if the player owns the entire group of the curProperty's color good will be true
+		// the even building must be checked
+		return good;
+	}
+	public boolean ownesColorGroup(String color)
+	{
+		// this method if for the double rent case is a certain player owns the entire color group
+		boolean good = false;
+		if(color.equalsIgnoreCase("blue") || color.equalsIgnoreCase("brown") || color.equalsIgnoreCase("black"))
+		{
+			int owned =0;
+			for(Square prop: ownedAssets)
+			{
+				if(prop.getColor().equalsIgnoreCase(color))
+				{
+					owned++;
+				}
+			}
+			if(owned == 2)
+			{
+				good = true;
+			} 
+		}
+		else if(!color.equalsIgnoreCase("white"))
+		{
+			int owned =0;
+			for(Square prop: ownedAssets)
+			{
+				if(prop.getColor().equalsIgnoreCase(color))
+				{
+					owned++;
+				}
+			}
+			if(owned == 3)
+			{
+				good = true;
+			}
+		}
+		return good;
 	}
 	// gets a single owned property so as to be used for auction or sale
 	public Square getProperty(int num)

@@ -1,4 +1,3 @@
-
 public class UtilitySquare extends Square {
 	
 	public UtilitySquare(int location, String name, String color, int cost, int rent, int rentWithTwo, int mortgage) {

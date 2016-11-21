@@ -1,4 +1,3 @@
-
 class PropertySquare extends Square {
 
 	public PropertySquare(int location, String name, String color, int cost, int rent, int houseCost,  int withOneHouse,
@@ -13,7 +12,6 @@ class PropertySquare extends Square {
 		setFourHousesRent(withFourHouses);
 		setHotelRent(withHotel);
 		setHouseCost(houseCost);
-		
 		setMortgage(mortgage);
 		
 		

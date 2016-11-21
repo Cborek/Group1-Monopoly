@@ -1,4 +1,3 @@
-
 class RailRoadSquare extends UtilitySquare {
 	
 	public RailRoadSquare(int location, String name, String color, int cost, int rent, int rentWithTwo, int rentWithThree, int rentWithFour, int mortgage) {

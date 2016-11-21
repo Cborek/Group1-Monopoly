@@ -1,4 +1,3 @@
-
 public class Square {
 
 	private int location; 		//Location of Square on board
