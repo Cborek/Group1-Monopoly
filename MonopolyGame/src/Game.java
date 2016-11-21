@@ -224,7 +224,7 @@ class Game {
 					playerProperty[i]=currentPlayer.getHoldings().get(i).getName();
 				}
 				//checks is player has ability to build a house
-				int propToSell = ConsoleUI.promptForMenuSelection(playerProperty,false);
+				int propToSell = ConsoleUI.promptForMenuSelection(playerProperty,false)-1;
 				if(currentPlayer.canBuild(currentPlayer.getProperty(propToSell)))
 				{
 					int choice = ConsoleUI.promptForMenuSelection(BuildOp,false);
@@ -397,7 +397,7 @@ class Game {
 					System.out.println (gameMembers.get(i).getName() + " The current bid is $" + bid +" and is held by "+ highBid.getName());
 					isBidding = ConsoleUI.promptForBool("Would you like to place a bid? Y/N", "y","n");
 				}
-				else
+				else if(highBid == gameMembers.get(i))
 				{
 					bidding--;
 				}
@@ -424,7 +424,7 @@ class Game {
 				}
 			}
 			//when no one is bidding the auction is over
-			if(bidding==0)
+			if(bidding<=0)
 			{
 				isBought=true;
 			}
