@@ -1,3 +1,5 @@
+package edu.neumont.csc110.a.monopoly;
+
 public class Square {
 
 	private int location; 		//Location of Square on board
@@ -19,7 +21,8 @@ public class Square {
 	private int player = 0;		//PLAYER NUMBER  IS NOT USED YET IN THIS CLASS  and  MAY NOT BE USED
 	private String contents;	//Holds the string contents in the blank squares in the board
 	private boolean isOwned;   //tells if the squared is owned and can be purchased
-	private boolean isMortgaged =false; // set it it is mortgaged
+	private boolean hasHotel;
+	private int numHotel;
 	
 	//Square constructor for BLANK SQUARES
 	//I would rename this but we have already assigned all of our blank squares with the new Square() constructor   
@@ -154,6 +157,7 @@ public class Square {
 	}
 	
 	
+	
 	// Method to add number of houses to a square
 	public void addHouse(){
 		if (numHouses<4){
@@ -166,15 +170,31 @@ public class Square {
 			numHouses--;
 		}
 	}
-	// adds a hotel to the square and sets number of houses to 0
+	//Return the number of houses that a property has on it.
+		public int getHouses(){
+			return numHouses;
+		}
+	// Adds a hotel to the square and sets number of houses to 0 and number of hotels to 1
 	public void addHotel(){
 		numHouses = 0;
+		numHotel = 1;
 		rent = hotelRent;
 	}
-	//Return the number of houses that a property has on it.
-	public int getHouses(){
-		return numHouses;
+	// Sets number of hotels to zero and number of houses back to 4
+	public void subtractHotel(){
+		numHotel=0;
+		numHouses=4;
 	}
+	// Returns whether a square has a hotel-TRUE; or has no hotel-FALSE
+	public boolean getHotel() {
+		if (numHotel==1) {
+			hasHotel=true;
+		} else {
+			hasHotel=false;
+		}
+		return hasHotel;
+	}
+	
 	
 	
 	//Return the cost of adding a house to the property.
@@ -226,9 +246,5 @@ public class Square {
 	public void setIsOwned()
 	{
 		isOwned =!isOwned;
-	}
-	public void setIsMortgaged()
-	{
-		isMortgaged = !isMortgaged;
 	}
 }
