@@ -18,6 +18,9 @@ public class LocationCards extends Cards{
 	// If it is negative, that means the user moves back the number of spaces specified.
 	public void moveToLocationSquare(Player currentPlayer) {
 		if (location>0) {
+			if (currentPlayer.getPlace()>location) {
+				currentPlayer.setMoney(200);
+			}
 			currentPlayer.goToPlace(location);
 		} else if (location<0) {
 			int moveTo =currentPlayer.getPlace()+location;
