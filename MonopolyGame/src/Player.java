@@ -28,25 +28,7 @@ class Player {
 		
 		return out;
 	}
-	public int getPlayerValue()
-	{
-		int worth =0;
-		worth += money;
-		for(Square Prop: ownedAssets)
-		{
-			worth += Prop.getCost();
-			worth+= Prop.getHouses()*Prop.getHouseCost();
-			if(Prop.getHotel())
-			{
-				worth += Prop.getHouseCost();
-			}
-		}
-		for(Square prop: mortgagedProperties)
-		{
-			worth += prop.getMortgage();
-		}
-		return worth;
-	}
+	
 	public String getName()
 	{
 		return name;
@@ -116,27 +98,6 @@ class Player {
 	{
 		return ownedAssets;
 	}
-	
-	// Method to return the TOTAL number of houses and hotels a player owns
-	public int getTotalHouses() {
-	int houseNum = 0;
-	for (int i=0;i>PropertyNum();i++) {
-		Square propertyNum = getProperty(i);
-		houseNum =+ propertyNum.getHouses();
-	}
-	return houseNum;
-	}
-	public int getTotalHotels() {
-	int hotelNum = 0;
-	for (int i=0;i>PropertyNum();i++) {
-		Square propertyNum = getProperty(i);
-		if (propertyNum.getHotel()) {
-			hotelNum++;
-		}
-	}
-	return hotelNum;
-	}
-	
 	// a statement to asses if the player can build upon the selected square
 	public boolean canBuildHouse(Square curProperty)
 	{
@@ -286,9 +247,38 @@ class Player {
 	public void addMortgagedProperty(Square a){
 		mortgagedProperties.add(a);
 	}
-	public void getMortgagedProperties(){
+	
+	public void getMortgagedProperties(){	
 		for(int i = 0; i < mortgagedProperties.size(); i++){
-			System.out.println(mortgagedProperties.get(i));
+			double mortgageValue = mortgagedProperties.get(i).getMortgage() * .10;
+			int theMortgageVal = (int)mortgageValue + mortgagedProperties.get(i).getMortgage();
+			System.out.println(mortgagedProperties.get(i).getName() + " Mortgage value: " + theMortgageVal);
 		}
+	}
+	
+	public int numMortgagedPoperties(){
+		return mortgagedProperties.size();
+	}
+	
+	public String[] getPropNames(){
+		String[] mortPropNames  = new String[numMortgagedPoperties()];
+		for(int i = 0; i < mortPropNames.length; i++){
+			mortPropNames[i] = mortgagedProperties.get(i).getName();
+		}
+		return mortPropNames;
+	}
+	
+	public Square getMortgagedProperty(int a){
+		return mortgagedProperties.get(a);
+	}
+	
+	public int getMortgageValue(int a){
+		double mortgageValue = mortgagedProperties.get(a).getMortgage() * .10;
+		int theMortgageVal = (int)mortgageValue + mortgagedProperties.get(a).getMortgage();
+		return theMortgageVal;
+	}
+	public void removeMortgagedPropertty(Square a){
+		ownedAssets.add(a);
+		mortgagedProperties.remove(a);
 	}
 }
