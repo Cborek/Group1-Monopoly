@@ -28,7 +28,25 @@ class Player {
 		
 		return out;
 	}
-	
+	public int getPlayerValue()
+	{
+		int worth =0;
+		worth += money;
+		for(Square Prop: ownedAssets)
+		{
+			worth += Prop.getCost();
+			worth+= Prop.getHouses()*Prop.getHouseCost();
+			if(Prop.getHotel())
+			{
+				worth += Prop.getHouseCost();
+			}
+		}
+		for(Square prop: mortgagedProperties)
+		{
+			worth += prop.getMortgage();
+		}
+		return worth;
+	}
 	public String getName()
 	{
 		return name;

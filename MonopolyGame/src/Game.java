@@ -100,7 +100,6 @@ class Game {
 			}
 			//the position value is equal to the square the player is currently on
 			Square position = gameArea.getPos(currentPlayer.getPlace());
-			System.out.println ("You have $" + currentPlayer.getMoney());
 			if(!position.getIsOwned())
 			{
 				System.out.println ("This square costs $" + position.getCost());
@@ -119,6 +118,7 @@ class Game {
 					position = selectCommunity(currentPlayer,position);
 			}
 			System.out.println ();
+			System.out.println ("You have $" + currentPlayer.getMoney());
 			System.out.println (currentPlayer.getName() + " it is your turn");
 			option = ConsoleUI.promptForMenuSelection(playerOptions,false);
 			uniqueSquares(position,currentPlayer);
@@ -173,6 +173,7 @@ class Game {
 				//create the in jail or just visiting
 				doubles = false;
 			}
+			// handle the bankruptcy case
 		}while(option <7);
 	
 		if(!gameArea.getPos(currentPlayer.getPlace()).getIsOwned() && option ==7)
@@ -222,16 +223,33 @@ class Game {
 		}
 	}
 	//handle the squares you cant buy
-	private void uniqueSquares(Square position , Player currentPlayer)
+	private void uniqueSquares(Square position , Player currentPlayer)throws IOException
 	{
-			if(gameArea.getPosName(currentPlayer.getPlace()).trim().equalsIgnoreCase("got to jail"))
+			if(position.getName().equalsIgnoreCase("got to jail"))
 			{
 				//player goes to jail
 				System.out.println ("you go to jail");
 				currentPlayer.goToPlace(11);
 				currentPlayer.setInJail();
 			}
-			
+			if(position.getName().equalsIgnoreCase("income tax"))
+			{
+				String tenPerc = "Pay $" + ((double)currentPlayer.getPlayerValue()*.1);
+				String[] options = {"Pay 200",tenPerc};
+				int choice = ConsoleUI.promptForMenuSelection(options,false);
+				if(choice ==1)
+				{
+					currentPlayer.setMoney(-1*position.getRent());
+				}
+				else{
+					currentPlayer.setMoney((int)(-1*(double)currentPlayer.getPlayerValue()*.1));
+				}
+			}
+			if(position.getName().equalsIgnoreCase("luxury tax"))
+			{
+				System.out.println ("You pay the luxury tax");
+				currentPlayer.setMoney(-1*position.getRent());
+			}
 	}
 	
 	//handles the player in jail
