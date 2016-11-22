@@ -25,31 +25,10 @@ class Player {
 	{
 		//checks the money and assets to determine if the player can or cannot continue
 		boolean out =false;
-		if(money<=0 && ownedAssets.size()==0&&mortgagedProperties.size()>=0)
-		{
-			out = true;
-		}
+		
 		return out;
 	}
-	public int getPlayerValue()
-	{
-		int worth =0;
-		worth += money;
-		for(Square Prop: ownedAssets)
-		{
-			worth += Prop.getCost();
-			worth+= Prop.getHouses()*Prop.getHouseCost();
-			if(Prop.getHotel())
-			{
-				worth += Prop.getHouseCost();
-			}
-		}
-		for(Square prop: mortgagedProperties)
-		{
-			worth += prop.getMortgage();
-		}
-		return worth;
-	}
+	
 	public String getName()
 	{
 		return name;
@@ -268,9 +247,38 @@ class Player {
 	public void addMortgagedProperty(Square a){
 		mortgagedProperties.add(a);
 	}
-	public void getMortgagedProperties(){
+	
+	public void getMortgagedProperties(){	
 		for(int i = 0; i < mortgagedProperties.size(); i++){
-			System.out.println(mortgagedProperties.get(i));
+			double mortgageValue = mortgagedProperties.get(i).getMortgage() * .10;
+			int theMortgageVal = (int)mortgageValue + mortgagedProperties.get(i).getMortgage();
+			System.out.println(mortgagedProperties.get(i).getName() + " Mortgage value: " + theMortgageVal);
 		}
+	}
+	
+	public int numMortgagedPoperties(){
+		return mortgagedProperties.size();
+	}
+	
+	public String[] getPropNames(){
+		String[] mortPropNames  = new String[numMortgagedPoperties()];
+		for(int i = 0; i < mortPropNames.length; i++){
+			mortPropNames[i] = mortgagedProperties.get(i).getName();
+		}
+		return mortPropNames;
+	}
+	
+	public Square getMortgagedProperty(int a){
+		return mortgagedProperties.get(a);
+	}
+	
+	public int getMortgageValue(int a){
+		double mortgageValue = mortgagedProperties.get(a).getMortgage() * .10;
+		int theMortgageVal = (int)mortgageValue + mortgagedProperties.get(a).getMortgage();
+		return theMortgageVal;
+	}
+	public void removeMortgagedPropertty(Square a){
+		ownedAssets.add(a);
+		mortgagedProperties.remove(a);
 	}
 }
