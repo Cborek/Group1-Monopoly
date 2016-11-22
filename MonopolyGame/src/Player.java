@@ -116,6 +116,27 @@ class Player {
 	{
 		return ownedAssets;
 	}
+	
+	// Method to return the TOTAL number of houses and hotels a player owns
+	public int getTotalHouses() {
+	int houseNum = 0;
+	for (int i=0;i>PropertyNum();i++) {
+		Square propertyNum = getProperty(i);
+		houseNum =+ propertyNum.getHouses();
+	}
+	return houseNum;
+	}
+	public int getTotalHotels() {
+	int hotelNum = 0;
+	for (int i=0;i>PropertyNum();i++) {
+		Square propertyNum = getProperty(i);
+		if (propertyNum.getHotel()) {
+			hotelNum++;
+		}
+	}
+	return hotelNum;
+	}
+	
 	// a statement to asses if the player can build upon the selected square
 	public boolean canBuildHouse(Square curProperty)
 	{
