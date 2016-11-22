@@ -34,6 +34,7 @@ class Game {
 		{
 			System.out.print("Player " + (i+1) + " ");
 			gameMembers.add(new Player(ConsoleUI.promptForInput("What is your name?",false)));
+			// also ask for the type of piece of the list in the enum player pieces
 		}
 		// handle the loop of game play
 		do{
@@ -86,7 +87,7 @@ class Game {
 					currentPlayer.incJailTurns();
 					moveInJail(currentPlayer, doubles);
 				}
-				else
+				if(!currentPlayer.isInJail())
 				{
 					System.out.println ("You are on "+gameArea.getPosName(currentPlayer.getPlace())+ " at space "+ currentPlayer.getPlace());
 					System.out.println ("You rolled "+ die1 +" and " +die2+ " You move "+ total + " spaces");
