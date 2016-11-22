@@ -37,8 +37,8 @@ public class RailRoadCards extends Cards{
 				currentPlayer.goToPlace(squareLocation4);
 				break; 
 			} else if (i>40) {
-				currentPlayer.setPlace(0);
-				break;
+				currentPlayer.setMoney(200); // Money for passing GO
+				i=1;
 			}
 		}
 	}
