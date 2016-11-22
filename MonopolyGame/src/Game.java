@@ -12,7 +12,7 @@ class Game {
 	//Start Menu for when application first starts up
 	private final String[] menu = {"Play a New Game", "Credits", "Exit"};
 	//options of the players turn
-	private final String[] playerOptions = {"Buy Space","Do not buy space","Build","Sell property","Make offer","Mortgage","End turn","Quit game", "Show my propreties", "Repay Mortgage"};
+	private final String[] playerOptions = {"Buy Space","Do not buy space","Build","Sell property","Make offer","Mortgage","End turn","Quit game", "Show my propreties"};
 	//a list of the player
 	private ArrayList<Player> gameMembers = new ArrayList<Player>();
 	private CreateCardLists cardLists = new CreateCardLists();
@@ -25,7 +25,7 @@ class Game {
 		chance = shuffleList(chance);
 	}
 	
-	void play()throws IOException
+	private void play()throws IOException
 	{
 		boolean good = true;
 		int PlayerNum = ConsoleUI.promptForInt("Please enter the number of players. 2-8", 2,8);
@@ -71,8 +71,6 @@ class Game {
 		int option =0;
 		do
 		{
-			
-			
 			if(option == 0 && !currentPlayer.isInJail())
 			{
 				int total =0;
@@ -100,7 +98,6 @@ class Game {
 			}
 			//the position value is equal to the square the player is currently on
 			Square position = gameArea.getPos(currentPlayer.getPlace());
-			System.out.println ("You have $" + currentPlayer.getMoney());
 			if(!position.getIsOwned())
 			{
 				System.out.println ("This square costs $" + position.getCost());
@@ -119,6 +116,7 @@ class Game {
 					position = selectCommunity(currentPlayer,position);
 			}
 			System.out.println ();
+			System.out.println ("You have $" + currentPlayer.getMoney());
 			System.out.println (currentPlayer.getName() + " it is your turn");
 			option = ConsoleUI.promptForMenuSelection(playerOptions,false);
 			uniqueSquares(position,currentPlayer);
@@ -173,18 +171,17 @@ class Game {
 				//create the in jail or just visiting
 				doubles = false;
 			}
+			// handle the bankruptcy case
 		}while(option <7);
 	
 		if(!gameArea.getPos(currentPlayer.getPlace()).getIsOwned() && option ==7)
 		{
 			auctionNotBought(gameArea.getPos(currentPlayer.getPlace()));
 		}
+		
 		else if(option == 8)
 		{
 			Option8quitGame(currentPlayer);
-		}
-		else if(option == 10){
-			option10RepayMortgage(currentPlayer);
 		}
 	}
 	
@@ -207,6 +204,7 @@ class Game {
 				payDouble=false;
 			}
 		}
+		// handle the player being so broke that they need to sell properties to pay rent
 		if(payDouble)
 		{
 			System.out.println ("This square and its other colors are owned by a single player. You pay double rent");
@@ -224,16 +222,33 @@ class Game {
 		}
 	}
 	//handle the squares you cant buy
-	private void uniqueSquares(Square position , Player currentPlayer)
+	private void uniqueSquares(Square position , Player currentPlayer)throws IOException
 	{
-			if(gameArea.getPosName(currentPlayer.getPlace()).trim().equalsIgnoreCase("got to jail"))
+			if(position.getName().equalsIgnoreCase("got to jail"))
 			{
 				//player goes to jail
 				System.out.println ("you go to jail");
 				currentPlayer.goToPlace(11);
 				currentPlayer.setInJail();
 			}
-			
+			if(position.getName().equalsIgnoreCase("income tax"))
+			{
+				String tenPerc = "Pay $" + ((double)currentPlayer.getPlayerValue()*.1);
+				String[] options = {"Pay 200",tenPerc};
+				int choice = ConsoleUI.promptForMenuSelection(options,false);
+				if(choice ==1)
+				{
+					currentPlayer.setMoney(-1*position.getRent());
+				}
+				else{
+					currentPlayer.setMoney((int)(-1*(double)currentPlayer.getPlayerValue()*.1));
+				}
+			}
+			if(position.getName().equalsIgnoreCase("luxury tax"))
+			{
+				System.out.println ("You pay the luxury tax");
+				currentPlayer.setMoney(-1*position.getRent());
+			}
 	}
 	
 	//handles the player in jail
@@ -388,22 +403,6 @@ class Game {
 			gameMembers.remove(currentPlayer);
 	}
 	
-	private void option10RepayMortgage(Player currentPlayer) throws IOException{
-		String[] propNames = currentPlayer.getPropNames();
-		System.out.println("You currently have the following properties mortgaged.");
-		currentPlayer.getMortgagedProperties();
-		System.out.println("For which property would you like to repay the mortgage?");
-		int selection = ConsoleUI.promptForMenuSelection(propNames, false) - 1;
-		
-		if(propNames[selection].equals(currentPlayer.getMortgagedProperty(selection).getName()) && currentPlayer.getMoney() >= currentPlayer.getMortgageValue(selection)){
-			System.out.println("The mortgage for this property has been repaid.");
-			currentPlayer.setMoney(currentPlayer.getMortgageValue(selection));
-		}
-		else{
-			System.out.println("You cannot afford to repay this property right now.");
-		}
-	}
-	
 	private int rollDice()
 	{
 		//generate the roll of a six sided die
@@ -547,6 +546,8 @@ class Game {
 		property.setPlayer(gameMembers.indexOf(highBid)+1);
 		highBid.propertyChange(property);
 		highBid.setMoney(-1*bid);
+		
+		// handle if the property is mortgaged
 	}
 	
 	private void trade(Player Init, Player Pass)
