@@ -37,7 +37,7 @@ Program cannot crash. We need to make sure to try REALLY hard to break the game 
 
 Use ArrayLists for collections of objects. DONE
 
-Use at least one constant.
+Use at least one constant. DONE
 
 At least one class level non-static variable. DONE
 
