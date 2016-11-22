@@ -182,6 +182,7 @@ class Game {
 			else if(option ==9)
 			{
 				currentPlayer.showHoldings();
+				System.out.println("You have $" +currentPlayer.getMoney());
 				option = -1;
 			}
 			if(doubles && turn!=3 && option == 7)
@@ -469,18 +470,28 @@ class Game {
 		}
 	}
 	
-	public Square selectCommunity(Player  currentPlayer, Square position)
+	private Square selectCommunity(Player currentPlayer, Square position)
 	{
-		//may need change to acomidate the get out of jail card leaving the deck
+		//may need change to accommodate the get out of jail card leaving the deck
 		communityChest.get(0).getInfo();
 		communityChest.add(communityChest.get(0));
-		communityChest.remove(0);
-		//modifiying player money with value on the card
-		if(communityChest.get(0).getCardType().equalsIgnoreCase("payment square"))
-		{
+		if (communityChest.get(0).getCardType().equals("PaymentCard")){
 			currentPlayer.setMoney(communityChest.get(0).getAmount());
+		} else if (communityChest.get(0) instanceof LocationCards) {
+			LocationCards location = (LocationCards)communityChest.get(0);
+			location.moveToLocationSquare(currentPlayer);
+		} else if (communityChest.get(0).getCardType().equalsIgnoreCase("PaymentCardWithTwo")) {
+			paymentCardWithTwo(currentPlayer, communityChest.get(0).getAmount(), communityChest.get(0).getAmountTwo());
+		} else if (communityChest.get(0).getCardType().equalsIgnoreCase("GetOutOfJail")) {
+			// CODE FOR KEEPING JAIL CARD
+		} else {
+			System.out.println("WE HAVE AN ERROR. THE COMMUNITY CARDS DID NOT WORK");
+			// Prints out error message if cards are not selected properly. FOR TESTING PURPOSES ONLY
 		}
+		communityChest.remove(0);
+		//modifying player money with value on the card
 		//return the square the player is on even if they did not move
+		System.out.println ("You are on "+gameArea.getPosName(currentPlayer.getPlace())+ " at space " +currentPlayer.getPlace());
 		return position;
 	}
 
@@ -489,16 +500,45 @@ class Game {
 		//possible needed changes for get out of jail
 		chance.get(0).getInfo();
 		chance.add(chance.get(0));
-		chance.remove(0);
-		if(chance.get(0).getCardType().equalsIgnoreCase("payment square"))
-		{
+		if (chance.get(0).getCardType().equals("PaymentCard")){
 			currentPlayer.setMoney(chance.get(0).getAmount());
+		} else if (chance.get(0).getCardType().equalsIgnoreCase("PaymentCardMultiplier")) {
+			for(Player member: gameMembers) {
+				member.setMoney(chance.get(0).getAmount());
+			}
+			int amountPaid = (chance.get(0).getAmount()*(PlayerNum-1) *-2); 
+			// Every player is given the amount that must be paid including the player paying it
+			// Because of this, current player will then pay the amount *numberOfPlayers-1 and *-2 to cancel out what he received
+			currentPlayer.setMoney(amountPaid);
+		} else if (chance.get(0).getCardType().equalsIgnoreCase("PaymentCardWithTwo")) {
+			paymentCardWithTwo(currentPlayer, chance.get(0).getAmount(), chance.get(0).getAmountTwo());
+		} else if (chance.get(0) instanceof LocationCards){
+			LocationCards location = (LocationCards)chance.get(0);
+			location.moveToLocationSquare(currentPlayer);
+		} else if (chance.get(0) instanceof UtilityCards) {
+			UtilityCards utility = (UtilityCards)chance.get(0);
+			utility.moveToUtilitySquare(currentPlayer);
+		} else if (chance.get(0) instanceof RailRoadCards) {
+			RailRoadCards railroad = (RailRoadCards)chance.get(0);
+			railroad.moveToRailRoadSquare(currentPlayer);
+		} else if (chance.get(0).getCardType().equalsIgnoreCase("GetOutOfJail")) {
+			// CODE FOR KEEPING JAIL CARD
+		} else {
+			System.out.println("WE HAVE AN ERROR. CHANCE CARDS DO NOT WORK");
+			// Prints out error message if cards are not selected properly. FOR TESTING PURPOSES ONLY
 		}
-		//modifiying player money with value on the card
-		// changing the amount lost based on houses or number of players
-		//return the square the player is on even if they did not move
+		chance.remove(0);
+		System.out.println ("You are on "+gameArea.getPosName(currentPlayer.getPlace())+ " at space " +currentPlayer.getPlace());
+		// Prints out game number and name after selecting card whether they moved or not
 		return position;
 	}
+
+	// Method for payment per houses and hotel number
+	private void paymentCardWithTwo(Player currentPlayer, int houseCost, int hotelCost) {
+		int amountPaid=(currentPlayer.getTotalHouses()*houseCost)+
+				(currentPlayer.getTotalHotels()*hotelCost);
+		currentPlayer.setMoney(amountPaid);
+	}	
 
 	private ArrayList<Cards> shuffleList(ArrayList<Cards> a){
 		Random rand = new Random();
