@@ -32,9 +32,30 @@ class Game {
 		//creates players based on the number of players
 		for(int i=0; i< PlayerNum; i++)
 		{
+			boolean isGoodPiece = false;
 			System.out.print("Player " + (i+1) + " ");
 			gameMembers.add(new Player(ConsoleUI.promptForInput("What is your name?",false)));
+			Player currentPlayer = gameMembers.get(i);
 			// also ask for the type of piece of the list in the enum player pieces
+						do{
+				int playerPiece = ConsoleUI.promptForInt("What token would you like to play as?\n1-Ship : 2-Racecar : "
+						+ "3-Iron : 4-Shoe : 5-Wheelbarrow\n6-Terrier : 7-Thimble : 8-Hat : 9-Horse : 10-Cannon", 1, 10);
+				
+				for(int j = 0; j < gameMembers.size(); j++){
+					if(gameMembers.get(j).getPlayerPieceInt() == playerPiece){
+						System.out.println("Sorry, that piece has already been chosen. Pick again.");
+						break;
+					}
+					else{
+					
+						currentPlayer.setPlayerPieceInt(playerPiece);
+						isGoodPiece=true;
+					}
+				}
+				
+				
+			}while(isGoodPiece == false);
+			gamePiece(currentPlayer);
 		}
 		// handle the loop of game play
 		do{
@@ -90,11 +111,15 @@ class Game {
 				if(!currentPlayer.isInJail())
 				{
 					System.out.println ("You are on "+gameArea.getPosName(currentPlayer.getPlace())+ " at space "+ currentPlayer.getPlace());
-					System.out.println ("You rolled "+ die1 +" and " +die2+ " You move "+ total + " spaces");
+					System.out.println ("You rolled "+ die1 +" and " +die2);
+					System.out.print("Your ");
+					gamePiece(currentPlayer);
+					System.out.println("moved " + total + " spaces");
 					//get not set dumby fix it later 
 					//above is covered
 					currentPlayer.setPlace(total);
-					System.out.println ("You are on "+gameArea.getPosName(currentPlayer.getPlace())+ " at space " +currentPlayer.getPlace());
+					System.out.print ("You are on "+gameArea.getPosName(currentPlayer.getPlace())+ " at space " +currentPlayer.getPlace());
+					
 					System.out.println ();	
 				}
 			}
@@ -554,5 +579,38 @@ class Game {
 		//tradeing between to player until a agreement is struck or they chose to end the trade
 		//handle what each player wants to offer both money and other ownable items (such as property or cards)
 		//ask the players if the trade is agreable
+	}
+	
+		private void gamePiece(Player currentPlayer){
+		if (currentPlayer.getPlayerPieceInt() == 1){
+			System.out.println("You are now playing as: " + PlayerPieces.Ship);
+		}
+		else if(currentPlayer.getPlayerPieceInt() == 2){
+			System.out.println("You are now playing as: " + PlayerPieces.Racecar);
+		}
+		else if(currentPlayer.getPlayerPieceInt() == 3){
+			System.out.println("You are now playing as: " + PlayerPieces.Iron);
+		}
+		else if(currentPlayer.getPlayerPieceInt() == 4){
+			System.out.println("You are now playing as: " + PlayerPieces.Shoe);
+		}
+		else if(currentPlayer.getPlayerPieceInt() == 5){
+			System.out.println("You are now playing as: " + PlayerPieces.Wheelbarrow);
+		}
+		else if(currentPlayer.getPlayerPieceInt() == 6){
+			System.out.println("You are now playing as: " + PlayerPieces.Terrier);
+		}
+		else if(currentPlayer.getPlayerPieceInt() == 7){
+			System.out.println("You are now playing as: " + PlayerPieces.Thimble);
+		}
+		else if(currentPlayer.getPlayerPieceInt() == 8){
+			System.out.println("You are now playing as: " + PlayerPieces.Hat);
+		}
+		else if(currentPlayer.getPlayerPieceInt() == 9){
+			System.out.println("You are now playing as: " + PlayerPieces.Horse);
+		}
+		else if(currentPlayer.getPlayerPieceInt() == 10){
+			System.out.println("You are now playing as: " + PlayerPieces.Cannon);
+		}
 	}
 }
