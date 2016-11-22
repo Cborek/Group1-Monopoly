@@ -224,11 +224,12 @@ class Game {
 					playerProperty[i]=currentPlayer.getHoldings().get(i).getName();
 				}
 				//checks is player has ability to build a house
-				int propToSell = ConsoleUI.promptForMenuSelection(playerProperty,false);
+				int propToSell = ConsoleUI.promptForMenuSelection(playerProperty,false)-1;
 				if(currentPlayer.canBuild(currentPlayer.getProperty(propToSell)))
 				{
 					int choice = ConsoleUI.promptForMenuSelection(BuildOp,false);
 					//handle the even building of houses and if they can or can not build a hotel
+					
 				}
 	}
 	
@@ -348,6 +349,7 @@ class Game {
 		communityChest.remove(0);
 		//modifiying player money with value on the card
 		//return the square the player is on eeven if they did not move
+		return position;
 	}
 
 	private Square selectChance(Player currentPlayer, Square position)
@@ -358,6 +360,7 @@ class Game {
 		chance.remove(0);
 		//modifiying player money with value on the card
 		//return the square the player is on even if they did not move
+		return position;
 	}
 
 	private ArrayList<Cards> shuffleList(ArrayList<Cards> a){
@@ -394,7 +397,7 @@ class Game {
 					System.out.println (gameMembers.get(i).getName() + " The current bid is $" + bid +" and is held by "+ highBid.getName());
 					isBidding = ConsoleUI.promptForBool("Would you like to place a bid? Y/N", "y","n");
 				}
-				else
+				else if(highBid == gameMembers.get(i))
 				{
 					bidding--;
 				}
@@ -421,7 +424,7 @@ class Game {
 				}
 			}
 			//when no one is bidding the auction is over
-			if(bidding==0)
+			if(bidding<=0)
 			{
 				isBought=true;
 			}

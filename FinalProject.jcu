@@ -51,7 +51,7 @@
 			<path>Game.java</path>
 			<source>true</source>
 			<index>4</index>
-			<active>true</active>
+			<active>false</active>
 		</docitem>
 		<docitem>
 			<path>CreateCardLists.java</path>
@@ -69,7 +69,7 @@
 			<path>Runner2.java</path>
 			<source>true</source>
 			<index>7</index>
-			<active>false</active>
+			<active>true</active>
 		</docitem>
 		<docitem>
 			<path>CardSquare.java</path>
@@ -108,13 +108,13 @@
 			<active>false</active>
 		</docitem>
 		<docitem>
-			<path>C:\Users\JWPeace\Documents\Neumont\Q1\CSC110\Files2\DrillsPart3\src\TriangleType.java</path>
+			<path>..\..\DrillsPart3\src\TriangleType.java</path>
 			<source>true</source>
 			<index>14</index>
 			<active>false</active>
 		</docitem>
 		<docitem>
-			<path>C:\Users\JWPeace\Documents\Neumont\Q1\CSC110\Files2\DrillsPart3\src\DrillsPart3.java</path>
+			<path>..\..\DrillsPart3\src\DrillsPart3.java</path>
 			<source>true</source>
 			<index>15</index>
 			<active>false</active>
@@ -153,26 +153,20 @@
 			</symbols>
 		</symboltable>
 		<symboltable>
-			<path>C:\Users\JWPeace\Documents\Neumont\Q1\CSC110\Files2\DrillsPart3\src\TriangleType.java.sdk</path>
+			<path>..\..\DrillsPart3\src\TriangleType.java.sdk</path>
 			<symbols/>
 		</symboltable>
 		<symboltable>
-			<path>C:\Users\JWPeace\Documents\Neumont\Q1\CSC110\Files2\DrillsPart3\src\TriType.java.sdk</path>
+			<path>..\..\DrillsPart3\src\TriType.java.sdk</path>
 			<symbols/>
 		</symboltable>
 		<symboltable>
-			<path>C:\Users\JWPeace\Documents\Neumont\Q1\CSC110\Files2\DrillsPart3\src\DrillsPart3.java.sdk</path>
+			<path>..\..\DrillsPart3\src\DrillsPart3.java.sdk</path>
 			<symbols/>
 		</symboltable>
 		<symboltable>
 			<path>PlayerPieces.java.sdk</path>
 			<symbols/>
-		</symboltable>
-		<symboltable>
-			<path>Cards.java.sdk</path>
-			<symbols>
-				<symbol>Cards</symbol>
-			</symbols>
 		</symboltable>
 		<symboltable>
 			<path>CardSquare.java.sdk</path>
@@ -202,13 +196,6 @@
 			</symbols>
 		</symboltable>
 		<symboltable>
-			<path>RailRoadSquare.java.sdk</path>
-			<symbols>
-				<symbol>RailRoadSquare</symbol>
-				<symbol>UtilitySquare</symbol>
-			</symbols>
-		</symboltable>
-		<symboltable>
 			<path>Board.java.sdk</path>
 			<symbols>
 				<symbol>Board</symbol>
@@ -229,29 +216,10 @@
 			</symbols>
 		</symboltable>
 		<symboltable>
-			<path>Game.java.sdk</path>
-			<symbols>
-				<symbol>Board</symbol>
-				<symbol>Cards</symbol>
-				<symbol>ConsoleUI</symbol>
-				<symbol>CreateCardLists</symbol>
-				<symbol>Game</symbol>
-				<symbol>Player</symbol>
-				<symbol>Square</symbol>
-			</symbols>
-		</symboltable>
-		<symboltable>
 			<path>PaymentSquare.java.sdk</path>
 			<symbols>
 				<symbol>PaymentSquare</symbol>
 				<symbol>Square</symbol>
-			</symbols>
-		</symboltable>
-		<symboltable>
-			<path>CreateCardLists.java.sdk</path>
-			<symbols>
-				<symbol>Cards</symbol>
-				<symbol>CreateCardLists</symbol>
 			</symbols>
 		</symboltable>
 		<symboltable>
@@ -269,9 +237,42 @@
 			</symbols>
 		</symboltable>
 		<symboltable>
+			<path>Game.java.sdk</path>
+			<symbols>
+				<symbol>Board</symbol>
+				<symbol>Cards</symbol>
+				<symbol>ConsoleUI</symbol>
+				<symbol>CreateCardLists</symbol>
+				<symbol>Game</symbol>
+				<symbol>Player</symbol>
+				<symbol>Square</symbol>
+			</symbols>
+		</symboltable>
+		<symboltable>
 			<path>Square.java.sdk</path>
 			<symbols>
 				<symbol>Square</symbol>
+			</symbols>
+		</symboltable>
+		<symboltable>
+			<path>RailRoadSquare.java.sdk</path>
+			<symbols>
+				<symbol>RailRoadSquare</symbol>
+				<symbol>UtilitySquare</symbol>
+			</symbols>
+		</symboltable>
+		<symboltable>
+			<path>Cards.java.sdk</path>
+			<symbols>
+				<symbol>Cards</symbol>
+				<symbol>Player</symbol>
+			</symbols>
+		</symboltable>
+		<symboltable>
+			<path>CreateCardLists.java.sdk</path>
+			<symbols>
+				<symbol>Cards</symbol>
+				<symbol>CreateCardLists</symbol>
 			</symbols>
 		</symboltable>
 	</symboltables>

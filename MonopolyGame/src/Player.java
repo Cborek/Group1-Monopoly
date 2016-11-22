@@ -98,7 +98,7 @@ class Player {
 		return ownedAssets;
 	}
 	// a statement to asses if the player can build upon the selected square
-	public boolean canBuild(Square curProperty)
+	public boolean canBuildHouse(Square curProperty)
 	{
 		String color = curProperty.getColor();
 		boolean good = false;
@@ -111,7 +111,55 @@ class Player {
 			good = ownesColorGroup(color);
 		}
 		// at this point if the player owns the entire group of the curProperty's color good will be true
-		// the even building must be checked
+		// the even building across properties must be checked for houses
+		if(good)
+		{
+			for(int i=0; i<ownedAssets.size();i++)
+			{
+				if(color.equalsIgnoreCase(ownedAssets.get(i).getColor())&&curProperty != ownedAssets.get(i))
+				{
+					if((Math.abs((curProperty.getHouses()+1)-ownedAssets.get(i).getHouses()) >1)&&curProperty.getHouses()<4)
+					{
+						good = true;
+					}
+					else
+					{
+						System.out.println ("You can not yet build a house on this property" + curProperty.getName());
+						good = false;
+						break;
+					}
+					
+				}
+			}
+		}
+		return good;
+	}
+	public boolean canBuildHotel(Square curProperty)
+	{
+		boolean good =false;
+		String color = curProperty.getColor();
+		for(int i=0; i<ownedAssets.size();i++)
+			{
+				if(color.equalsIgnoreCase(ownedAssets.get(i).getColor()) && ownedAssets.get(i)!=curProperty)
+				{
+					if((ownedAssets.get(i).getHouses() == 4 && curProperty.getHouses() == 4) || (ownedAssets.get(i).getHotel()))
+					{
+						good = true;
+					}
+					else
+					{
+						System.out.println ("You may not yet build a hotel on this square");
+						good = false;
+						break;
+					}
+					
+				}
+			}
+		if(curProperty.getHotel())
+		{
+			System.out.println ("This square has a hotel");
+			good = false;
+		}
 		return good;
 	}
 	public boolean ownesColorGroup(String color)

@@ -19,6 +19,7 @@ public class Square {
 	private int player = 0;		//PLAYER NUMBER  IS NOT USED YET IN THIS CLASS  and  MAY NOT BE USED
 	private String contents;	//Holds the string contents in the blank squares in the board
 	private boolean isOwned;   //tells if the squared is owned and can be purchased
+	private boolean isMortgaged =false; // set it it is mortgaged
 	
 	//Square constructor for BLANK SQUARES
 	//I would rename this but we have already assigned all of our blank squares with the new Square() constructor   
@@ -225,5 +226,9 @@ public class Square {
 	public void setIsOwned()
 	{
 		isOwned =!isOwned;
+	}
+	public void setIsMortgaged()
+	{
+		isMortgaged = !isMortgaged;
 	}
 }

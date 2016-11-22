@@ -41,7 +41,7 @@ class Game {
 			for(int whoseTurn =0; whoseTurn < gameMembers.size(); whoseTurn++)
 			{
 				printGame();
-				System.out.println (gameMembers.get(whoseTurn).getName() + " it is your turn");
+				System.out.println (gameMembers.get(whoseTurn).getName() + " it is your turn. You have $" + gameMembers.get(whoseTurn).getMoney());
 				playerTurn(gameMembers.get(whoseTurn));
 			}
 			for(Player member: gameMembers)
@@ -121,7 +121,7 @@ class Game {
 			}
 			else if(option == 3)
 			{
-				option3Build(position,currentPlayer);
+				option3Build(currentPlayer);
 			}
 			else if(option ==4)
 			{
@@ -214,28 +214,37 @@ class Game {
 		auctionNotBought(position);
 	}
 
-	private void option3Build(Square position , Player currentPlayer)throws IOException
+	private void option3Build(Player currentPlayer)throws IOException
 	{
 		String[] playerProperty = new String[currentPlayer.getHoldings().size()];
-		String[] BuildOp= {"Build house","Build Hotel"};
+		final String[] BuildOp= {"Build house","Build Hotel"};
 				currentPlayer.showHoldings();
 				for(int i=0; i<playerProperty.length;i++)
 				{
 					playerProperty[i]=currentPlayer.getHoldings().get(i).getName();
 				}
 				//checks is player has ability to build a house
-				int propToSell = ConsoleUI.promptForMenuSelection(playerProperty,false)-1;
-				if(currentPlayer.canBuild(currentPlayer.getProperty(propToSell)))
-				{
-					int choice = ConsoleUI.promptForMenuSelection(BuildOp,false);
-					//handle the even building of houses and if they can or can not build a hotel
-					
+				if(currentPlayer.PropertyNum()>0){	
+					int propToSell = ConsoleUI.promptForMenuSelection(playerProperty,false)-1;
+					int choice = ConsoleUI.promptForMenuSelection(BuildOp,true);
+					if(currentPlayer.canBuildHouse(currentPlayer.getProperty(propToSell)) && choice ==1)
+					{
+						//builds the players a house on the square chosen
+						System.out.println ("You have built a house on " + currentPlayer.getProperty(propToSell).getName());
+						currentPlayer.getProperty(propToSell).addHouse();
+					}
+					else if(choice == 2 && currentPlayer.canBuildHotel(currentPlayer.getProperty(propToSell)))
+					{
+						// handles building a hotel on square
+						System.out.println ("You have built a hotel on " + currentPlayer.getProperty(propToSell).getName());
+						currentPlayer.getProperty(propToSell).addHotel();
+					}
 				}
 	}
 	
 	private void option4SellProp(Player currentPlayer)
 	{
-		// has the user select if they want to sell a property or a card
+		// has the user select if they want to sell a property, a card, or a building
 		//and if they want to sell to a specific player or not 
 		//then handle the selling from there
 		//if it is a property and they do not want to sell specifically put it in auction
@@ -344,21 +353,30 @@ class Game {
 	public Square selectCommunity(Player  currentPlayer, Square position)
 	{
 		//may need change to acomidate the get out of jail card leaving the deck
-		System.out.println (communityChest.get(0));
+		communityChest.get(0).getInfo();
 		communityChest.add(communityChest.get(0));
 		communityChest.remove(0);
 		//modifiying player money with value on the card
-		//return the square the player is on eeven if they did not move
+		if(communityChest.get(0).getCardType().equalsIgnoreCase("payment square"))
+		{
+			currentPlayer.setMoney(communityChest.get(0).getAmount());
+		}
+		//return the square the player is on even if they did not move
 		return position;
 	}
 
 	private Square selectChance(Player currentPlayer, Square position)
 	{
 		//possible needed changes for get out of jail
-		System.out.println (chance.get(0));
+		chance.get(0).getInfo();
 		chance.add(chance.get(0));
 		chance.remove(0);
+		if(chance.get(0).getCardType().equalsIgnoreCase("payment square"))
+		{
+			currentPlayer.setMoney(chance.get(0).getAmount());
+		}
 		//modifiying player money with value on the card
+		// changing the amount lost based on houses or number of players
 		//return the square the player is on even if they did not move
 		return position;
 	}
@@ -418,7 +436,7 @@ class Game {
 						highBid=gameMembers.get(i);
 					}
 				}
-				else
+				else if(highBid!=gameMembers.get(i))
 				{
 					System.out.println ("You are currently not bidding");
 				}
