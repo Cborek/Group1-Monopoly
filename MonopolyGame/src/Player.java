@@ -12,6 +12,7 @@ class Player {
 	private String name;
 	private int place;
 	private boolean inJail =false;
+	private int jailTurns =0;
 	
 	public Player(String isName)
 	{
@@ -196,12 +197,43 @@ class Player {
 				good = true;
 			}
 		}
+		else if(color.equalsIgnoreCase("white"));
+		{
+			int owned =0;
+			for(Square prop: ownedAssets)
+			{
+				if(prop.getColor().equalsIgnoreCase(color))
+				{
+					owned++;
+				}
+			}
+			if(owned == 4)
+			{
+				good = true;
+			}
+		}
 		return good;
 	}
 	// gets a single owned property so as to be used for auction or sale
 	public Square getProperty(int num)
 	{
 		return ownedAssets.get(num);
+	}
+	public boolean isInJail()
+	{
+		return inJail;
+	}
+	public void incJailTurns()
+	{
+		jailTurns++;
+	}
+	public int getJailTurns()
+	{
+		return jailTurns;
+	}
+	public void setJailTurns(int num)
+	{
+		jailTurns = num;
 	}
 	public void removeProperty(Square toRem){
 		ownedAssets.remove(toRem);

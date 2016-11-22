@@ -70,23 +70,40 @@ class Game {
 		int option =0;
 		do
 		{
-			if(option == 0)
+			
+			
+			if(option == 0 && !currentPlayer.isInJail())
 			{
 				int total =0;
 				int die1 = rollDice();
 				int die2 = rollDice();
 				total = die1+die2;
 				doubles = isDoubles(die1,die2);
-				System.out.println ("You are on "+gameArea.getPosName(currentPlayer.getPlace())+ " at space "+ currentPlayer.getPlace());
-				System.out.println ("You rolled "+ die1 +" and " +die2+ " You move "+ total + " spaces");
-				//get not set dumby fix it later 
-				//above is covered
-				currentPlayer.setPlace(total);
-				System.out.println ("You are on "+gameArea.getPosName(currentPlayer.getPlace())+ " at space " +currentPlayer.getPlace());
+				//handles the payers turn in jail
+				if(currentPlayer.isInJail())
+				{
+					System.out.println ("You are in jail");
+					currentPlayer.incJailTurns();
+					moveInJail(currentPlayer, doubles);
+				}
+				else
+				{
+					System.out.println ("You are on "+gameArea.getPosName(currentPlayer.getPlace())+ " at space "+ currentPlayer.getPlace());
+					System.out.println ("You rolled "+ die1 +" and " +die2+ " You move "+ total + " spaces");
+					//get not set dumby fix it later 
+					//above is covered
+					currentPlayer.setPlace(total);
+					System.out.println ("You are on "+gameArea.getPosName(currentPlayer.getPlace())+ " at space " +currentPlayer.getPlace());
+					System.out.println ();	
+				}
 			}
 			//the position value is equal to the square the player is currently on
 			Square position = gameArea.getPos(currentPlayer.getPlace());
-			
+			System.out.println ("You have $" + currentPlayer.getMoney());
+			if(!position.getIsOwned())
+			{
+				System.out.println ("This square costs $" + position.getCost());
+			}
 			if(position.getIsOwned() && !currentPlayer.ownes(position)&& position.getRent()>0 )
 			{
 				payRent(position, currentPlayer);
@@ -151,6 +168,7 @@ class Game {
 			{
 				System.out.println ("You go to jail. You rolled to many doubles");
 				currentPlayer.goToPlace(11);
+				currentPlayer.setInJail();
 				//create the in jail or just visiting
 				doubles = false;
 			}
@@ -170,10 +188,37 @@ class Game {
 	private void payRent(Square position, Player currentPlayer)
 	{
 		// need to add what is done for owneing multiple things of the same color as well as railroads and utilities
-		System.out.println ("This space is owned you pay rent of $" + position.getRent() +" dollars");
-		currentPlayer.setMoney(-1*position.getRent());
-		gameMembers.get(position.getPlayer()-1).setMoney(position.getRent());
-		System.out.println (gameMembers.get(position.getPlayer()-1).getName() + " you have been paid rent");
+		boolean payDouble = false;
+		for(int i=0; i<gameMembers.size();i++)
+		{
+			if(!position.getName().contains("tax") &&gameMembers.get(i).ownesColorGroup(position.getColor()))
+			{
+				payDouble = true;
+				if(gameMembers.get(i) == currentPlayer)
+				{
+					payDouble = false;
+				}
+			}
+			else if(position.getName().contains("tax"))
+			{
+				payDouble=false;
+			}
+		}
+		if(payDouble)
+		{
+			System.out.println ("This square and its other colors are owned by a single player. You pay double rent");
+			System.out.println ("You pay $" + position.getRent()*2);
+			currentPlayer.setMoney(-1*position.getRent()*2);
+			gameMembers.get(position.getPlayer()-1).setMoney(position.getRent()*2);
+			System.out.println (gameMembers.get(position.getPlayer()-1).getName() + " you have been paid rent");
+		}
+		else
+		{
+			System.out.println ("This space is owned you pay rent of $" + position.getRent() +" dollars");
+			currentPlayer.setMoney(-1*position.getRent());
+			gameMembers.get(position.getPlayer()-1).setMoney(position.getRent());
+			System.out.println (gameMembers.get(position.getPlayer()-1).getName() + " you have been paid rent");
+		}
 	}
 	//handle the squares you cant buy
 	private void uniqueSquares(Square position , Player currentPlayer)
@@ -183,8 +228,35 @@ class Game {
 				//player goes to jail
 				System.out.println ("you go to jail");
 				currentPlayer.goToPlace(11);
+				currentPlayer.setInJail();
 			}
 			
+	}
+	
+	//handles the player in jail
+	private void moveInJail(Player currentPlayer, boolean doubles)throws IOException
+	{
+		boolean payFine = ConsoleUI.promptForBool("Will you pay the $50 fine to get out of jail? Y/N","y","n");
+		if(payFine)
+		{
+			currentPlayer.setInJail();
+			currentPlayer.setMoney(-1*50);
+		}
+		else if(doubles)
+		{
+			currentPlayer.setInJail();
+			System.out.println ("You rolled doubles. You are out of jail");
+		}
+		else if(currentPlayer.getJailTurns()==3)
+		{
+			System.out.println ("You are not in jail anymore. You have been in jail for 3 turns.");
+			currentPlayer.setInJail();
+			currentPlayer.setJailTurns(0);
+		}
+		else
+		{
+			System.out.println ("You are still in jail");
+		}
 	}
 
 	private void option1(Square position , Player currentPlayer)
@@ -238,6 +310,9 @@ class Game {
 						// handles building a hotel on square
 						System.out.println ("You have built a hotel on " + currentPlayer.getProperty(propToSell).getName());
 						currentPlayer.getProperty(propToSell).addHotel();
+					}
+					else{
+						System.out.println ("You can not build here");
 					}
 				}
 	}
