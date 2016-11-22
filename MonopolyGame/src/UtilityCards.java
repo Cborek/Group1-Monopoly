@@ -25,8 +25,8 @@ public class UtilityCards extends Cards{
 				currentPlayer.goToPlace(squareLocation2);
 				break;
 			} else if (i>40) {
-				currentPlayer.setPlace(0);
-				break;
+				currentPlayer.setMoney(200);
+				i=1;
 			}
 		}
 	}
