@@ -12,7 +12,7 @@ class Game {
 	//Start Menu for when application first starts up
 	private final String[] menu = {"Play a New Game", "Credits", "Exit"};
 	//options of the players turn
-	private final String[] playerOptions = {"Buy Space","Do not buy space","Build","Sell property","Make offer","Mortgage","End turn","Quit game", "Show my propreties", "Repay Mortgage"};
+	private final String[] playerOptions = {"Buy Space","Do not buy space","Build","Sell property","Make offer","Mortgage","End turn","Quit game", "Show my propreties"};
 	//a list of the player
 	private ArrayList<Player> gameMembers = new ArrayList<Player>();
 	private CreateCardLists cardLists = new CreateCardLists();
@@ -25,37 +25,16 @@ class Game {
 		chance = shuffleList(chance);
 	}
 	
-	void play()throws IOException
+	private void play()throws IOException
 	{
 		boolean good = true;
 		int PlayerNum = ConsoleUI.promptForInt("Please enter the number of players. 2-8", 2,8);
 		//creates players based on the number of players
 		for(int i=0; i< PlayerNum; i++)
 		{
-			boolean isGoodPiece = false;
 			System.out.print("Player " + (i+1) + " ");
 			gameMembers.add(new Player(ConsoleUI.promptForInput("What is your name?",false)));
-			Player currentPlayer = gameMembers.get(i);
 			// also ask for the type of piece of the list in the enum player pieces
-						do{
-				int playerPiece = ConsoleUI.promptForInt("What token would you like to play as?\n1-Ship : 2-Racecar : "
-						+ "3-Iron : 4-Shoe : 5-Wheelbarrow\n6-Terrier : 7-Thimble : 8-Hat : 9-Horse : 10-Cannon", 1, 10);
-				
-				for(int j = 0; j < gameMembers.size(); j++){
-					if(gameMembers.get(j).getPlayerPieceInt() == playerPiece){
-						System.out.println("Sorry, that piece has already been chosen. Pick again.");
-						break;
-					}
-					else{
-					
-						currentPlayer.setPlayerPieceInt(playerPiece);
-						isGoodPiece=true;
-					}
-				}
-				
-				
-			}while(isGoodPiece == false);
-			gamePiece(currentPlayer);
 		}
 		// handle the loop of game play
 		do{
@@ -92,8 +71,6 @@ class Game {
 		int option =0;
 		do
 		{
-			
-			
 			if(option == 0 && !currentPlayer.isInJail())
 			{
 				int total =0;
@@ -111,30 +88,25 @@ class Game {
 				if(!currentPlayer.isInJail())
 				{
 					System.out.println ("You are on "+gameArea.getPosName(currentPlayer.getPlace())+ " at space "+ currentPlayer.getPlace());
-					System.out.println ("You rolled "+ die1 +" and " +die2);
-					System.out.print("Your ");
-					gamePiece(currentPlayer);
-					System.out.println("moved " + total + " spaces");
+					System.out.println ("You rolled "+ die1 +" and " +die2+ " You move "+ total + " spaces");
 					//get not set dumby fix it later 
 					//above is covered
 					currentPlayer.setPlace(total);
-					System.out.print ("You are on "+gameArea.getPosName(currentPlayer.getPlace())+ " at space " +currentPlayer.getPlace());
-					
+					System.out.println ("You are on "+gameArea.getPosName(currentPlayer.getPlace())+ " at space " +currentPlayer.getPlace());
 					System.out.println ();	
 				}
 			}
 			//the position value is equal to the square the player is currently on
 			Square position = gameArea.getPos(currentPlayer.getPlace());
-			System.out.println ("You have $" + currentPlayer.getMoney());
 			if(!position.getIsOwned())
 			{
 				System.out.println ("This square costs $" + position.getCost());
 			}
-			if(position.getIsOwned() && !currentPlayer.ownes(position)&& position.getRent()>0 )
+			if(position.getIsOwned() && !currentPlayer.ownes(position)&& position.getRent()>0 && option ==0)
 			{
 				payRent(position, currentPlayer);
 			}
-			else if(position.getName().equalsIgnoreCase("chance") || position.getName().equalsIgnoreCase("community Chest"))
+			else if((position.getName().equalsIgnoreCase("chance") || position.getName().equalsIgnoreCase("community Chest"))&&option==0)
 			{
 				if(position.getName().equalsIgnoreCase("chance"))
 				{
@@ -144,6 +116,7 @@ class Game {
 					position = selectCommunity(currentPlayer,position);
 			}
 			System.out.println ();
+			System.out.println ("You have $" + currentPlayer.getMoney());
 			System.out.println (currentPlayer.getName() + " it is your turn");
 			option = ConsoleUI.promptForMenuSelection(playerOptions,false);
 			uniqueSquares(position,currentPlayer);
@@ -182,7 +155,6 @@ class Game {
 			else if(option ==9)
 			{
 				currentPlayer.showHoldings();
-				System.out.println("You have $" +currentPlayer.getMoney());
 				option = -1;
 			}
 			if(doubles && turn!=3 && option == 7)
@@ -199,18 +171,17 @@ class Game {
 				//create the in jail or just visiting
 				doubles = false;
 			}
+			// handle the bankruptcy case
 		}while(option <7);
 	
 		if(!gameArea.getPos(currentPlayer.getPlace()).getIsOwned() && option ==7)
 		{
 			auctionNotBought(gameArea.getPos(currentPlayer.getPlace()));
 		}
+		
 		else if(option == 8)
 		{
 			Option8quitGame(currentPlayer);
-		}
-		else if(option == 10){
-			option10RepayMortgage(currentPlayer);
 		}
 	}
 	
@@ -233,6 +204,7 @@ class Game {
 				payDouble=false;
 			}
 		}
+		// handle the player being so broke that they need to sell properties to pay rent
 		if(payDouble)
 		{
 			System.out.println ("This square and its other colors are owned by a single player. You pay double rent");
@@ -250,18 +222,35 @@ class Game {
 		}
 	}
 	//handle the squares you cant buy
-	private void uniqueSquares(Square position , Player currentPlayer)
+	private void uniqueSquares(Square position , Player currentPlayer)throws IOException
 	{
-			if(gameArea.getPosName(currentPlayer.getPlace()).trim().equalsIgnoreCase("got to jail"))
+			if(position.getName().equalsIgnoreCase("got to jail"))
 			{
 				//player goes to jail
 				System.out.println ("you go to jail");
 				currentPlayer.goToPlace(11);
 				currentPlayer.setInJail();
 			}
-			
-	}
-	
+			if(position.getName().equalsIgnoreCase("income tax"))
+			{
+				String tenPerc = "Pay $" + ((double)currentPlayer.getPlayerValue()*.1);
+				String[] options = {"Pay 200",tenPerc};
+				int choice = ConsoleUI.promptForMenuSelection(options,false);
+				if(choice ==1)
+				{
+					currentPlayer.setMoney(-1*position.getRent());
+				}
+				else{
+					currentPlayer.setMoney((int)(-1*(double)currentPlayer.getPlayerValue()*.1));
+				}
+			}
+			if(position.getName().equalsIgnoreCase("luxury tax"))
+			{
+				System.out.println ("You pay the luxury tax");
+				currentPlayer.setMoney(-1*position.getRent());
+			}
+			else return;
+	}	
 	//handles the player in jail
 	private void moveInJail(Player currentPlayer, boolean doubles)throws IOException
 	{
@@ -317,13 +306,9 @@ class Game {
 
 	private void option3Build(Player currentPlayer)throws IOException
 	{
-		String[] playerProperty = new String[currentPlayer.getHoldings().size()];
+		String[] playerProperty = currentPlayer.getHoldings();
 		final String[] BuildOp= {"Build house","Build Hotel"};
 				currentPlayer.showHoldings();
-				for(int i=0; i<playerProperty.length;i++)
-				{
-					playerProperty[i]=currentPlayer.getHoldings().get(i).getName();
-				}
 				//checks is player has ability to build a house
 				if(currentPlayer.PropertyNum()>0){	
 					int propToSell = ConsoleUI.promptForMenuSelection(playerProperty,false)-1;
@@ -346,10 +331,40 @@ class Game {
 				}
 	}
 	
-	private void option4SellProp(Player currentPlayer)
+	private void option4SellProp(Player currentPlayer)throws IOException
 	{
 		// has the user select if they want to sell a property, a card, or a building
 		//and if they want to sell to a specific player or not 
+		String[] sellTo = {"Sell a property or card","Sell a building"};
+		boolean doneSelling = false;
+		String[] Members = new String[gameMembers.size()];
+		for(int i=0; i<Members.length; i++)
+		{
+			Members[i] = gameMembers.get(i).getName();
+		}
+		int selection = ConsoleUI.promptForMenuSelection(sellTo,true);
+		// add the statement to cover the auction the square or not
+		if(selection == 1)
+		{
+			do
+			{
+				//present the player with a list of others to sell to 
+				System.out.println ("Who would you like to sell to?");
+				int whoToSellTo = ConsoleUI.promptForMenuSelection(Members,true);
+				if(whoToSellTo == 0)
+				{
+					doneSelling=true;
+				}
+				else
+				{
+					trade(currentPlayer,gameMembers.get(whoToSellTo-1));
+				}
+			}while(!doneSelling);
+		}
+		else if(selection == 2)
+		{
+			sellBuildings(currentPlayer);
+		}
 		//then handle the selling from there
 		//if it is a property and they do not want to sell specifically put it in auction
 		//else send to trade method
@@ -413,23 +428,10 @@ class Game {
 			//remove player from list
 			gameMembers.remove(currentPlayer);
 	}
-	
-	private void option10RepayMortgage(Player currentPlayer) throws IOException{
-		String[] propNames = currentPlayer.getPropNames();
-		System.out.println("You currently have the following properties mortgaged.");
-		currentPlayer.getMortgagedProperties();
-		System.out.println("For which property would you like to repay the mortgage?");
-		int selection = ConsoleUI.promptForMenuSelection(propNames, false) - 1;
-		
-		if(propNames[selection].equals(currentPlayer.getMortgagedProperty(selection).getName()) && currentPlayer.getMoney() >= currentPlayer.getMortgageValue(selection)){
-			System.out.println("The mortgage for this property has been repaid.");
-			currentPlayer.setMoney(currentPlayer.getMortgageValue(selection));
-		}
-		else{
-			System.out.println("You cannot afford to repay this property right now.");
-		}
+	private void sellBuildings(Player currentPlayer)
+	{
+		//Square[] sellable = currentPlayer.
 	}
-	
 	private int rollDice()
 	{
 		//generate the roll of a six sided die
@@ -470,28 +472,19 @@ class Game {
 		}
 	}
 	
-	private Square selectCommunity(Player currentPlayer, Square position)
+	public Square selectCommunity(Player  currentPlayer, Square position)
 	{
-		//may need change to accommodate the get out of jail card leaving the deck
+		//may need change to acomidate the get out of jail card leaving the deck
 		communityChest.get(0).getInfo();
 		communityChest.add(communityChest.get(0));
-		if (communityChest.get(0).getCardType().equals("PaymentCard")){
-			currentPlayer.setMoney(communityChest.get(0).getAmount());
-		} else if (communityChest.get(0) instanceof LocationCards) {
-			LocationCards location = (LocationCards)communityChest.get(0);
-			location.moveToLocationSquare(currentPlayer);
-		} else if (communityChest.get(0).getCardType().equalsIgnoreCase("PaymentCardWithTwo")) {
-			paymentCardWithTwo(currentPlayer, communityChest.get(0).getAmount(), communityChest.get(0).getAmountTwo());
-		} else if (communityChest.get(0).getCardType().equalsIgnoreCase("GetOutOfJail")) {
-			// CODE FOR KEEPING JAIL CARD
-		} else {
-			System.out.println("WE HAVE AN ERROR. THE COMMUNITY CARDS DID NOT WORK");
-			// Prints out error message if cards are not selected properly. FOR TESTING PURPOSES ONLY
-		}
 		communityChest.remove(0);
-		//modifying player money with value on the card
+		//modifiying player money with value on the card
+		if(communityChest.get(0).getCardType().equalsIgnoreCase("payment square"))
+		{
+			currentPlayer.setMoney(communityChest.get(0).getAmount());
+		}
 		//return the square the player is on even if they did not move
-		System.out.println ("You are on "+gameArea.getPosName(currentPlayer.getPlace())+ " at space " +currentPlayer.getPlace());
+		
 		return position;
 	}
 
@@ -500,45 +493,16 @@ class Game {
 		//possible needed changes for get out of jail
 		chance.get(0).getInfo();
 		chance.add(chance.get(0));
-		if (chance.get(0).getCardType().equals("PaymentCard")){
-			currentPlayer.setMoney(chance.get(0).getAmount());
-		} else if (chance.get(0).getCardType().equalsIgnoreCase("PaymentCardMultiplier")) {
-			for(Player member: gameMembers) {
-				member.setMoney(chance.get(0).getAmount());
-			}
-			int amountPaid = (chance.get(0).getAmount()*(PlayerNum-1) *-2); 
-			// Every player is given the amount that must be paid including the player paying it
-			// Because of this, current player will then pay the amount *numberOfPlayers-1 and *-2 to cancel out what he received
-			currentPlayer.setMoney(amountPaid);
-		} else if (chance.get(0).getCardType().equalsIgnoreCase("PaymentCardWithTwo")) {
-			paymentCardWithTwo(currentPlayer, chance.get(0).getAmount(), chance.get(0).getAmountTwo());
-		} else if (chance.get(0) instanceof LocationCards){
-			LocationCards location = (LocationCards)chance.get(0);
-			location.moveToLocationSquare(currentPlayer);
-		} else if (chance.get(0) instanceof UtilityCards) {
-			UtilityCards utility = (UtilityCards)chance.get(0);
-			utility.moveToUtilitySquare(currentPlayer);
-		} else if (chance.get(0) instanceof RailRoadCards) {
-			RailRoadCards railroad = (RailRoadCards)chance.get(0);
-			railroad.moveToRailRoadSquare(currentPlayer);
-		} else if (chance.get(0).getCardType().equalsIgnoreCase("GetOutOfJail")) {
-			// CODE FOR KEEPING JAIL CARD
-		} else {
-			System.out.println("WE HAVE AN ERROR. CHANCE CARDS DO NOT WORK");
-			// Prints out error message if cards are not selected properly. FOR TESTING PURPOSES ONLY
-		}
 		chance.remove(0);
-		System.out.println ("You are on "+gameArea.getPosName(currentPlayer.getPlace())+ " at space " +currentPlayer.getPlace());
-		// Prints out game number and name after selecting card whether they moved or not
+		if(chance.get(0).getCardType().equalsIgnoreCase("payment square"))
+		{
+			currentPlayer.setMoney(chance.get(0).getAmount());
+		}
+		//modifiying player money with value on the card
+		// changing the amount lost based on houses or number of players
+		//return the square the player is on even if they did not move
 		return position;
 	}
-
-	// Method for payment per houses and hotel number
-	private void paymentCardWithTwo(Player currentPlayer, int houseCost, int hotelCost) {
-		int amountPaid=(currentPlayer.getTotalHouses()*houseCost)+
-				(currentPlayer.getTotalHotels()*hotelCost);
-		currentPlayer.setMoney(amountPaid);
-	}	
 
 	private ArrayList<Cards> shuffleList(ArrayList<Cards> a){
 		Random rand = new Random();
@@ -612,45 +576,82 @@ class Game {
 		property.setPlayer(gameMembers.indexOf(highBid)+1);
 		highBid.propertyChange(property);
 		highBid.setMoney(-1*bid);
+		
+		// handle if the property is mortgaged
 	}
 	
-	private void trade(Player Init, Player Pass)
+	private void trade(Player Init, Player Pass)throws IOException
 	{
 		//tradeing between to player until a agreement is struck or they chose to end the trade
+		boolean tradeDone = false;
+		String[] tradeOp = {"Property","Money","Card"};
+		ArrayList<Square> InitProp = new ArrayList<Square>();
+		ArrayList<Cards> InitCards = new ArrayList<Cards>();
+		int InitMon =0;
+		ArrayList<Square> PassProp = new ArrayList<Square>();
+		ArrayList<Cards> PassCards = new ArrayList<Cards>();
+		int PassMon =0;
+		String[] curInitProps = Init.getHoldings();
+		String[] curPassProps = Pass.getHoldings();
+		do
+		{
+			System.out.println (Init.getName() + "What would you like to offer?");
+			int InitOp = ConsoleUI.promptForMenuSelection(tradeOp,false);
+			//selection option of the Init player
+			if(InitOp == 1 && Init.PropertyNum()>0)
+			{
+				System.out.println ("What property would you like to offer");
+				//add the selected property to the initprop list
+				int select = ConsoleUI.promptForMenuSelection(curInitProps,false);
+				InitProp.add(Init.getProperty(select-1));
+			}
+			else if(InitOp == 2)
+			{
+				int offer = ConsoleUI.promptForInt("How much will you offer",0,Init.getMoney());
+				InitMon = offer;
+			}
+			else if(InitOp == 3)
+			{
+				if(Init.getCardsNum() >0)
+				{
+					System.out.println ("You have offered a get out of jail free card");
+					InitCards.add(Init.getCard());
+						// add the get of jail card to the offer list
+						
+				}
+					//if the Init player has a get out of jail card to trade it is put up for trade
+			}
+			System.out.println ();
+			System.out.println (Pass.getName()+ "What would you like to offer?");
+			int passOp = ConsoleUI.promptForMenuSelection(tradeOp,false);
+			//selection option of the Init player
+			if(passOp == 1&& Init.PropertyNum()>0)
+			{
+				System.out.println ("What property would you like to offer");
+				//add the selected property to the initprop list
+				int select = ConsoleUI.promptForMenuSelection(curPassProps,false);
+				PassProp.add(Pass.getProperty(select-1));
+			}
+			else if(passOp == 2)
+			{
+				int offer = ConsoleUI.promptForInt("How much will you offer",0,Pass.getMoney());
+				PassMon = offer;
+			}
+			else if(passOp == 3)
+			{
+				if(Pass.getCardsNum() >0)
+				{
+					System.out.println ("You have offered a get out of jail free card");
+					PassCards.add(Pass.getCard());
+						// add the get of jail card to the offer list
+						
+				}
+				else 
+					System.out.println ("You have no card to offer");
+					//if the Init player has a get out of jail card to trade it is put up for trade
+			}
+		}while(!tradeDone);
 		//handle what each player wants to offer both money and other ownable items (such as property or cards)
 		//ask the players if the trade is agreable
-	}
-	
-		private void gamePiece(Player currentPlayer){
-		if (currentPlayer.getPlayerPieceInt() == 1){
-			System.out.println("You are now playing as: " + PlayerPieces.Ship);
-		}
-		else if(currentPlayer.getPlayerPieceInt() == 2){
-			System.out.println("You are now playing as: " + PlayerPieces.Racecar);
-		}
-		else if(currentPlayer.getPlayerPieceInt() == 3){
-			System.out.println("You are now playing as: " + PlayerPieces.Iron);
-		}
-		else if(currentPlayer.getPlayerPieceInt() == 4){
-			System.out.println("You are now playing as: " + PlayerPieces.Shoe);
-		}
-		else if(currentPlayer.getPlayerPieceInt() == 5){
-			System.out.println("You are now playing as: " + PlayerPieces.Wheelbarrow);
-		}
-		else if(currentPlayer.getPlayerPieceInt() == 6){
-			System.out.println("You are now playing as: " + PlayerPieces.Terrier);
-		}
-		else if(currentPlayer.getPlayerPieceInt() == 7){
-			System.out.println("You are now playing as: " + PlayerPieces.Thimble);
-		}
-		else if(currentPlayer.getPlayerPieceInt() == 8){
-			System.out.println("You are now playing as: " + PlayerPieces.Hat);
-		}
-		else if(currentPlayer.getPlayerPieceInt() == 9){
-			System.out.println("You are now playing as: " + PlayerPieces.Horse);
-		}
-		else if(currentPlayer.getPlayerPieceInt() == 10){
-			System.out.println("You are now playing as: " + PlayerPieces.Cannon);
-		}
 	}
 }
