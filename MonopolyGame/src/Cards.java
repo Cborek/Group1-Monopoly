@@ -7,7 +7,6 @@ class Cards {
 	private int amount;
 	private int amountTwo;
 	
-	
 	public Cards(String type, String name, String todo, int monitary)
 	{
 		setCardType(type);
@@ -45,6 +44,9 @@ class Cards {
 	{
 		return amount;
 	}
+	public int getAmountTwo() {
+		return amountTwo;
+	}
 	// Method to take player to GO square
 	public void goToGo(Player currentPlayer) {
 		currentPlayer.goToPlace(1);
@@ -60,4 +62,6 @@ class Cards {
 	public String cardType() {
 		return getCardType();
 	}
+	
+	
 }
