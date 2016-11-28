@@ -12,10 +12,12 @@ class Game {
 	//Start Menu for when application first starts up
 	private final String[] menu = {"Play a New Game", "Credits", "Exit"};
 	//options of the players turn
-	private final String[] playerOptions = {"Buy Space","Do not buy space","Build","Sell property","Make offer","Mortgage","End turn","Quit game", "Show my propreties","Repay Mortgage"};
+	private final String[] playerOptions = {"Buy Space","Do not buy space","Build","Trade with players","Mortgage","End turn","Quit game", "Show my propreties","Repay Mortgage"};
 	//a list of the player
 	private ArrayList<Player> gameMembers = new ArrayList<Player>();
 	private CreateCardLists cardLists = new CreateCardLists();
+	private int PlayerNum;
+	
 	public Game()throws IOException
 	{
 		//creates the card piles
@@ -24,7 +26,7 @@ class Game {
 		chance =cardLists.getChance();
 		chance = shuffleList(chance);
 	}
-	private int PlayerNum;
+	
 	private void play()throws IOException
 	{
 		boolean good = true;
@@ -38,8 +40,8 @@ class Game {
  			Player currentPlayer = gameMembers.get(i);
   			// also ask for the type of piece of the list in the enum player pieces
  						do{
- 				int playerPiece = ConsoleUI.promptForInt("What token would you like to play as?\n1Ship : 2Racecar : "
- 						+ "3Iron : 4Shoe : 5Wheelbarrow\n6Terrier : 7Thimble : 8Hat : 9Horse : 10Cannon", 1, 10);
+ 				int playerPiece = ConsoleUI.promptForInt("What token would you like to play as?\n1 Ship : 2 Racecar : "
+ 						+ "3 Iron : 4 Shoe : 5 Wheelbarrow\n6 Terrier : 7 Thimble : 8 Hat : 9 Horse : 10 Cannon", 1, 10);
  				
  				for(int j = 0; j < gameMembers.size(); j++){
  					if(gameMembers.get(j).getPlayerPieceInt() == playerPiece){
@@ -55,7 +57,9 @@ class Game {
  				
  				
  			}while(isGoodPiece == false);
+ 			System.out.print ("You are playing as the ");
  			gamePiece(currentPlayer);
+ 			System.out.println ();
   		}
 		// handle the loop of game play
 		do{
@@ -84,6 +88,7 @@ class Game {
 		}
 		startMenu();
 	}
+	
 	private void playerTurn(Player currentPlayer)throws IOException
 	{
 		// runs throught the options and possibilities of the players turn
@@ -169,23 +174,18 @@ class Game {
 			}
 			else if(option == 5)
 			{
-				option5makeOffer(currentPlayer);
-			}
-			else if(option == 6)
-			{
 				option6Mortgage(currentPlayer);
-
 			}
-			else if(option ==9)
+			else if(option ==8)
 			{
 				currentPlayer.showHoldings();
 				option = 1;
 			}
-			else if(option == 10){
+			else if(option == 9){
  			option10RepayMortgage(currentPlayer);
  			option = 1;
  		}
-			if(doubles && turn!=3 && option == 7)
+			if(doubles && turn!=3 && option == 6)
 			{
 				System.out.println ("You rolled doubles go again");
 				turn++;
@@ -200,23 +200,30 @@ class Game {
 				doubles = false;
 			}
 			// handle the bankruptcy case
-		}while(option <7);
+		}while(option <6);
 	
-		if(!gameArea.getPos(currentPlayer.getPlace()).getIsOwned() && option ==7)
+		if(!gameArea.getPos(currentPlayer.getPlace()).getIsOwned() && option ==6)
 		{
 			auctionNotBought(gameArea.getPos(currentPlayer.getPlace()));
 		}
 		
-		else if(option == 8)
+		else if(option == 7 && currentPlayer.PropertyNum() >0 && currentPlayer.numMortgagedPoperties() >0)
 		{
 			Option8quitGame(currentPlayer);
 		}
+		else if(option ==7 && currentPlayer.PropertyNum() ==0 && currentPlayer.numMortgagedPoperties() ==0)
+		{
+			//todo if they own nothing and are quiting
+			System.out.println ("you have quit");
+			gameMembers.remove(currentPlayer);
+		}
 	}
 	
-	private void payRent(Square position, Player currentPlayer)
+	private void payRent(Square position, Player currentPlayer)throws IOException
 	{
 		// need to add what is done for owneing multiple things of the same color as well as railroads and utilities
 		boolean payDouble = false;
+		int rent = position.getRent();
 		if(position.getIsMortgaged())
 		{
 			System.out.println ("This property is mortgaged you pay no rent");
@@ -237,21 +244,73 @@ class Game {
 				payDouble=false;
 			}
 		}
-		// handle the player being so broke that they need to sell properties to pay rent
 		if(payDouble)
 		{
+			rent = rent*2;
+		}
+		// handle the player being so broke that they need to sell properties to pay rent
+		while(rent > currentPlayer.getMoney() && currentPlayer.PropertyNum()>0)
+		{
+			String[] SellOp = {"Sell a building", "Morgage a property"};
+			System.out.println ("You must mortgage or sell things you own to");
+			int option = ConsoleUI.promptForMenuSelection(SellOp,false);
+			if(option ==1)
+			{
+				sellBuildings(currentPlayer);
+			}
+			else if(option == 2)
+			{
+				option6Mortgage(currentPlayer);
+			}
+			
+		}
+		if(rent>currentPlayer.getMoney() &&currentPlayer.PropertyNum() ==0)
+		{
+			if(!position.getName().contains("tax"))
+			{
+				gameMembers.get(position.getPlayer()-1).setMoney(currentPlayer.getMoney());
+				currentPlayer.setMoney(-1*currentPlayer.getMoney());
+				//transfer of properties
+				while(currentPlayer.PropertyNum()>0)
+				{
+					gameMembers.get(position.getPlayer()-1).propertyChange(currentPlayer.getProperty(0));
+					currentPlayer.getProperty(0).setPlayer(position.getPlayer());
+					currentPlayer.propertyChange(currentPlayer.getProperty(0));
+				}
+				while(currentPlayer.numMortgagedPoperties()>0)
+				{
+					gameMembers.get(position.getPlayer()-1).addMortgagedProperty(currentPlayer.getMortgagedProperty(0));
+					currentPlayer.getMortgagedProperty(0).setPlayer(position.getPlayer());
+					currentPlayer.removeMortgagedPropertty(currentPlayer.getMortgagedProperty(0));
+					currentPlayer.propertyChange(currentPlayer.getProperty(currentPlayer.PropertyNum()-1));
+				}
+			}
+			else
+			{
+				Option8quitGame(currentPlayer);
+			}
+		}
+		else if(payDouble)
+		{
 			System.out.println ("This square and its other colors are owned by a single player. You pay double rent");
-			System.out.println ("You pay $" + position.getRent()*2);
-			currentPlayer.setMoney(-1*position.getRent()*2);
-			gameMembers.get(position.getPlayer()-1).setMoney(position.getRent()*2);
+			System.out.println ("You pay $" + rent);
+			currentPlayer.setMoney(-1*rent);
+			gameMembers.get(position.getPlayer()-1).setMoney(rent);
 			System.out.println (gameMembers.get(position.getPlayer()-1).getName() + " you have been paid rent");
 		}
 		else
 		{
-			System.out.println ("This space is owned you pay rent of $" + position.getRent() +" dollars");
-			currentPlayer.setMoney(-1*position.getRent());
-			gameMembers.get(position.getPlayer()-1).setMoney(position.getRent());
-			System.out.println (gameMembers.get(position.getPlayer()-1).getName() + " you have been paid rent");
+			System.out.println ("This space is owned you pay rent of $" + rent +" dollars");
+			currentPlayer.setMoney(-1*rent);
+			gameMembers.get(position.getPlayer()-1).setMoney(rent);
+			if(position.getName().contains("tax"))
+			{
+				System.out.println ("You have paid tax");
+			}
+			else{
+				System.out.println (gameMembers.get(position.getPlayer()-1).getName() + " you have been paid rent");
+			}
+			
 		}
 	}
 	//handle the squares you cant buy
@@ -269,20 +328,44 @@ class Game {
 				String tenPerc = "Pay $" + ((double)currentPlayer.getPlayerValue()*.1);
 				String[] options = {"Pay 200",tenPerc};
 				int choice = ConsoleUI.promptForMenuSelection(options,false);
-				if(choice ==1)
+				if(choice ==1 && currentPlayer.getMoney()>=200)
 				{
-					currentPlayer.setMoney(-1*position.getRent());
+					payRent(position, currentPlayer);
 				}
 				else{
-					currentPlayer.setMoney((int)(-1*(double)currentPlayer.getPlayerValue()*.1));
+						int pay = ((int)(-1*(double)currentPlayer.getPlayerValue()*.1));
+						while(pay > currentPlayer.getMoney() && currentPlayer.PropertyNum()>0)
+						{
+							String[] SellOp = {"Sell a building", "Morgage a property"};
+							System.out.println ("You must mortgage or sell things you own to pay the tax");
+							int option = ConsoleUI.promptForMenuSelection(SellOp,false);
+							if(option ==1)
+							{
+								sellBuildings(currentPlayer);
+							}
+							else if(option == 2)
+							{
+								option6Mortgage(currentPlayer);
+							}
+						}	
+						if(currentPlayer.getMoney()<pay)
+							{
+								Option8quitGame(currentPlayer);
+							}
+						else
+							{
+								System.out.println ("You pay the tax");
+								currentPlayer.setMoney(-1*pay);
+							}
+						
 				}
+				if(position.getName().equalsIgnoreCase("luxury tax"))
+				{
+					System.out.println ("You pay the luxury tax");
+					payRent(position,currentPlayer);
+				}
+				else return;
 			}
-			if(position.getName().equalsIgnoreCase("luxury tax"))
-			{
-				System.out.println ("You pay the luxury tax");
-				currentPlayer.setMoney(-1*position.getRent());
-			}
-			else return;
 	}	
 	//handles the player in jail
 	private void moveInJail(Player currentPlayer, boolean doubles)throws IOException
@@ -300,7 +383,34 @@ class Game {
 		}
 		else if(currentPlayer.getJailTurns()==3)
 		{
-			System.out.println ("You are not in jail anymore. You have been in jail for 3 turns.");
+			System.out.println ("You are not in jail anymore. You have been in jail for 3 turns. You pay $50");
+				System.out.println ("You must pay $50");
+				while(50 > currentPlayer.getMoney() && currentPlayer.PropertyNum()>0)
+				{
+					System.out.println ("You cannoy pay bail");
+					String[] SellOp = {"Sell a building", "Morgage a property"};
+					System.out.println ("You must mortgage or sell things you own to pay the fine");
+					int option = ConsoleUI.promptForMenuSelection(SellOp,false);
+					if(option ==1)
+					{
+						sellBuildings(currentPlayer);
+					}
+					else if(option == 2)
+					{
+						option6Mortgage(currentPlayer);
+					}
+					
+				}
+				if(currentPlayer.getMoney()<50)
+				{
+					Option8quitGame(currentPlayer);
+				}
+				else
+				{
+					System.out.println ("You pay the $50");
+					currentPlayer.setMoney(-50);
+				}
+					
 			currentPlayer.setInJail();
 			currentPlayer.setJailTurns(0);
 		}
@@ -314,7 +424,7 @@ class Game {
 	{
 		if(!position.getIsOwned() && currentPlayer.getMoney()>=position.getCost())
 				{
-					currentPlayer.setMoney(1*position.getCost());
+					currentPlayer.setMoney(-1*position.getCost());
 					//Player purchases the space
 					currentPlayer.propertyChange(position);
 					// player is passed the square they are on
@@ -403,13 +513,6 @@ class Game {
 		//else send to trade method
 	}
 
-	private void option5makeOffer(Player currentPlayer)
-	{
-		// handles the player offering to buy from other players any property
-		//utilize the trade method after asking a player who they would like to trade with
-		//may siappear entirly
-	}
-
 	private void option6Mortgage(Player currentPlayer) throws IOException
 	{
 		/*Handles the mortgaging of a chosen square
@@ -444,23 +547,30 @@ class Game {
 		currentPlayer.getMortgagedProperties();
 	}
 	
-	//option 7 does not need a method so this skips to option 8
 	private void Option8quitGame(Player currentPlayer)throws IOException
 	{
-		System.out.println ("You have quit the game");
+		System.out.println ("You have lost the game");
 			//action all property off
-			currentPlayer.setMoney(1*currentPlayer.getMoney());
+			currentPlayer.setMoney(-1*currentPlayer.getMoney());
 			
 			for(int i=0; i<=currentPlayer.PropertyNum();i++)
 			{
 				System.out.println ();
-				System.out.println (currentPlayer.getName() + " you may not participate in this auction. You are quiting and have forfieted all your money");
+				System.out.println (currentPlayer.getName() + " you may not participate in this auction. You have lost and have forfieted all your money");
 				auctionNotBought(currentPlayer.getProperty(0));
 				currentPlayer.propertyChange(currentPlayer.getProperty(0));
+			}
+			for(int i=0;i<currentPlayer.numMortgagedPoperties();i++)
+			{
+				System.out.println ();
+				System.out.println (currentPlayer.getName() + " you may not participate in this auction. You have lost and have forfieted all your money");
+				auctionNotBought(currentPlayer.getMortgagedProperty(0));
+				currentPlayer.propertyChange(currentPlayer.getMortgagedProperty(0));
 			}
 			//remove player from list
 			gameMembers.remove(currentPlayer);
 	}
+	
 	private void option10RepayMortgage(Player currentPlayer) throws IOException{
  		String[] propNames = currentPlayer.getHoldings();
  		System.out.println("You currently have the following properties mortgaged.");
@@ -476,6 +586,7 @@ class Game {
  			System.out.println("You cannot afford to repay this property right now.");
  		}
 	}
+	
 	private void sellBuildings(Player currentPlayer)throws IOException
 	{
 		Square[] sellable = currentPlayer.ableToSell();
@@ -493,6 +604,7 @@ class Game {
 		}
 		
 	}
+	
 	private int rollDice()
 	{
 		//generate the roll of a six sided die
@@ -508,7 +620,7 @@ class Game {
 		return die1==die2;
 	}
 
-	public void printGame()throws IOException
+	private void printGame()throws IOException
 	{
 		//prints the board as well as the players and where they are on the board
 		gameArea.showBoard();
@@ -619,6 +731,7 @@ class Game {
  				(currentPlayer.getTotalHotels()*hotelCost);
  		currentPlayer.setMoney(amountPaid);
  	}
+	
 	private ArrayList<Cards> shuffleList(ArrayList<Cards> a){
 		Random rand = new Random();
 		for(int i = 0; i < a.size(); i++){
@@ -690,7 +803,7 @@ class Game {
 		property.setIsOwned();
 		property.setPlayer(gameMembers.indexOf(highBid)+1);
 		highBid.propertyChange(property);
-		highBid.setMoney(1*bid);
+		highBid.setMoney(-1*bid);
 		
 		// handle if the property is mortgaged
 	}
@@ -723,7 +836,7 @@ class Game {
 				{
 					System.out.println ("What property would you like to offer");
 					//add the selected property to the initprop list
-					select = ConsoleUI.promptForMenuSelection(curPassProps,true);
+					select = ConsoleUI.promptForMenuSelection(curInitProps,true);
 					PassProp.add(Pass.getProperty(select-1));
 				}while(select !=0);
 			}
@@ -838,36 +951,37 @@ class Game {
 			System.out.println ("Negotiations have broken down. This trade is over");
 		}
 	}
+	
 	private void gamePiece(Player currentPlayer){
  		if (currentPlayer.getPlayerPieceInt() == 1){
- 			System.out.println("You are now playing as: " + PlayerPieces.Ship);
+ 			System.out.println(PlayerPieces.Ship);
  		}
  		else if(currentPlayer.getPlayerPieceInt() == 2){
- 			System.out.println("You are now playing as: " + PlayerPieces.Racecar);
+ 			System.out.println(PlayerPieces.Racecar);
  		}
  		else if(currentPlayer.getPlayerPieceInt() == 3){
- 			System.out.println("You are now playing as: " + PlayerPieces.Iron);
+ 			System.out.println(PlayerPieces.Iron);
  		}
  		else if(currentPlayer.getPlayerPieceInt() == 4){
- 			System.out.println("You are now playing as: " + PlayerPieces.Shoe);
+ 			System.out.println(PlayerPieces.Shoe);
  		}
  		else if(currentPlayer.getPlayerPieceInt() == 5){
- 			System.out.println("You are now playing as: " + PlayerPieces.Wheelbarrow);
+ 			System.out.println(PlayerPieces.Wheelbarrow);
  		}
  		else if(currentPlayer.getPlayerPieceInt() == 6){
- 			System.out.println("You are now playing as: " + PlayerPieces.Terrier);
+ 			System.out.println(PlayerPieces.Terrier);
  		}
  		else if(currentPlayer.getPlayerPieceInt() == 7){
- 			System.out.println("You are now playing as: " + PlayerPieces.Thimble);
+ 			System.out.println(PlayerPieces.Thimble);
  		}
  		else if(currentPlayer.getPlayerPieceInt() == 8){
- 			System.out.println("You are now playing as: " + PlayerPieces.Hat);
+ 			System.out.println(PlayerPieces.Hat);
  		}
  		else if(currentPlayer.getPlayerPieceInt() == 9){
- 			System.out.println("You are now playing as: " + PlayerPieces.Horse);
+ 			System.out.println(PlayerPieces.Horse);
  		}
  		else if(currentPlayer.getPlayerPieceInt() == 10){
- 			System.out.println("You are now playing as: " + PlayerPieces.Cannon);
+ 			System.out.println(PlayerPieces.Cannon);
  		}
  	}
  }
