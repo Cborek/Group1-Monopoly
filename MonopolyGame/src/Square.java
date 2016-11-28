@@ -1,4 +1,3 @@
-
 public class Square {
 
 	private int location; 		//Location of Square on board
@@ -250,5 +249,9 @@ public class Square {
 	public void setIsMortgaged()
 	{
 		isMortgaged = !isMortgaged;
+	}
+	public boolean getIsMortgaged()
+	{
+		return isMortgaged;
 	}
 }
