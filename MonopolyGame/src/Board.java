@@ -22,7 +22,7 @@ public class Board {
 		BOARD[10][0] = new Square(11, "Jail");
 		BOARD[10][0].setIsOwned();
 		BOARD[9][0] = new PropertySquare(12, "St. Charles Place", "Pink", 140, 10, 100, 50, 150, 450, 625, 750, 70);
-		BOARD[8][0] = new UtilitySquare(13, "Electric Company", "Black", 140, 1, 2, 70); // NEED TO ADD RENT COST
+		BOARD[8][0] = new UtilitySquare(13, "Electric Company", "Black", 150, 4, 10, 75); // 4 and 10 are the multipliers
 		BOARD[7][0] = new PropertySquare(14, "States Avenue", "Pink", 140, 10, 100, 50, 150, 450, 625, 750, 70);
 		BOARD[6][0] = new PropertySquare(15, "Virginia Avenue", "Pink", 160, 12, 100, 60, 180, 500, 700, 900, 80);
 		BOARD[5][0] = new RailRoadSquare(16, "Pennsylvania Railroad", "White", 200, 25, 50, 100, 200, 100);
@@ -39,7 +39,7 @@ public class Board {
 		BOARD[0][5] = new RailRoadSquare(26, "B. & O. Railroad", "White", 200, 25, 50, 100, 200, 100);
 		BOARD[0][6] = new PropertySquare(27, "Atlantic Avenue", "Yellow", 260, 22, 150, 110, 330, 800, 975, 1150, 130);
 		BOARD[0][7] = new PropertySquare(28, "Ventnor", "Yellow", 260, 22, 150, 110, 330, 800, 975, 1150, 130);
-		BOARD[0][8] = new UtilitySquare(29, "Water Works", "Black", 140, 1, 2, 70); // NEED TO ADD RENT COST
+		BOARD[0][8] = new UtilitySquare(29, "Water Works", "Black", 150, 4, 10, 75); // 4 and 10 are the multipliers
 		BOARD[0][9] = new PropertySquare(30, "Marvin Gardens", "Yellow", 280, 24, 150, 120, 360, 850, 1025, 1200, 140);
 		BOARD[0][10] = new Square(31, "Go to Jail");
 		BOARD[0][10].setIsOwned();
