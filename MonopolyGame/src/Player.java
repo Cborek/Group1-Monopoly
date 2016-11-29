@@ -410,6 +410,10 @@ class Player {
  		return mortgagedProperties.get(a);
  	}
  	
+ 	public int getMortgagedPropertyLocation(Square a){
+ 		return mortgagedProperties.indexOf(a);
+ 	}
+ 	
  	public int getMortgageValue(int a){
  		double mortgageValue = mortgagedProperties.get(a).getMortgage() * .10;
  		int theMortgageVal = (int)mortgageValue + mortgagedProperties.get(a).getMortgage();

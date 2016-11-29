@@ -802,7 +802,16 @@ class Game {
 		//give the winning player the space and retrive the money spent on the bid
 		property.setIsOwned();
 		property.setPlayer(gameMembers.indexOf(highBid)+1);
-		highBid.propertyChange(property);
+		if(property.getIsMortgaged() == true){
+			highBid.addMortgagedProperty(property);
+		}
+		else{
+			highBid.propertyChange(property);
+			System.out.println("You pay 10% of the morgtgage value for this mortgaged property.");
+			double tenPercent = highBid.getMortgageValue(highBid.getMortgagedPropertyLocation(property)) * .10;
+			int payTenPercent = (int)tenPercent;
+			highBid.setMoney(payTenPercent);
+		}
 		highBid.setMoney(-1*bid);
 		
 		// handle if the property is mortgaged
@@ -926,13 +935,25 @@ class Game {
 			Pass.setMoney(InitMon);
 			for(Square prop: InitProp)
 			{
-				Init.propertyChange(prop);
-				Pass.propertyChange(prop);
+				if(prop.getIsMortgaged() == true){
+					Init.addMortgagedProperty(prop);
+					Pass.removeProperty(prop);
+				}
+				else{
+					Init.propertyChange(prop);
+					Pass.propertyChange(prop);
+				}
 			}
 			for(Square prop: PassProp)
 			{
-				Init.propertyChange(prop);
-				Pass.propertyChange(prop);
+				if(prop.getIsMortgaged() == true){
+					Pass.addMortgagedProperty(prop);
+					Init.removeProperty(prop);
+				}
+				else{
+					Init.propertyChange(prop);
+					Pass.propertyChange(prop);
+				}
 			}
 			for(Cards prop: InitCards)
 			{
