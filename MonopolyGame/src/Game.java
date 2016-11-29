@@ -289,8 +289,14 @@ class Game {
 			{
 				Option8quitGame(currentPlayer);
 			}
-		}
-		else if(payDouble)
+		} else if(position.getColor().equalsIgnoreCase("Black")) // Statement for paying rent when landing on UtilitySquares
+		{
+			int rent =position.getUtilityRent(currentPlayer);
+			System.out.println("This space is owned, you pay rent of $" +rent);
+			currentPlayer.setMoney(-1*rent);
+			gameMembers.get(position.getPlayer()-1).setMoney(rent);	
+			System.out.println (gameMembers.get(position.getPlayer()-1).getName() + " you have been paid rent");
+		} else if(payDouble)
 		{
 			System.out.println ("This square and its other colors are owned by a single player. You pay double rent");
 			System.out.println ("You pay $" + rent);
