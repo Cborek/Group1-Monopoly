@@ -1,6 +1,5 @@
 import java.util.Random;
 
-import edu.neumont.csc110.a.utilities.ConsoleUI;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -130,10 +129,7 @@ class Game {
 			}
 			//the position value is equal to the square the player is currently on
 			Square position = gameArea.getPos(currentPlayer.getPlace());
-			if(!position.getIsOwned())
-			{
-				System.out.println ("This square costs $" + position.getCost());
-			}
+			
 			if(position.getIsOwned() && !currentPlayer.ownes(position)&& position.getRent()>0 && option ==0)
 			{
 				payRent(position, currentPlayer);
@@ -148,6 +144,11 @@ class Game {
 					position = selectCommunity(currentPlayer,position);
 			}
 			System.out.println ();
+			
+			if(!position.getIsOwned())
+			{
+				System.out.println ("This square costs $" + position.getCost());
+			}
 			System.out.println ("You have $" + currentPlayer.getMoney());
 			System.out.println (currentPlayer.getName() + " it is your turn");
 			option = ConsoleUI.promptForMenuSelection(playerOptions,false);
