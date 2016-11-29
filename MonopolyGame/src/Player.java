@@ -137,6 +137,17 @@ class Player {
 			heldCards.add(newCard);
 	}
 	
+	public void setJailCard() {
+		if (!(getCard()==null)){
+			jailCard = true;
+		} else {
+			jailCard = false;
+		}
+	}
+	public boolean getJailCard() {
+		return jailCard;
+	}
+	
 	public void setInJail()
 	{
 		inJail = !inJail;
@@ -435,16 +446,5 @@ class Player {
  	{
  		return playerPiece;
  	}
-	
-	public void setJailCard(boolean hasCard) {
-		if (hasCard) {
-			jailCard=true;
-		} else {
-			jailCard=false;
-		}
-	}
-	public boolean getJailCard() {
-		return jailCard;
-	}
  	
 }
