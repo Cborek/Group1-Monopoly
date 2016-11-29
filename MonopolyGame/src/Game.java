@@ -211,7 +211,7 @@ class Game {
 			auctionNotBought(gameArea.getPos(currentPlayer.getPlace()));
 		}
 		
-		else if(option == 9 && currentPlayer.PropertyNum() >0 && currentPlayer.numMortgagedPoperties() >0)
+		else if(option == 9 && currentPlayer.PropertyNum() >0 && currentPlayer.numMortgagedPoperties() >=0)
 		{
 			Option8quitGame(currentPlayer);
 		}
@@ -508,12 +508,18 @@ class Game {
 	{
 		// has the user select if they want to sell a property, a card, or a building
 		//and if they want to sell to a specific player or not 
-		String[] sellTo = {"Sell a Property or Card","Sell a Building"};
+		String[] sellTo = {"Sell a property or card","Sell a building"};
 		boolean doneSelling = false;
-		String[] Members = new String[gameMembers.size()];
-		for(int i=0; i<Members.length; i++)
+		String[] Members = new String[gameMembers.size()-1];
+		int count =0;
+		for(int i=0; i<gameMembers.size(); i++)
 		{
-			Members[i] = gameMembers.get(i).getName();
+			if(gameMembers.get(i) != currentPlayer)
+			{
+				Members[count] = gameMembers.get(i).getName();
+				count++;
+			}
+				
 		}
 		int selection = ConsoleUI.promptForMenuSelection(sellTo,true);
 		// add the statement to cover the auction the square or not
@@ -530,7 +536,7 @@ class Game {
 				}
 				else
 				{
-					trade(currentPlayer,gameMembers.get(whoToSellTo));
+					trade(currentPlayer,gameMembers.get(whoToSellTo-1));
 				}
 			}while(!doneSelling);
 		}
@@ -884,22 +890,32 @@ class Game {
 				int select =0;
 				do
 				{
-					System.out.println ("What property would you like to offer?");
+					System.out.println ("What property would you like to offer");
 					//add the selected property to the initprop list
 					select = ConsoleUI.promptForMenuSelection(curInitProps,true);
-					PassProp.add(Pass.getProperty(select-1));
+					if(!curInitProps[select-1].equalsIgnoreCase("Already up for trade"))
+					{
+						InitProp.add(Init.getProperty(select-1));
+						Init.propertyChange(Init.getProperty(select-1));
+						curInitProps[select-1] = "Already up for trade";
+					}
+					else
+					{
+						System.out.println ("You have already offered that");
+					}
 				}while(select !=0);
 			}
 			else if(InitOp == 2)
 			{
-				int offer = ConsoleUI.promptForInt("How much will you offer?",0,Init.getMoney());
+				System.out.println ("You have $" + Init.getMoney());
+				int offer = ConsoleUI.promptForInt("How much will you offer",0,Init.getMoney());
 				InitMon = offer;
 			}
 			else if(InitOp == 3)
 			{
 				if(Init.getCardsNum() >0)
 				{
-					System.out.println ("You have offered a 'Get Out of Jail Free' card");
+					System.out.println ("You have offered a get out of jail free card");
 					InitCards.add(Init.getCard());
 						// add the get of jail card to the offer list
 						
@@ -915,29 +931,60 @@ class Game {
 				int select =0;
 				do
 				{
-					System.out.println ("What property would you like to offer?");
+					System.out.println ("What property would you like to offer");
 					//add the selected property to the initprop list
-					select = ConsoleUI.promptForMenuSelection(curPassProps,true);
-					PassProp.add(Pass.getProperty(select-1));
+					select = ConsoleUI.promptForMenuSelection(curPassProps,true);	
+					if(!curPassProps[select-1].equalsIgnoreCase("Already up for trade"))
+					{
+						PassProp.add(Pass.getProperty(select-1));
+						Pass.propertyChange(Pass.getProperty(select-1));
+						curPassProps[select-1] = "Already up for trade";
+					}
+					else
+					{
+						System.out.println ("You have already offered that");
+					}
+					
 				}while(select !=0);
 			}
 			else if(passOp == 2)
 			{
-				int offer = ConsoleUI.promptForInt("How much will you offer?",0,Pass.getMoney());
+				System.out.println ("You have $" + Pass.getMoney());
+				int offer = ConsoleUI.promptForInt("How much will you offer",0,Pass.getMoney());
 				PassMon = offer;
 			}
 			else if(passOp == 3)
 			{
 				if(Pass.getCardsNum() >0)
 				{
-					System.out.println ("You have offered a 'Get Out of Jail Free' card");
+					System.out.println ("You have offered a get out of jail free card");
 					PassCards.add(Pass.getCard());
 						// add the get of jail card to the offer list
 						
 				}
 				else 
-					System.out.println ("You have no card to offer.");
+					System.out.println ("You have no card to offer");
 					//if the Init player has a get out of jail card to trade it is put up for trade
+			}
+			System.out.println (Init.getName() + " You have offered");
+			for(Square prop: InitProp)
+			{
+				System.out.println (prop.getName());
+			}
+			System.out.println ("$" + InitMon);
+			for(Cards card: InitCards)
+			{
+				card.getInfo();
+			}
+			System.out.println (Pass.getName() + " You have offered");
+			for(Square prop: PassProp)
+			{
+				System.out.println (prop.getName());
+			}
+			System.out.println ("$" + PassMon);
+			for(Cards card: PassCards)
+			{
+				card.getInfo();
 			}
 			boolean InitGood= false;
 			boolean PassGood = false;
