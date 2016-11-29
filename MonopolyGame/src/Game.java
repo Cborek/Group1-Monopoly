@@ -651,11 +651,9 @@ class Game {
  		//may need change to acomidate the get out of jail card leaving the deck
   		communityChest.get(0).getInfo();
   		communityChest.add(communityChest.get(0));
- 		if (communityChest.get(0).getCardType().equals("PaymentCard")){
- 		communityChest.remove(0);
+ 		
  		//modifiying player money with value on the card
- 		if(communityChest.get(0).getCardType().equalsIgnoreCase("payment square"))
- 		{
+ 		if(communityChest.get(0).getCardType().equalsIgnoreCase("PaymentCard")) {
   			currentPlayer.setMoney(communityChest.get(0).getAmount());
  		} else if (communityChest.get(0) instanceof LocationCards) {
  			LocationCards location = (LocationCards)communityChest.get(0);
@@ -674,18 +672,15 @@ class Game {
  		System.out.println ("You are on "+gameArea.getPosName(currentPlayer.getPlace())+ " at space " +currentPlayer.getPlace());
  		
   		return position;
-  		}
-  		return position;
+  		
   	}
 
 	private Square selectChance(Player currentPlayer, Square position){
   		//possible needed changes for get out of jail
   		chance.get(0).getInfo();
   		chance.add(chance.get(0));
- 		if (chance.get(0).getCardType().equals("PaymentCard")){
- 		chance.remove(0);
- 		if(chance.get(0).getCardType().equalsIgnoreCase("payment square"))
- 		{
+ 		
+ 		if(chance.get(0).getCardType().equalsIgnoreCase("PaymentCard")) {
   			currentPlayer.setMoney(chance.get(0).getAmount());
  		} 
  		else if (chance.get(0).getCardType().equalsIgnoreCase("PaymentCardMultiplier")) {
@@ -721,8 +716,7 @@ class Game {
  		// changing the amount lost based on houses or number of players
  		//return the square the player is on even if they did not move
   		return position;
-  		}
-  		return position;
+  		
 	}
 	
 	// Method for payment per houses and hotel number
