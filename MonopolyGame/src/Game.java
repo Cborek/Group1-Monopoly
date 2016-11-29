@@ -1,4 +1,7 @@
 import java.util.Random;
+
+import edu.neumont.csc110.a.utilities.ConsoleUI;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -27,7 +30,7 @@ class Game {
 		chance = shuffleList(chance);
 	}
 	
-	private void play()throws IOException
+	public void play()throws IOException
 	{
 		boolean good = true;
 		PlayerNum = ConsoleUI.promptForInt("Please enter the number of players. 2-8", 2,8);
@@ -291,7 +294,7 @@ class Game {
 			}
 		} else if(position.getColor().equalsIgnoreCase("Black")) // Statement for paying rent when landing on UtilitySquares
 		{
-			int rent =position.getUtilityRent(currentPlayer);
+			rent =position.getUtilityRent(currentPlayer);
 			System.out.println("This space is owned, you pay rent of $" +rent);
 			currentPlayer.setMoney(-1*rent);
 			gameMembers.get(position.getPlayer()-1).setMoney(rent);	
@@ -376,13 +379,16 @@ class Game {
 	//handles the player in jail
 	private void moveInJail(Player currentPlayer, boolean doubles)throws IOException
 	{
+		boolean payFine = false;
 		boolean useJailCard = ConsoleUI.promptForBool("Will you use your Get Out of Jail Card? Y/N", "y","n");
+		
 		if (useJailCard) 
 		{
 			currentPlayer.setInJail();
 			currentPlayer.setJailCard(false);
+			payFine = ConsoleUI.promptForBool("Will you pay the $50 fine to get out of jail? Y/N","y","n"); //CHANGE 
 		}
-		boolean payFine = ConsoleUI.promptForBool("Will you pay the $50 fine to get out of jail? Y/N","y","n");
+		
 		else if(payFine)
 		{
 			currentPlayer.setInJail();
