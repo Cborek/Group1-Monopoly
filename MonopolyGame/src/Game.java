@@ -46,7 +46,7 @@ class Game {
  						+ "3 Iron : 4 Shoe : 5 Wheelbarrow\n6 Terrier : 7 Thimble : 8 Hat : 9 Horse : 10 Cannon", 1, 10);
  				
  				for(int j = 0; j < gameMembers.size(); j++){
- 					if(gameMembers.get(j).getPlayerPieceInt() == playerPiece){
+ 					if(gameMembers.get(j).getPlayerPieceInt() == playerPiece && gameMembers.get(j) != currentPlayer){
  						System.out.println("Sorry, that piece has already been chosen. Pick again.");
  						break;
  					}
