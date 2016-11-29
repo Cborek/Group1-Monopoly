@@ -9,6 +9,7 @@ class Player {
 	private ArrayList<Square> ownedAssets = new ArrayList<Square>();
 	private ArrayList<Square>mortgagedProperties = new ArrayList<Square>();
 	// some type of thing to hold the piece the player is using most likly an enum
+	private boolean jailCard = false;
 	private String name;
 	private int place;
 	private boolean inJail =false;
@@ -434,5 +435,16 @@ class Player {
  	{
  		return playerPiece;
  	}
+	
+	public void setJailCard(boolean hasCard) {
+		if (hasCard) {
+			jailCard=true;
+		} else {
+			jailCard=false;
+		}
+	}
+	public boolean getJailCard() {
+		return jailCard;
+	}
  	
 }
