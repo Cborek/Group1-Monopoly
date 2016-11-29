@@ -30,7 +30,7 @@ class Game {
 		chance = shuffleList(chance);
 	}
 	
-	public void play()throws IOException
+	private void play()throws IOException
 	{
 		boolean good = true;
 		PlayerNum = ConsoleUI.promptForInt("Please enter the number of players. 2-8", 2,8);
