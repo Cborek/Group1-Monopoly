@@ -227,6 +227,23 @@ public class Square {
 		return rentWithFour;
 	}
 	
+	//Gets rent of utility square
+	public int getUtilityRent(Player player) {
+		Random rndm = new Random();
+		int die1 = rndm.nextInt(6)+1;
+		int die2 = rndm.nextInt(6)+1;
+		int total = die1+die2;
+		int rentAmount;
+		// If checks to see if the player owns both utilitySquares and multiplies the roll total it by ten
+		// Else the roll total is multiplied by 4
+		if (player.ownesColorGroup(getColor())) {
+			rentAmount = getRentWithTwo()*total;
+		} else {
+			rentAmount = getRent()*total;
+		}
+		
+		return rentAmount;
+	}
 	
 	//Gets the mortgage of a property
 	public int getMortgage(){
