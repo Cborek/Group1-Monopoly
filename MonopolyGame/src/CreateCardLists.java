@@ -28,7 +28,7 @@ class CreateCardLists {
 		CommunityChest.add(new Cards("PaymentCard", "Advance to GO", "Collect $200", 200)); //12 This card needs to move player to the GO space
 		CommunityChest.add(new Cards("PaymentCard", "Xmas Fun Matures", "Collect $100", 100)); //13
 		CommunityChest.add(new Cards("PaymentCard", "Go To Jail", "Do not collect $200", 0)); //14 This card needs to move player to the JAIL SPACE
-		CommunityChest.add(new Cards("PaymentCard", "Get out of jail free", "May be kept until needed, or sold.", 0)); //15 This card should allow player to keep this option in their inventory until they use it.
+		CommunityChest.add(new Cards("GetOutOfJail", "Get out of jail free", "May be kept until needed, or sold.", 0)); //15 This card should allow player to keep this option in their inventory until they use it.
 		CommunityChest.add(new Cards("PaymentCard", "Pay Hospital: ", "$100", -100)); //16
 		
 		
