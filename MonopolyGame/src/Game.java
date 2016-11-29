@@ -380,17 +380,28 @@ class Game {
 	//handles the player in jail
 	private void moveInJail(Player currentPlayer, boolean doubles)throws IOException
 	{
+		boolean useJailCard = false;
 		boolean payFine = false;
-		boolean useJailCard = ConsoleUI.promptForBool("Do you want to use your 'Get Out of Jail Card'? Y/N", "y","n");
 		
+		
+		if (currentPlayer.getJailCard()) {
+			useJailCard = ConsoleUI.promptForBool("Do you want to use your 'Get Out of Jail Card'? Y/N", "y","n");
+		} 
 		if (useJailCard) 
 		{
 			currentPlayer.setInJail();
-			currentPlayer.setJailCard(false);
-			payFine = ConsoleUI.promptForBool("Do you want to pay the $50 fine to get out of jail? Y/N","y","n"); //CHANGE 
+			if (communityChest.contains(currentPlayer.getCard())) {
+				chance.add(currentPlayer.getCard());
+			} else if (chance.contains(currentPlayer.getCard())) {
+				communityChest.add(currentPlayer.getCard());
+			}
+			currentPlayer.setCard(currentPlayer.getCard());
+			currentPlayer.setJailCard(); // if (player contains a card) then boolean is true
+			
+		} else if (!useJailCard) {
+			payFine = ConsoleUI.promptForBool("Do you pay the $50 fine to get out of jail? Y/N","y","n"); //CHANGE 
 		}
-		
-		else if(payFine)
+		if (payFine)
 		{
 			currentPlayer.setInJail();
 			currentPlayer.setMoney(1*50);
@@ -693,7 +704,9 @@ class Game {
  		} else if (communityChest.get(0).getCardType().equalsIgnoreCase("PaymentCardWithTwo")) {
  			paymentCardWithTwo(currentPlayer, communityChest.get(0).getAmount(), communityChest.get(0).getAmountTwo());
  		} else if (communityChest.get(0).getCardType().equalsIgnoreCase("GetOutOfJail")) {
- 			currentPlayer.setJailCard(true);
+ 			currentPlayer.setCard(communityChest.get(0));
+ 			communityChest.remove(communityChest.size()-1);
+ 			currentPlayer.setJailCard(); // if (player contains a card) then boolean is true
  		} else {
  			System.out.println("WE HAVE AN ERROR. THE COMMUNITY CARDS DID NOT WORK");
  			// Prints out error message if cards are not selected properly. FOR TESTING PURPOSES ONLY
@@ -736,7 +749,9 @@ class Game {
  			RailRoadCards railroad = (RailRoadCards)chance.get(0);
  			railroad.moveToRailRoadSquare(currentPlayer);
  		} else if (chance.get(0).getCardType().equalsIgnoreCase("GetOutOfJail")) {
- 			currentPlayer.setJailCard(true);
+ 			currentPlayer.setCard(chance.get(0));
+ 			chance.remove(chance.size()-1);
+ 			currentPlayer.setJailCard(); // if (player contains a card) then boolean is true
  		} else {
  			System.out.println("WE HAVE AN ERROR. CHANCE CARDS DO NOT WORK");
  			// Prints out error message if cards are not selected properly. FOR TESTING PURPOSES ONLY
