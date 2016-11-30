@@ -117,9 +117,9 @@ class Game {
 				{
 					System.out.println ("You are on '"+gameArea.getPosName(currentPlayer.getPlace())+ "' at space "+ currentPlayer.getPlace());
 					System.out.println ("You rolled a "+ die1 +" and a " +die2);
- 					System.out.print("Your ");
+ 					System.out.print("The following token has moved " + total + " spaces: ");
  					gamePiece(currentPlayer);	
- 					System.out.println("has moved " + total + " spaces");
+ 					//System.out.println("has moved " + total + " spaces");
 					//get not set dumby fix it later 
 					//above is covered
 					currentPlayer.setPlace(total);
@@ -182,6 +182,7 @@ class Game {
 			}
 			else if(option ==7)
 			{
+				System.out.println("My Current Assets:");
 				currentPlayer.showHoldings();
 				option = -1;
 			}
@@ -218,7 +219,7 @@ class Game {
 		else if(option ==9 && currentPlayer.PropertyNum() ==0 && currentPlayer.numMortgagedPoperties() ==0)
 		{
 			//todo if they own nothing and are quiting
-			System.out.println ("you have quit");
+			System.out.println ("You have quit the game! :(");
 			gameMembers.remove(currentPlayer);
 		}
 	}
@@ -795,7 +796,7 @@ class Game {
 	{
 		boolean isBought = false;
 		//use a player that holds the current highest bid
-		Player highBid = new Player("no one");
+		Player highBid = new Player("no one.");
 		int bid =0;
 		System.out.println (property.getName() + " is up for Auction.");
 		//loops through players until bidding ceases
@@ -810,7 +811,7 @@ class Game {
 				boolean isBidding = false;
 				if(highBid != gameMembers.get(i))
 				{
-					System.out.println (gameMembers.get(i).getName() + " The current bid is $" + bid +" and is held by "+ highBid.getName());
+					System.out.println (gameMembers.get(i).getName() + ", the current bid is $" + bid +" and is held by "+ highBid.getName());
 					isBidding = ConsoleUI.promptForBool("Would you like to place a bid? Y/N", "y","n");
 				}
 				else if(highBid == gameMembers.get(i))
