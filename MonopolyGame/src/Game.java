@@ -203,7 +203,7 @@ class Game {
 				}catch(IllegalArgumentException noMortgages){
 					System.out.println("You currently do not have any mortgaged properties.");
 				}
- 			}
+ 		}
 			if(doubles && turn!=3 && option == 8)
 			{
 				System.out.println ("You rolled doubles! Roll again!");
@@ -759,7 +759,7 @@ class Game {
  			for(Player member: gameMembers) {
  				member.setMoney(chance.get(0).getAmount());
  			}
- 			int amountPaid = ((chance.get(0).getAmount())*(PlayerNum-1) *2); 
+ 			int amountPaid = ((chance.get(0).getAmount())*(-PlayerNum)); 
  			//PlayerNum1
  			// Every player is given the amount that must be paid including the player paying it
  			// Because of this, current player will then pay the amount *numberOfPlayers1 and *2 to cancel out what he received
