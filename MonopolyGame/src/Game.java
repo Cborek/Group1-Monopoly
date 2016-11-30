@@ -242,7 +242,7 @@ class Game {
 		}
 		for(int i=0; i<gameMembers.size();i++)
 		{
-			if(!position.getName().contains("tax") &&gameMembers.get(i).ownesColorGroup(position.getColor()))
+			if(!(position instanceof PaymentSquare) &&gameMembers.get(i).ownesColorGroup(position.getColor()))
 			{
 				payDouble = true;
 				if(gameMembers.get(i) == currentPlayer)
@@ -711,6 +711,9 @@ class Game {
  		//modifiying player money with value on the card
  		if(communityChest.get(0).getCardType().equalsIgnoreCase("PaymentCard")) {
   			currentPlayer.setMoney(communityChest.get(0).getAmount());
+ 		} else if (communityChest.get(0).getCardType().equalsIgnoreCase("GoToJail")) {
+ 			currentPlayer.goToPlace(11);
+			currentPlayer.setInJail();
  		} else if (communityChest.get(0) instanceof LocationCards) {
  			LocationCards location = (LocationCards)communityChest.get(0);
  			location.moveToLocationSquare(currentPlayer);
@@ -740,7 +743,10 @@ class Game {
  		
  		if(chance.get(0).getCardType().equalsIgnoreCase("PaymentCard")) {
   			currentPlayer.setMoney(chance.get(0).getAmount());
- 		} 
+ 		} else if (chance.get(0).getCardType().equalsIgnoreCase("GoToJail")) {
+ 			currentPlayer.goToPlace(11);
+			currentPlayer.setInJail();
+ 		}
  		else if (chance.get(0).getCardType().equalsIgnoreCase("PaymentCardMultiplier")) {
  			for(Player member: gameMembers) {
  				member.setMoney(chance.get(0).getAmount());
