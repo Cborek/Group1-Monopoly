@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Square {
 
 	private int location; 		//Location of Square on board
@@ -44,8 +46,9 @@ public class Square {
 
 	// Prints out basic info of square that is shared between all squares
 	public void getSquareInfo() {
-		System.out.println("The location is: " +location);
-		System.out.println("The Name is: " + name);
+		System.out.println("Space #: " +location);
+		System.out.println("Location name: " + name);
+		System.out.println("~*~*~");
 	}
 	
 	
