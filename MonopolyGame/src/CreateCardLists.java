@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 
 class CreateCardLists {
@@ -8,7 +7,7 @@ class CreateCardLists {
 	public CreateCardLists()
 	{
 		addCommChestCards();
-		addCommunChest();
+		addChanceCard();
 	}
 	
 	public void addCommChestCards(){
@@ -38,10 +37,10 @@ class CreateCardLists {
 	{
 		return CommunityChest;
 	}
-	public void addCommunChest() {
+	public void addChanceCard() {
 		Chance.add(new Cards("PaymentCard", "Bank pays off your dividend.", "Collect $50", 50));
 		Chance.add(new Cards("PaymentCard", "Pay poor tax.", "Pay $15", (-15)));
-		Chance.add(new Cards("PaymentCardMultiplier", "You have been elected chairman of the board.", "Pay each player $50", -50));
+		Chance.add(new Cards("PaymentCardMultiplier", "You have been elected chairman of the board.", "Pay each player $50", 50));
 		Chance.add(new Cards("GetOutOfJail", "Get out of jail free.", "This card may be kept until needed, or sold", 0)); // INT NOT NEEDED
 		Chance.add(new Cards("PaymentCardWithTwo", "Make general repairs on all your property", "For each house pay $25 and for each hotel $100", 25, 100));
 		
