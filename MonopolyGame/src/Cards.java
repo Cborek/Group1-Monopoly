@@ -1,28 +1,30 @@
-
 class Cards {
 	
+	//setting up variables for parameters of cards
 	private String cardType;
 	private String description;
 	private String action;
 	private int amount;
 	private int amountTwo;
 	
-	public Cards(String type, String name, String todo, int monitary)
+	//cards have these properties
+	public Cards(String type, String name, String todo, int monetary)
 	{
 		setCardType(type);
 		description = name;
 		action = todo;
-		amount = monitary;
+		amount = monetary;
 	}	
 	
 	// CARD constructor for card that requires more than one value. PAY for HOUSE and HOTEL
-	public Cards(String type, String name, String todo, int monitary, int monitaryTwo) {
+	public Cards(String type, String name, String todo, int monetary, int monetaryTwo) {
 		setCardType(type);
 		description = name;
 		action = todo;
-		amount = monitary;
-		amountTwo = monitaryTwo;
+		amount = monetary;
+		amountTwo = monetaryTwo;
 	}
+	//gets info of cards including its description and action correlating with the card
 	public void getInfo()
 	{
 		System.out.println (description);
@@ -40,6 +42,8 @@ class Cards {
 		}
 			
 	}
+	
+	//getters to do get the amount of $ player must pay
 	public int getAmount()
 	{
 		return amount;
