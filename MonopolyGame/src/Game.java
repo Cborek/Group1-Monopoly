@@ -65,9 +65,13 @@ class Game {
   		}
 		// handle the loop of game play
 		do{
-			
-			for(int whoseTurn =0; whoseTurn < gameMembers.size(); whoseTurn++)
+			int startingPlayers = gameMembers.size();
+			for(int whoseTurn =0; whoseTurn < startingPlayers; whoseTurn++)
 			{
+				if(gameMembers.size() < startingPlayers){
+					whoseTurn = 0;
+					startingPlayers = gameMembers.size();
+				}
 				printGame();
 				System.out.println (gameMembers.get(whoseTurn).getName() + ", it is your turn. You have $" + gameMembers.get(whoseTurn).getMoney());
 				playerTurn(gameMembers.get(whoseTurn));
