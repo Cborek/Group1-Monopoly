@@ -183,7 +183,11 @@ class Game {
 			}
 			else if(option == 5)
 			{
-				option6Mortgage(currentPlayer);
+				try{
+					option6Mortgage(currentPlayer);
+				}catch(IllegalArgumentException noMortgages){
+					System.out.println("You currently do not have any properties which can be mortgaged.");
+				}
 			}
 			else if(option ==7)
 			{
