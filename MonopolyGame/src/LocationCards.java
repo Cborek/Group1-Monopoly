@@ -6,6 +6,7 @@ public class LocationCards extends Cards{
 	private String action;
 	private int location;
 	
+	//sets up parameters for details of the location cards
 	public LocationCards(String type, String name, String todo, int value){
 		super(type, name, todo, value);
 		setCardType(type);
