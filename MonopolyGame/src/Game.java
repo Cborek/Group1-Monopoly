@@ -187,6 +187,7 @@ class Game {
 			else if(option ==7)
 			{
 				System.out.println("My Current Assets:");
+				System.out.println();
 				currentPlayer.showHoldings();
 				option = -1;
 			}
@@ -885,7 +886,7 @@ class Game {
 		boolean agreeable = false;
 		do
 		{
-			System.out.println (Init.getName() + "What would you like to offer?");
+			System.out.println (Init.getName() + ", what would you like to offer?");
 			int InitOp = ConsoleUI.promptForMenuSelection(tradeOp,false);
 			InitProp.clear();
 			PassProp.clear();
