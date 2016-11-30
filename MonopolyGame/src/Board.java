@@ -7,7 +7,7 @@ public class Board {
 	public Board() {
 		BOARD = new Square[11][11];
 	
-
+		//Assigns specific details for each space on the board
 		BOARD[10][10] = new GoSquare(1, "GO");
 		BOARD[10][10].setIsOwned();
 		BOARD[10][9] = new PropertySquare(2, "Mediterranean Avenue", "Brown", 60, 2, 50, 10, 30, 90, 160, 250, 30);
@@ -53,7 +53,7 @@ public class Board {
 		BOARD[8][10] = new PaymentSquare(39, "Luxury Tax", 100);
 		BOARD[9][10] = new PropertySquare(40, "Boardwalk", "Blue", 400, 50, 200, 200, 600, 1400, 1700, 2000, 200);
 
-		// blank squares
+		// blank squares used as placeholders for printing of the board
 		BOARD[1][1] = new Square ("  ");
 		BOARD[1][2] = new Square ("  ");
 		BOARD[1][3] = new Square ("  ");
@@ -136,7 +136,7 @@ public class Board {
 		BOARD[9][8] = new Square ("  ");
 		BOARD[9][9] = new Square ("  ");
 	}
-
+	//code to print a visual of the monopoly board
 	public void showBoard() throws IOException {
 		System.out.println();
 		System.out.println("     ----------------------------------------------");
@@ -172,6 +172,7 @@ public class Board {
 			System.out.println("     ---------------------------------------------");
 			System.out.println();
 	}
+	//gets square number thats on the board
 	public Square getPos(int num)
 	{
 		//returns the value of a position
@@ -188,6 +189,7 @@ public class Board {
 		return BOARD[0][0];
 	}
 	
+	//gets the name of the specific square space number
 	public String getPosName(int num)
 	{
 		//returns the value of a position
