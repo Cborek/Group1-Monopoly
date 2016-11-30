@@ -16,6 +16,7 @@ class Player {
 	private int jailTurns =0;
 	private int playerPiece=0;
 	
+	//sets the starting amount of money to $1500
 	public Player(String isName)
 	{
 		money = 1500;
@@ -96,6 +97,8 @@ class Player {
 			ownedAssets.add(changed);
 	}
 	
+	
+	//if player passes space 40 that means they passed go and can collect $200
 	public void setPlace(int moved)
 	{
 		place+=moved;
@@ -127,6 +130,8 @@ class Player {
 		return heldCards.get(0);
 	}
 	
+	
+	//heldCards deal with any cards that the player currently owns
 	public void setCard(Cards newCard)
 	{
 		if(heldCards.contains(newCard))
@@ -228,6 +233,8 @@ class Player {
 		}
 		return good;
 	}
+	
+	//allows player to sell houses
 	public boolean canSellHouse(Square curProperty)
 	{
 		String color = curProperty.getColor();
@@ -305,7 +312,7 @@ class Player {
 	
 	public boolean ownesColorGroup(String color)
 	{
-		// this method if for the double rent case is a certain player owns the entire color group
+		// this method if for the double rent case is a certain player owns the entire color group aka a monopoly
 		boolean good = false;
 		if(color.equalsIgnoreCase("blue") || color.equalsIgnoreCase("brown") || color.equalsIgnoreCase("black"))
 		{
