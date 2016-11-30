@@ -27,7 +27,7 @@ class CreateCardLists {
 		CommunityChest.add(new Cards("PaymentCard", "Bank error in your favor", "Collect $200", 200)); //11
 		CommunityChest.add(new Cards("PaymentCard", "Advance to GO", "Collect $200", 200)); //12 This card needs to move player to the GO space
 		CommunityChest.add(new Cards("PaymentCard", "Xmas Fun Matures", "Collect $100", 100)); //13
-		CommunityChest.add(new Cards("PaymentCard", "Go To Jail", "Do not collect $200", 0)); //14 This card needs to move player to the JAIL SPACE
+		CommunityChest.add(new Cards("GoToJail", "Go To Jail", "Do not collect $200", 0)); //14 INT NOT NEEDED
 		CommunityChest.add(new Cards("GetOutOfJail", "Get out of jail free", "May be kept until needed, or sold.", 0)); //15 This card should allow player to keep this option in their inventory until they use it.
 		CommunityChest.add(new Cards("PaymentCard", "Pay Hospital: ", "$100", -100)); //16
 		
@@ -51,7 +51,7 @@ class CreateCardLists {
 		Chance.add(new LocationCards("LocationCard", "Advance to St. Charles Place.", "If you pass go, collect $200", 12)); // ST. CHARLES PLACE on square 12
 		Chance.add(new LocationCards("LocationCard", "Take a ride on the Reading.", "If you pass go, collect $200", 6)); // READING RAILROAD on square 6
 		Chance.add(new LocationCards("LocationCard", "Take a walk on the Boardwalk.", "Advance token to Boardwalk", 40)); // BOARDWALK on square 40
-		Chance.add(new LocationCards("LocationCard", "Go directly to jail.", "Do not pass go, do not collect $200", 11)); // JAIL on square 11
+		Chance.add(new Cards("GoToJail", "Go directly to jail.", "Do not pass go, do not collect $200", 0)); // INT NOT NEEDED
 		Chance.add(new LocationCards("LocationCard", "Advance to go.", "Collect $200", 1)); // GO on square 1
 		
 		// UTILITY CARDS
