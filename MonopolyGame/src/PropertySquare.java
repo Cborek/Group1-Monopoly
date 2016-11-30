@@ -1,5 +1,7 @@
 class PropertySquare extends Square {
 
+	//creates variables and parameters for the information of each property and its specific details
+	
 	public PropertySquare(int location, String name, String color, int cost, int rent, int houseCost,  int withOneHouse,
 			int withTwoHouses, int withThreeHouses, int withFourHouses, int withHotel, int mortgage) {
 		super(location, name);
@@ -16,7 +18,7 @@ class PropertySquare extends Square {
 		
 		
 	}
-	
+	//displays all of the information on the specific deed/property card
 	public void getInfo(){
 		getSquareInfo();
 		System.out.println("This color is: " + getColor());
