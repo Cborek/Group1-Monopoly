@@ -190,7 +190,7 @@ class Game {
 		int option =0;
 		do
 		{
-			if(option == 0 && !currentPlayer.isInJail())
+			if(option == 0)
 			{
 				int total =0;
 				int die1 = rollDice();
