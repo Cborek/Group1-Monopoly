@@ -583,7 +583,6 @@ class Game {
 		boolean useJailCard = false;
 		boolean payFine = false;
 		
-		
 		if (currentPlayer.getJailCard()) {
 			useJailCard = ConsoleUI.promptForBool("Do you want to use your 'Get Out of Jail Card'? Y/N", "y","n");
 		} 
@@ -598,22 +597,26 @@ class Game {
 			currentPlayer.setCard(currentPlayer.getCard());
 			currentPlayer.setJailCard(); // if (player contains a card) then boolean is true
 			
-		} else if (!useJailCard) {
+		} 
+		if (!useJailCard) {
 			payFine = ConsoleUI.promptForBool("Do you pay the $50 fine to get out of jail? Y/N","y","n"); //CHANGE 
 		}
-		if (payFine)
+		if (payFine && currentPlayer.isInJail())
 		{
 			currentPlayer.setInJail();
-			currentPlayer.setMoney(1*50);
+			currentPlayer.setMoney(-1*50);
+			currentPlayer.setJailTurns(0);
 		}
-		else if(doubles)
+		if(doubles && currentPlayer.isInJail())
 		{
 			currentPlayer.setInJail();
 			System.out.println ("You rolled doubles. You are out of jail!");
+			currentPlayer.setJailTurns(0);
 		}
-		else if(currentPlayer.getJailTurns()==3)
+		if(currentPlayer.getJailTurns()==3&& currentPlayer.isInJail())
 		{
-			System.out.println ("You can't be in jail anymore. You have been in jail for 3 turns. You must pay $50");
+				// the occurance of the player having been in jail for three turns in a row
+				System.out.println ("You can't be in jail anymore. You have been in jail for 3 turns. You must pay $50");
 				System.out.println ("You must pay $50");
 				while(50 > currentPlayer.getMoney() && currentPlayer.PropertyNum()>0)
 				{
