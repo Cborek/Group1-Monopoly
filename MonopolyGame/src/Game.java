@@ -197,9 +197,13 @@ class Game {
 				option = -1;
 			}
 			else if(option == 6){
- 			option10RepayMortgage(currentPlayer);
- 			option = -1;
- 		}
+				try{
+					option10RepayMortgage(currentPlayer);
+					option = -1;
+				}catch(IllegalArgumentException noMortgages){
+					System.out.println("You currently do not have any mortgaged properties.");
+				}
+ 			}
 			if(doubles && turn!=3 && option == 8)
 			{
 				System.out.println ("You rolled doubles! Roll again!");
