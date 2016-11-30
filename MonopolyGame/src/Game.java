@@ -219,7 +219,10 @@ class Game {
 			//the position value is equal to the square the player is currently on
 			Square position = gameArea.getPos(currentPlayer.getPlace());
 			
-			if(position.getIsOwned() && !currentPlayer.ownes(position)&& position.getRent()>0 && option ==0)
+			if (position instanceof PaymentSquare) {
+				currentPlayer.setMoney(-position.getRent());
+			}
+			else if(position.getIsOwned() && !currentPlayer.ownes(position)&& position.getRent()>0 && option ==0)
 			{
 				payRent(position, currentPlayer);
 			}
@@ -456,49 +459,49 @@ class Game {
 				currentPlayer.goToPlace(11);
 				currentPlayer.setInJail();
 			}
-			if(position.getName().equalsIgnoreCase("income tax"))
-			{
-				String tenPerc = "Pay $" + ((double)currentPlayer.getPlayerValue()*.1);
-				String[] options = {"Pay 200",tenPerc};
-				int choice = ConsoleUI.promptForMenuSelection(options,false);
-				if(choice ==1 && currentPlayer.getMoney()>=200)
-				{
-					payRent(position, currentPlayer);
-				}
-				else{
-						int pay = ((int)(-1*(double)currentPlayer.getPlayerValue()*.1));
-						while(pay > currentPlayer.getMoney() && currentPlayer.PropertyNum()>0)
-						{
-							String[] SellOp = {"Sell a Building", "Mortgage a Property"};
-							System.out.println ("You must mortgage or sell things you own to pay the tax");
-							int option = ConsoleUI.promptForMenuSelection(SellOp,false);
-							if(option ==1)
-							{
-								sellBuildings(currentPlayer);
-							}
-							else if(option == 2)
-							{
-								option5Mortgage(currentPlayer);
-							}
-						}	
-						if(currentPlayer.getMoney()<pay)
-							{
-								Option9quitGame(currentPlayer);
-							}
-						else
-							{
-								System.out.println ("You pay the tax");
-								currentPlayer.setMoney(-1*pay);
-							}
+// 			if(position.getName().equalsIgnoreCase("income tax"))
+// 			{
+// 				String tenPerc = "Pay $" + ((double)currentPlayer.getPlayerValue()*.1);
+// 				String[] options = {"Pay 200",tenPerc};
+// 				int choice = ConsoleUI.promptForMenuSelection(options,false);
+// 				if(choice ==1 && currentPlayer.getMoney()>=200)
+// 				{
+// 					payRent(position, currentPlayer);
+// 				}
+// 				else{
+// 						int pay = ((int)(-1*(double)currentPlayer.getPlayerValue()*.1));
+// 						while(pay > currentPlayer.getMoney() && currentPlayer.PropertyNum()>0)
+// 						{
+// 							String[] SellOp = {"Sell a Building", "Mortgage a Property"};
+// 							System.out.println ("You must mortgage or sell things you own to pay the tax");
+// 							int option = ConsoleUI.promptForMenuSelection(SellOp,false);
+// 							if(option ==1)
+// 							{
+// 								sellBuildings(currentPlayer);
+// 							}
+// 							else if(option == 2)
+// 							{
+// 								option5Mortgage(currentPlayer);
+// 							}
+// 						}	
+// 						if(currentPlayer.getMoney()<pay)
+// 							{
+// 								Option9quitGame(currentPlayer);
+// 							}
+// 						else
+// 							{
+// 								System.out.println ("You pay the tax");
+// 								currentPlayer.setMoney(-1*pay);
+// 							}
 						
-				}
-				if(position.getName().equalsIgnoreCase("luxury tax"))
-				{
-					System.out.println ("You paid the luxury tax.");
-					payRent(position,currentPlayer);
-				}
-				else return;
-			}
+// 				}
+// 				if(position.getName().equalsIgnoreCase("luxury tax"))
+// 				{
+// 					System.out.println ("You paid the luxury tax.");
+// 					payRent(position,currentPlayer);
+// 				}
+// 				else return;
+// 			}
 	}
 	
 	private Square selectChance(Player currentPlayer, Square position){
