@@ -852,13 +852,13 @@ class Game {
 		property.setPlayer(gameMembers.indexOf(highBid)+1);
 		if(property.getIsMortgaged() == true){
 			highBid.addMortgagedProperty(property);
-		}
-		else{
-			highBid.propertyChange(property);
 			System.out.println("You pay 10% of the morgtgage value for this mortgaged property.");
 			double tenPercent = highBid.getMortgageValue(highBid.getMortgagedPropertyLocation(property)) * .10;
 			int payTenPercent = (int)tenPercent;
 			highBid.setMoney(payTenPercent);
+		}
+		else{
+			highBid.propertyChange(property);
 		}
 		highBid.setMoney(-1*bid);
 		
