@@ -1,7 +1,7 @@
 
 public enum PlayerPieces {
-        Ship,
-    Racecar,
+    Ship,
+    Towncar,
     Iron,
     Shoe,
     Wheelbarrow,
