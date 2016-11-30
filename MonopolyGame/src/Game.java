@@ -48,6 +48,7 @@ class Game {
  				for(int j = 0; j < gameMembers.size(); j++){
  					if(gameMembers.get(j).getPlayerPieceInt() == playerPiece && gameMembers.get(j) != currentPlayer){
  						System.out.println("Sorry, that piece has already been chosen. Pick again.");
+						isGoodPiece = false;
  						break;
  					}
  					else{
